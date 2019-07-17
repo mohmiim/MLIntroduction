@@ -18,10 +18,10 @@ _Just keep this statement in mind, it will make sense as we continue._
 
 ## 1. Introduction to Machine Learning
 
-Machine Learning, Artificial Intelligence, and Augmented Intelligence are words we hear today everywhere. We each perceive them differently: they scare some and excite others. But what is it really? Should we be scared or excited? What can it do for you, your company, and your community?
+Machine Learning, Artificial Intelligence, and Augmented Intelligence are words we hear today everywhere. We each perceive them differently: they scare some and excite others. But what are they really? Should we be scared or excited? What can it do for you, your company, and your community?
 
 As a software developer, not a data scientist or a researcher, should you care?
-The answer is: you definitely should care. The transformation is happening as you read this. Examples of this transformation are all around us. Luckily, it's not too late to get your feet wet and apply it. The topic's not as scary as it might sound! You don't need a Ph.D. or an advanced degree in statistics (though it does not hurt to have one of them or both :) ).
+The answer is, you definitely should care. The transformation is happening as you read this. Examples of this transformation are all around us. Luckily, it's not too late to get your feet wet and apply it. The topic's not as scary as it might sound! You don't need a Ph.D. or an advanced degree in statistics (though it does not hurt to have one of them or both :) ).
 
 Let’s start simple. What is the difference between machine learning and our typical day to day software development (I might even say compared to classic development)? In typical programming we receive an input, and we write code that represents all the rules for producing the correct output.
 
@@ -44,7 +44,7 @@ If you think about it, it is much easier this way (given you have enough data to
 
 ## 2. Single-Neuron Neural Network
 
-Usually the first concept that comes to mind when someone mentions Machine Learning or Deep Learning is Neural Networks. They've existed for a very long time, with their good days and bad days :) , but regardless, understanding the basics will allow us to understand the more sophisticated topics we will handle in later sessions.
+Usually the first concept that comes to mind when someone mentions Machine Learning or Deep Learning is Neural Network. It had been there for a very long time, it had good days and bad days :) , but regardless, understanding the it will allow us to understand the more sophisticated topics we will handle in later sessions.
 
 This figure shows the simplest Neural Network we can create. It has only one node (neuron), accepts 2 inputs and has one output:
 
@@ -57,7 +57,7 @@ This figure shows the simplest Neural Network we can create. It has only one nod
 
 `b`: The bias, allows the network to find a good constant value to add to the input of the neuron.
 
-`X`<sub>`n`</sub>: The input to the network (eg. I am trying to build a network that predict house price based on Number of rooms and total area of the house, then I have 2 numerical inputs: one for number of bedrooms and one for area)
+`X`<sub>`n`</sub>: The input to the network. Imagine I am trying to build a network that predicts house prices based on the number of rooms and the total area of each house.  In this case I have two numerical inputs: one for the number of bedrooms and one for the total area of the house.
 
 `W`<sub>`n`</sub>: The weight of each input to our neuron; this starts as a random number but with the magic of machine learning (training) the system will be able to to adjust it to be the suitable value to produce the correct output.
 
@@ -117,7 +117,7 @@ Loss functions measure how well our model works on the given training data. It's
 
 ### Optimization function(s)
 
-Optimization functions are used minimize the loss of the Neural Network; there are many types of optimization functions.
+Optimization functions are used to minimize the loss of the Neural Network; there are many types of optimization functions.
 
 **Stochastic gradient descent(SGD):** Works well for shallow networks. Can cause the objective function to fluctuate heavily
 
@@ -125,7 +125,7 @@ Optimization functions are used minimize the loss of the Neural Network; there a
 
 ## 3. Approximating a linear function with Single-Neuron Neural Network
 
-We saw what Single-Neuron NN looks like, now how can we use it to do a simple task?  
+We saw what a Single-Neuron NN looks like, now how can we use it to do a simple task?  
 
 We are going to use Python and Keras to show how we can build our first Neural Network; it is going to be a Single-Neuron NN and we will use it to approximate the following linear function:
 
@@ -181,7 +181,7 @@ Let's try our model with some value it hasn't seen before:
 ```python
 print(model.predict([10.0]))
 ```
-You will get a result very close to 17, which is 2*10 - 3. This means that the very simple neural net we created managed to approximate the function correctly, by just seeing few sample input and output.
+You will get a result very close to 17, which is (2 X 10 - 3). This means that the very simple neural net we created managed to approximate the function correctly by just seeing a few sample inputs and outputs.
 
 To confirm this, let's print out the weight and bias:
 
@@ -210,18 +210,18 @@ which is a pretty close approximation for our function
 
 ## 4. Approximating a quadratic function with Neural Network
 
-In the last section we saw how to approximate the linear function Y = 2X - 3 , but this is too simple , what if we want to approximate a more complex function, let say quadratic function like this: 
+In the last section we saw how to approximate the linear function Y = 2X - 3 , but this is too simple, what if we want to approximate a more complex function? let say quadratic function like this: 
 
 <p align="center">Y = X<sup>2</sup> </p> 
 
-Let's modify our code so Xs and Ys to reflect the new function  
+Let's modify our code so that Xs and Ys to reflect the new function  
 
 ```python
 xs = np.random.choice(np.arange(-3,3,.01),500)
 ys = xs**2
 ```
 
-we will leave every thing else the same, and let's re-run our training and see what we get ?
+we will leave every thingelse the same  and re-run our training. What we get ?
 
 Your will notice that the loss value does not really improve, and the accuracy is 0, basically the model is failing to approximate the function 
 
@@ -229,7 +229,7 @@ screenshot of the training output
 
 <img src="images/bad_approx.png"  height="300" width="850">
 
-wee can visualize the approximation our model did vs, the expected values using this code 
+we can visualize the approximation our model made versus the expected values using the following code: 
 
 
 ```python
@@ -247,16 +247,16 @@ In the previous code we are plotting the correct results as blue and plotting th
  
 I think we can agree this is a very bad approximation.
 
-The reason this is failing is the fact that we are using a single neuron model, which can only approximate linear function, remember with wiungle neurom the output is:
+The reason this is failing is the fact that we are using a single neuron model, which can only approximate linear function, remember that with single neuron the output is:
 
 `Y`:The  output of the neuron, calculated as a function of the sum on inputs multiplied by weight plus the bias: 
 <p align="center">Y = f(W<sub>1</sub>.X<sub>1</sub> + W<sub>2</sub>.X<sub>2</sub> + b)</p>
 
-The solution to this is Multi-Neuron model, which is not a big difference from what we discussed before the only difference is that we will have more than one neuron and connect all of them together like in the following image
+The solution to this is a Multi-Neuron model.  This is not much different from what we discussed before.  We just add several neurons and connect them together as showing in the following image:
 
 <img src="images/Neural_network_example.png"  height="200" width="200">
 
-every thing we discussed in the single neuron discussion is still the same, the only difference is that we have now more than one neuron and we use the output of each neuron as an input to our output neuron 
+Every thing we discussed in the single neuron discussion is still the same, the only difference is that we have now more than one neuron and we use the output of each neuron as an input to our output neuron. 
 
 in the diagram we introduced few new terms because of the nature of the Multi-Neuron model
 
@@ -270,7 +270,7 @@ in the diagram we introduced few new terms because of the nature of the Multi-Ne
 ### output layer
    This is the collection of all the output nodes, in our examples so far we only had one output node
 
-let's apply this to our quadratic example, so instead of using a single neuron let have a model setup[ like this 
+let's apply this to our quadratic example, so instead of using a single neuron let's have a model setup like this 
 input layer: 1 node
 hidden layers: i hidden layer contains 20 nodes, and activation function of type Relu
 output layer: 1 node
@@ -283,19 +283,19 @@ model = Sequential();
 model.add(Dense(units=20,input_dim=1, activation='relu'))
 model.add(Dense(units=1))
 ```
-We do not need to change any thing else, re_run the training step, what do you get ?
+We do not need to change anything else.  Rerun the training step and let’s see what we get.
 
-Unlike last run, now you will see that the loss value is getting down and if we use the plotting code we get much better approximation 
+Unlike the last run, now we see that the loss value is going down and if we plot the results we have a much better approximation.
 
 <img src="images/good_approx.png"  height="300" width="850">
  
 <img src="images/goodchart.png"  height="400" width="400">
 
-The Layer type we used here is ```Dense``` this is basically a layer that is connected to all nodes in the layers on its left, and right as in the diagram above. There are different types of layers we will see later in this tutorial.
+The Layer type we used here is ```Dense```. This is basically a layer that is connected to all nodes in the layers on its left, and right as in the diagram above. There are different types of layers we will see later in this tutorial.
 
-The reason this works much better; is the extra nodes we just added, these nodes allow the model to simulate the non-linearity nature of the function we are trying to approximate
+The reason this works much better is the extra nodes we just added.  These nodes allow the model to simulate the non-linearity nature of the function we are trying to approximate.
 
-Now you know how to create a single neuron model, or a multi layer model using tensorflow with few lines of code. Hope you found this useful and convince you that machine learning is really easy to get going. This is the end of session one. Hope you give the assignment a try and see you in session 2 
+Now you know how to create a single neuron model, or a multi layer model using tensorflow with few lines of code. I hope you found this useful and and have convinced you that machine learning is really easy to get going. This is the end of session one. Hope you give the assignment a try and see you in session 2 
 
 ## 5. Assignment (XOR)
 
