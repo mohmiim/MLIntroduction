@@ -268,6 +268,26 @@ this should produce:
 <img src="images/output.png" height="200" width="300">
  
 
+## 6. Saving the Model
+
+We saw how to create a model and train it, but we never saved our model. Meaning, every time we try to use the model for prediction we have to retrain it. This was ok when we dealt with models like the ones in session 1, where the model can be trained in a minute or so, but real models take a long time to train it can take days. We really need to save our model so we can continue to train where we stopped or we can just load it and use it for prediction without need to retrain. Fortunately, this is easily done with Tensorflow.
+
+* Saving the entire model
+ 
+```python
+model.save('my_model.h5')
+```
+* Loading the model
+
+```python
+model = keras.models.load_model('my_model.h5')
+```
+
+* Dealing with files in google colab
+
+Since we are starting to save and load models, we need a place to save them. If you did read the section in session1 about running python code, I mentioned that I use both google colab and eclipse pydev for my python development. If you are using eclipse or a similar local IDE then saving is no problem since you have access to your HDD and you can save wherever you like by providing the path in the save method. But if you are using google colab what should you do?
+
+This [link](https://colab.research.google.com/notebooks/io.ipynb "IO colab") shows all the different options you have to deal with files in colab, I tend to use the google drive option.
 
 
 
