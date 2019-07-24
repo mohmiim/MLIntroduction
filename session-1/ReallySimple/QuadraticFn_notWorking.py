@@ -1,7 +1,7 @@
 '''
 Created on May 30, 2019
 
-@author: mohammedmostaqfa
+@author: mohammedmostafa
 '''
 import numpy as np
 from tensorflow.keras.layers import Dense
