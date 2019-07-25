@@ -18,8 +18,8 @@
 
 ## 1. What are we going to build
 
-   In session 1, we saw how to approximate linear and quadratic functions using Neural networks. This was a simple enough project to get introduced to Tensorflow and how to use it to build Neural Network models. Now it is time to move to more fun project, a project that will be very hard (if not impossible to do with classic programming). Let's build a system when given an image of a chart it can tell us what type of chart is in the image for example: 
-   If the system receive this image: 
+   In session 1, we saw how to approximate linear and quadratic functions using Neural networks. This was a simple enough project to get introduced to Tensorflow and how to use it to build Neural Network models. Now it is time to move to a more fun project, a project that will be very hard (if not impossible to do with classic programming). Let's build a system when given an image of a chart it can tell us what type of chart is in the image for example: 
+   If the system receives this image:  
 
 <p align="center"> 
 <img src="images/bar.png" height="350" width="650">
@@ -33,8 +33,8 @@
    
    It will say, this is a pie_chart 
    
-   The first thing we need to think about is what will be the input to our model, In all the cases we have seen so far the input was quite simple it was either one or 2 simple numbers, but in this case what would it be  ?
-   We can not just feed the image as an image to the model for training, we need to represent it as numbers. Easiest way is to basically feed in the pixel values as the input to the model. basically if we have a true colour image we can represent every pixel using 3 integer values to represent the RGB value of the pixel. In other words is our image is W width and H height in pixels, we represent it as W*H*3 numbers. This way we can feed it to the Neural network and start the training process.
+   First, we need to think about is what will be the input to our model? In all the cases we have seen so far the input was quite simple it was either 1 or 2 simple numbers, but in this case, what would it be?
+   We can not just feed the image as an image to the model for training, we need to represent it as numbers. The easiest way is to feed in the pixel values as the input to the model. Basically, if we have a true-color image we can represent every pixel using 3 integer values to represent the RGB value of the pixel. In other words, if our image is W width and H height in pixels, we represent it as W*H*3 numbers. This way we can feed it to the Neural network and start the training process.
    
    The following diagram shows how this will look for an image that is 28 X 28 pixels
 
@@ -42,19 +42,19 @@
 <img src="images/pixels.png" height="400" width="600">
 </p>    
    
-## 2. Loading images training set using tensorflow
-   In the last section we discussed how can we present images to a neural network, let talk a bit about training sets and testing sets.
-   What we have been doing so far, is called supervised learning, which is training a model by giving it a set of inputs and the expected output this way the model can learn from these input/outputs the rules we need to produce the correct output, These inputs/outputs are called the training set, because it had been used to train the model. But how can we check how good is our model ? 
+## 2. Loading images training set using TensorFlow
+   In the last section, we discussed how to present images as input to a neural network, let's talk a bit about training sets and testing sets.
+   What we have been doing so far, is called supervised learning, which is training a model by giving it a set of inputs and the expected outputs. Then the model can learn from these input/outputs the rules we need to produce the correct output, These inputs/outputs are called the training set because it had been used to train the model. But how can we check how good is our model?  
    
-   If we use the same inputs we used for the training, this will not be a correct way to measure the quality of our model, since the model have seen these inputs already and knows what should be the output, this can be used only to measure the training accuracy. But in real use cases the model will receive inputs it did not see before. This Bring us to the testing data set, which is a set of inputs and their output that the model did not see during training. we use this testing dataset to measure the model accuracy to see if it is really able to recognize input it did not see before.
+   If we use the same inputs we used for the training to validate it, this will be a misleading measure of the quality of the model, since the model have seen these inputs already and knows what should be the output, this can be used only to measure the training accuracy. But in real use-cases, the model will receive inputs it did not see before. This brings us to the testing data set, which is a set of inputs and their outputs that the model did not see during training. we use this testing dataset to measure the model accuracy to see if it is really able to recognize input it did not see before.
    
    Ok, so we now know we need a training set and testing test. Let's see how we prepare the folders containing our images. We start by creating this folder structure
    
 <img src="images/smallData.png" height="150" width="150">
 
-   You will notice that we created separate folders for the training vs testing, and in each folder we created sub folders one for each type of chart we are going to recognize. For example in this case we have samples for bar and pie charts
+   We created separate folders for the training vs testing, and in each folder, we created subfolders one for each type of chart we are going to recognize. For example, in this case, we have samples for bar and pie charts.
 
-Next step is to load the images in these folders and prepare to be fed into our model, tensorflow has a great utility called ``ImageDataGenerator``, we can use it to load our data the following code shows how this can be done 
+Next step is to load the images in these folders and prepare to be fed into our model, Tensorflow has a great utility called ``ImageDataGenerator``, we can use it to load our data the following code shows how this can be done 
 
 ```python
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
@@ -66,9 +66,17 @@ train_generator = train_data_generator.flow_from_directory("../smallData/train",
                                                            target_size=(100,100))
 ```
 
-What did we do in this code, first step we created the ImageDataGenerator, when you create an ImageDataGenerator you can pass it parameters to control how it work, for example you can pass it a rescale factor that will be multiplied by all pixel values (to make all values range between 0 and 1), you can also pass it a pre-processing function that will be called on all inputs this can be your own function or one of the tensorflow.keras functions, i found that using `` tensorflow.keras.applications.mobilenet.preprocess_input `` function usually produce good results for me, that is why you will find me passing it in the code when i create the image generator.
+What did we do in this code? first step we created the ImageDataGenerator, when you create an ImageDataGenerator you can pass it parameters to control how it works, for example, you can pass it a rescale factor that will be multiplied by all pixel values (to make all values range between 0 and 1), you can also pass it a pre-processing function that will be called on all inputs this can be your own function or one of the tensorflow.keras functions, i found that using `` tensorflow.keras.applications.mobilenet.preprocess_input `` function usually produce good results for me, that is why you will find me passing it in the code when I create the image generator.
 
-Then we called the method flow_from_directory to create our train data generator, this method receives the folder to load the images from, target size it will scale the images to fit (in this case we used 100 X 100), and the patch size , the patch size is basically the number of images to be yielded from the generator per batch.
+Then we called the method flow_from_directory to create our train data generator, this method receives the folder to load the images from, target size it will scale the images to fit (in this case we used 100 X 100), and the patch size, the patch size is basically the number of images to be yielded from the generator per batch.
+
+
+* Dealing with files in google colab
+
+Since we are starting to deal with files, we need a place to load them from. If you did read the section in session 1 about running python code, I mentioned that I use both google colab and eclipse pydev for my python development. If you are using eclipse or a similar local IDE then loading or saving is no problem since you have access to your HDD and you can load/save as you like. But if you are using google colab what should you do?
+
+This [link](https://colab.research.google.com/notebooks/io.ipynb "IO colab") shows all the different options you have to deal with files in colab, I tend to use the google drive option.
+
 
 ## 3. Designing a Neural network model for chart recognition
 
@@ -283,11 +291,6 @@ model.save('my_model.h5')
 model = keras.models.load_model('my_model.h5')
 ```
 
-* Dealing with files in google colab
-
-Since we are starting to save and load models, we need a place to save them. If you did read the section in session1 about running python code, I mentioned that I use both google colab and eclipse pydev for my python development. If you are using eclipse or a similar local IDE then saving is no problem since you have access to your HDD and you can save wherever you like by providing the path in the save method. But if you are using google colab what should you do?
-
-This [link](https://colab.research.google.com/notebooks/io.ipynb "IO colab") shows all the different options you have to deal with files in colab, I tend to use the google drive option.
 
 
 
