@@ -214,6 +214,8 @@ which is a pretty close approximation for our function
 
 <p align="center">Y = 2*X - 3 </p> 
 
+To see the full code working, you can either get it form the github folder and run it on your local machine or you can use [this Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-1/Session_1_first.ipynb) to see the note book, then click on the Open in Colab button to run it and change the code as you like 
+
 
 ## 4. Approximating a quadratic function with Neural Network
 
@@ -304,6 +306,8 @@ The reason this works much better is the extra nodes we just added.  These nodes
 
 Now you know how to create a single neuron model, or a multi layer model using tensorflow with few lines of code. I hope you found this useful and and have convinced you that machine learning is really easy to get going. This is the end of session one. Hope you give the assignment a try and see you in session 2 
 
+To see the full code working, you can either get it form the github folder and run it on your local machine or you can use [this Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-1/session_1_Quadratic.ipynb) to see the note book, then click on the Open in Colab button to run it and change the code as you like 
+
 ## 5. Assignment (XOR)
 
    XOR, data for 2 variables looks very simple but it is really none linear. The data will look like that 
@@ -345,5 +349,7 @@ the expected output should be
  [0.]]
 
 <a href="https://github.ibm.com/BusinessAnalytics/machine-learning-sessions/blob/master/session-1/ReallySimple/XOR.py">Solution</a> 
+
+or You can use [this Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-1/Session_1_XOR.ipynb) to see the note book, then click on the Open in Colab button to run it and change the code as you like 
    
    
