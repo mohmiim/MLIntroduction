@@ -292,6 +292,9 @@ model.save('my_model.h5')
 model = keras.models.load_model('my_model.h5')
 ```
 
+To see the full code working, you can either get it form the github folder and run it on your local machine or you can use [this Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-2/Session_2_first.ipynb) to see the note book, then click on the Open in Colab button to run it and change the code as you like 
+
+
 ## 7. Assignment
 
 We did train a model to recognize 2 chart types, we have been using the samples in the folder called smallData for our training but I did provide another folder called [data](https://github.com/mohmiim/MLIntroduction/tree/master/session-2/data) it has 5 classes instead of 2.
