@@ -80,7 +80,7 @@ This [link](https://colab.research.google.com/notebooks/io.ipynb "IO colab") sho
 
 ## 3. Designing a Neural network model for chart recognition
 
-   We prepared our training data, now we can go ahead and create the model we will try to train, this will be no different that what we did before in session one with one exception that the model will be a bit bigger (a lot bigger actually)
+   We prepared our training data, now we can go ahead and create the model we will try to train, this will be no different than what we did before in session one with one exception that the model will be a bit bigger (a lot bigger actually)
    
   ```python
 from tensorflow.keras.models import Sequential
@@ -98,11 +98,11 @@ model.compile(optimizer=SGD(),
                metrics=['accuracy'])
    ```
    
-   You will notice that i am using more nodes in each layers than before, and i set my input to be and array or (100,100,3) as we explained before, but neural net Dense layer expects a vector, that is why we use the layer type Flatten which will basically convert our input into a vector
-   
-   You will also notice that my output layer has 2 nodes since i have 2 classes of output to identify, Bar chart and Pie chart, and the loss function i am using here is the categorical crossentropy since my output is more than one class.
-   
-   To get an idea how big is this model, use the summary function to display it, like this 
+   You will notice that I am using more nodes in each layer than before, and I set my input to be an array of (100,100,3) as we explained before, but neural net Dense layer expects a vector, that is why we use the layer type Flatten to convert our input to a vector
+   
+   You will also notice that my output layer has 2 nodes since i have 2 classes of output to identify, Bar chart and Pie chart, and the loss function I am using here is the categorical crossentropy since my output is more than one class.
+   
+   To get an idea of how big is this model, use the summary function to display it, like this  
    
    ```python      
  model.summary()
@@ -111,36 +111,35 @@ model.compile(optimizer=SGD(),
    
 <img src="images/nnsummary.png" height="300" width="500">
 
-as you can see this model, have 31M parameters to train
+As you can see this model has 31M parameters to train. To train the model use this code 
 
-to train the model use this code 
 
 ```python
 model.fit_generator(generator=train_generator,epochs=500)
 ```
-   since we are using InageDataGenerator to load our data, we use the fit_generator method instead of the fit method, which is like pretty much like the fit method we saw before but it receives a generator as the input instead of the typical array of input and output. 
+   Since we are using ImageDataGenerator to load our data, we use the fit_generator method instead of the fit method, which is the same as the fit method we saw before but it receives a generator as the input instead of the typical array of input and output. 
    
 ## 4. Testing model performance
 
    We loaded our data, designed our model and trained it. Now we want to see how does it perform.
 
-To do this, we need to understand few new terms
+To do this, we need to understand a few new terms
 
 **True Positives (TP):** 
    
-   These are the correctly predicted positive values which means that the value of actual class is yes and the value of predicted class is also yes. E.g. if actual class value is Bar charts, and predicted class is Bar chart.
+   These are the correctly predicted positive values which mean that the value of the actual class is yes and the value of the predicted class is also yes. E.g. if the actual class value is Bar charts, and predicted class is Bar chart.
 
 **True Negatives (TN):** 
    
-   These are the correctly predicted negative values which means that the value of actual class is no and value of predicted class is also no. E.g. if actual class is not a Bar chart and predicted class tells you the same thing.
+   These are the correctly predicted negative values which mean that the value of the actual class is no and the value of the predicted class is also no. E.g. if the actual class is not a Bar chart and predicted class tells you the same thing.
 
 **False Positives (FP):** 
    
-   When actual class is no and predicted class is yes. E.g. if actual class is a Pie chart but predicted class tells you it is a Bar.
+   When the actual class is no and predicted class is yes. E.g. if the actual class is a Pie chart but predicted class tells you it is a Bar.
 
 **False Negatives (FN):** 
    
-   When actual class is yes but predicted class in no. E.g. if actual class is Bar chart but the predicted class is Pie.
+   When the actual class is yes but predicted class in no. E.g. if the actual class is a Bar chart but the predicted class is Pie.
 
 **Precision:** 
  
@@ -160,9 +159,9 @@ To do this, we need to understand few new terms
    
    F1 Score = 2*(Recall * Precision) / (Recall + Precision)
    
-This might sound a but much, but the more you use these th emore it will be clear to you, for now lets just focus on the precision
+This might sound a bit much, but the more you use these the more it will be clear to you, for now lets just focus on the precision
 
-Calculating these numbers, is a task that we  will do many times to verify our models, so it will be a good idea to have a utiltiy method that does that and we can call it any time we need to:
+Calculating these numbers, is a task that we  will do many times to verify our models, so it will be a good idea to have a utility method that does that and we can call it any time we need to:
  
 ```python
    from sklearn.metrics import confusion_matrix, classification_report   
@@ -173,17 +172,17 @@ Calculating these numbers, is a task that we  will do many times to verify our m
         target_names = generator.class_indices.keys()
         print(classification_report(generator.classes, row_index, target_names=target_names))
 ```
-So, in the previous code we create a method that receive a data generator (like the one we created before) and a model then it display the numbers we discussed for each class in the model. 
+   In the previous code we create a method that receive a data generator (like the one we created before) and a model then it display the numbers we discussed for each class in the model. 
 
 The First line is just using the model to predict all the values for our testing data by calling ``predict_generator`` on our model and passing it the generator.
 
-Remember that our output layer has 2 nodes (one for each class), this means the prediction we will get back will be an array of n rows where n equals the number of images we are passing to the model and each row will be 2 columns with one float number for each class (the number is basically the probability of the input image being the class), for example for 2 images it might look like this [[0.6 0.1] [0.2 0.8]], we want to convert this to a vector of n where n equals the number of test and the value in each row reflect the index of the predicted class.
+Remember that our output layer has 2 nodes (one for each class), this means the prediction we will get back will be an array of n rows where n equals the number of images we are passing to the model and each row will be 2 columns with one float number for each class (the number is the probability of the input image being the class), for example for 2 images it might look like this [[0.6 0.1] [0.2 0.8]], we want to convert this to a vector of n where n equals the number of test and the value in each row reflect the index of the predicted class.
 
-Calling the method argmax on the predictions array will do this for us, for example if we call argmax on [[0.6 0.1] [0.2 0.8]] we will get back [0 1]
+Calling the method argmax on the predictions array will do this for us, for example, if we call argmax on [[0.6 0.1] [0.2 0.8]] we will get back [0 1]
 
-the last step is to calculate the precision, recall, and F1Score. We do not need to calculate it ourselves, we will use the classification_report function from sklearn module, and it will do all the work for us. This function requires the class , the correct classification, the predicted classification and the names of the classes. We explained how to get thr prediction vector, the correct classification can be obtained from the generator using generator.classes and the labels of the classes using generator.class_indices.keys().
+   The last step is to calculate the precision, recall, and F1 Score. We do not need to calculate it ourselves, we will use the classification_report function from sklearn module, it will do all the work for us. This function requires the class, the correct classification, the predicted classification and the names of the classes. We explained how to get the prediction vector, the correct classification can be obtained from the generator using generator.classes and the labels of the classes using generator.class_indices.keys().
 
-lets call this function now using our training data and see what do we get
+let's call this function now using our training data and see what do we get
 
 ```python
    test(generator=train_generator, model=model)
@@ -192,9 +191,9 @@ you will get this output
 
 <img src="images/train.png" height="150" width="350">
 
-As you can see, our training precision is 100%, but as we said it is more important to calcuate these numbers on data set the model did not see before
+As you can see, our training precision is 100%, but as we said it is more important to calculate these numbers on data set the model did not see before
 
-Lets, create a generator using our testing data
+Let's create a generator using our testing data
 
 ```python
 test_data_generator = ImageDataGenerator(preprocessing_function=preprocess_input)
@@ -202,9 +201,9 @@ test_generator = test_data_generator.flow_from_directory("../smallData/test",
                                                          target_size=(100,100),
                                                          shuffle=False)
 ```
-it is pretty much similar code to what we did with the training set, but we pass it the folder for the testing set instead of the training one, and we set shuffle to False since we do not want to shuffle or testing set.
+It is similar code to what we did with the training set, but we pass it the folder for the testing set instead of the training folder, and we set shuffle to False since we do not want to shuffle or testing set.
 
-now we can call our test function agiann but this time with the testing data set and see what do we get
+now we can call our test function agian but this time with the testing data set and see what do we get
 
 ```python
    test(generator=test_generator, model=model)
@@ -216,13 +215,13 @@ you will get something similar to this output
 
 You will notice that precision now is 78% instead of 100%, but this is a lot more real measure of our model performance since we are running it on data the model did not see before.
 
-Now, this an interesting observation here, out training precision is 100%, while our testing precision is 78%. Although 78% is good, typically when you see a big difference between model training performance and testing performance this is an indication of a problem called Overfitting
+An interesting observation here is our training precision is 100%, while our testing precision is 78%. Although 78% is good, when you see a big difference between model training performance and testing performance this is an indication of a problem called Overfitting.
 
 **Overfitting:**
 If our model does much better on the training set than on the test set, then we’re likely overfitting. There are few actions you can take to deal with overfitting:
 1- Add more samples to your training set
 2- Stop your training earlier
-3- Remove useless features, for example does color matter in your classification, maybe you shoudl switch to gray scale instead of RGB
+3- Remove useless features, for example, does color matter in your classification, maybe you should switch to grayscale instead of RGB
 
 <p align="center"> 
 <img src="images/overfitting.png" height="400" width="600">
@@ -231,9 +230,9 @@ If our model does much better on the training set than on the test set, then we�
 ## 5. Confusion matrix
 
 
-We checked out model performance, and found that our precision is on average 78%, one important point to keep in mind is when you have a model that do multi-class classifications, looking at the over all performance can be misleading. It is important to check the performance per class as well, this will allow you to see how each class if performance. For example in our case you will notice that the performance of bar chart is 79% while pie chart is 78% this is fine, but imagine is you find one of them like 20% this means you need to pay this class more attention. For example what is the qualility of the samples for this class, do we have enough samples for it and so on.
+   We checked our model performance, and found that our precision is on average 78%, one important point to keep in mind is when you have a model that does multi-class classifications, looking at the overall performance can be misleading. It is important to check the performance per class as well, this will allow you to see each class performance. For example in our case you will notice that the performance of bar chart is 79% while pie chart is 78% this is fine, but imagine is you find one of them like 20% this means you need to pay this class more attention. For example, what is the quality of the samples of this class, do we have enough samples for it and so on.
 
-Another, important aspect to keep in mind when dealing with multiple classes classification, if we find that our model performs bad for one class, it is important to check to see what does it confuse this class with. In other words imagine we were detecting Bar, Pie and Line charts then we find that our model performs bad with line chart classification, it will be very helpful to know what does it confuse line charts with. For example does it tend to misclassify line charts as bar charts, does it tend to think that pie charts are line charts and so on. This helps us alot to decide what acvtions do we need to take to deal with the issue.
+Another, important aspect to keep in mind when dealing with multiple classes classification, if we find that our model performs bad for one class, it is important to check what does it confuse this class with. In other words imagine we were detecting Bar, Pie, and Line charts then we find that our model performs bad with line chart classification, it will be very helpful to know what does it confuse line charts with. For example, does it tend to misclassify line charts as bar charts, does it tend to think that pie charts are line charts and so on? This helps us to decide what actions do we need to take to deal with the issue.
 
 This is where the concept of a confusion metrix become very handy. The easiest way to understand confusion matrix is to visualize it:
 
@@ -241,11 +240,11 @@ This is where the concept of a confusion metrix become very handy. The easiest w
 <img src="images/confusionmatrix.png" height="300" width="500">
 </p>   
 
-A quick glance at the confusion matrix will allow you to compare the predicted classes to the actually and what classes get misclassified and what was the misclassification. We want the Diagonal to have the heights number since this reflect that predication matched the true class.
+A quick glance at the confusion matrix will allow you to compare the predicted classes to the actual, what classes get misclassified and what was the misclassification. We want the Diagonal to have the highest number since this reflects that predication matched the true class.
 
 The module we used before to print our the precision and F1 score, comes with a handy function for showing the confusion matrix. Here is how we can show our confusion matrix
 
-we will modify out test function we did before to look like this 
+we will modify the test function we did before to look like this  
 
 ```python
 	from sklearn.metrics import confusion_matrix, classification_report
@@ -259,7 +258,7 @@ we will modify out test function we did before to look like this
         	print(classification_report(generator.classes, row_index, target_names=target_names))
 ```
 
-The change was very simple, we added 2 lines print statements. One to print the names of all class
+The change was very simple, we added 2 print statements. One to print the names of all class
 
 ```python
 target_names = generator.class_indices.keys()
