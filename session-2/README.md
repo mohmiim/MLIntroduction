@@ -12,11 +12,11 @@
 
 [5. Confusion matrix](#5-Confusion-matrix)
 
-[6. Saving the Model](#6-Saving_Model)
+[6. Saving the Model](#6-Saving-the-Model)
 
 [7. Assignment](#7-Assignment)
 
-[8. Observations and Conclusions](#8-Observations_Conclusions)  
+[8. Observations and Conclusions](#8-Observations-and-Conclusions)  
 
 ## 1. What are we going to build
 
