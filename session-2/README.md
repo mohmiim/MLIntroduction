@@ -14,7 +14,9 @@
 
 [6. Saving the Model](#Saving_Model)
 
-[7. Observations and Conclusions](#Observations_Conclusions)  
+[7. Assignment](#Assignment)
+
+[8. Observations and Conclusions](#Observations_Conclusions)  
 
 ## 1. What are we going to build
 
@@ -176,9 +178,9 @@ Calculating these numbers, is a task that we  will do many times to verify our m
 
 The First line is just using the model to predict all the values for our testing data by calling ``predict_generator`` on our model and passing it the generator.
 
-Remember that our output layer has 2 nodes (one for each class), this means the prediction we will get back will be an array of n rows where n equals the number of images we are passing to the model and each row will be 2 columns with one float number for each class (the number is the probability of the input image being the class), for example for 2 images it might look like this [[0.6 0.1] [0.2 0.8]], we want to convert this to a vector of n where n equals the number of test and the value in each row reflect the index of the predicted class.
+Remember that our output layer has 2 nodes (one for each class), this means the prediction we will get back will be an array of n rows where n equals the number of images we are passing to the model and each row will be 2 columns with one float number for each class (the number is the probability of the input image being the class), for example for 2 images it might look like this ``[[0.6 0.1] [0.2 0.8]]``, we want to convert this to a vector of n where n equals the number of test and the value in each row reflect the index of the predicted class.
 
-Calling the method argmax on the predictions array will do this for us, for example, if we call argmax on [[0.6 0.1] [0.2 0.8]] we will get back [0 1]
+Calling the method argmax on the predictions array will do this for us, for example, if we call argmax on ``[[0.6 0.1] [0.2 0.8]]`` we will get back ``[0 1]``
 
    The last step is to calculate the precision, recall, and F1 Score. We do not need to calculate it ourselves, we will use the classification_report function from sklearn module, it will do all the work for us. This function requires the class, the correct classification, the predicted classification and the names of the classes. We explained how to get the prediction vector, the correct classification can be obtained from the generator using generator.classes and the labels of the classes using generator.class_indices.keys().
 
@@ -277,7 +279,7 @@ this should produce:
 
 ## 6. Saving the Model
 
-We saw how to create a model and train it, but we never saved our model. Meaning, every time we try to use the model for prediction we have to retrain it. This was ok when we dealt with models like the ones in session 1, where the model can be trained in a minute or so, but real models take a long time to train it can take days. We really need to save our model so we can continue to train where we stopped or we can just load it and use it for prediction without need to retrain. Fortunately, this is easily done with Tensorflow.
+We saw how to create a model and train it, but we never saved our model. Meaning, every time we try to use the model for prediction we have to retrain it. This was OK when we dealt with models like the ones in session 1, where the model can be trained in a minute or so, but real models take a long time to train it can take days. We really need to save our model so we can continue to train where we stopped or we can just load it and use it for prediction without need to retrain. Fortunately, this is easily done with Tensorflow.
 
 * Saving the entire model
  
@@ -289,6 +291,20 @@ model.save('my_model.h5')
 ```python
 model = keras.models.load_model('my_model.h5')
 ```
+
+## 7. Assignment
+
+We did train a model to recognize 2 chart types, we have been using the samples in the folder called smallData for our training but I did provide another folder called [data](https://github.com/mohmiim/MLIntroduction/tree/master/session-2/data) it has 5 classes instead of 2.
+Try to go back and modify the code we did so far to create a model that recognize these 5 charts, what are your observations, for example, did the accuracy improve or get worse, from the confusion matrix what charts are confused with each other. Can you play with the model setup to improve the accuracy?
+
+[Solution](https://github.com/mohmiim/MLIntroduction/blob/master/session-2/NNRecognizer/NNChartRecognizer.py)    
+
+## 8. Observations and Conclusions
+
+We did go a long way in this session, instead of just approximating a simple Linear function, to building a model that recognizes chart type form an image. But there are a few things we need to think about. The quality of our model is not great, considering that we are trying to recognize only 2 types of charts. We know we are suffering from  Overfitting issue that we need to deal with. We could try to increase our training set size, but i am  not doing that for now and starting with small training set in the first place on purpose, Because having more labeled samples is not an easy task, and we will learn in session 4 of easy tricks we can do to deal with this issue. Other Options is to add more nodes to our layers or increase the number of layers, but our model already contains 31M parameters to trains (when you save it if you check the file size it will 100MB+), maybe this is an indication that we should take a different approach. In session 3 we will learn a new layer type called Convolution that will help. This is important because Machine learning is an iterative process, and we need to feel comfortable to understand our model and its limitations, so we can get back re-adjust and try again.
+
+All, this being said if you have been following so far you should be proud. You did learn quite a few concepts and build machine learning models, analyzed their results and was able to reason about them. Great Job.     
+
 
 
 

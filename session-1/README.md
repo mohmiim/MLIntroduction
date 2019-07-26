@@ -44,7 +44,7 @@ If you think about it, it is much easier this way (given you have enough data to
 
 ## 2. Single-Neuron Neural Network
 
-Usually the first concept that comes to mind when someone mentions Machine Learning or Deep Learning is Neural Network. It had been there for a very long time, it had good days and bad days :) , but regardless, understanding the it will allow us to understand the more sophisticated topics we will handle in later sessions.
+Usually the first concept that comes to mind when someone mentions Machine Learning or Deep Learning is Neural Network. It had been there for a very long time, it had good days and bad days :) , but regardless, understanding it will allow us to understand the more sophisticated topics we will handle in later sessions.
 
 This figure shows the simplest Neural Network we can create. It has only one node (neuron), accepts 2 inputs and has one output:
 
