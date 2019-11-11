@@ -8,8 +8,8 @@ from sklearn.externals import joblib
 import os
 import numpy as np
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.applications import xception, InceptionV3, resnet_v2, vgg19
-from tensorflow.keras.layers import concatenate, Add, Flatten
+from tensorflow.keras.applications import xception, inception_v3, resnet_v2, vgg19,densenet
+from tensorflow.keras.layers import Flatten
 from tensorflow.keras.models import Sequential
 
 
@@ -71,29 +71,45 @@ FEATURE_EXTRACTOR = creator(weights='imagenet',include_top=False,input_shape=tar
 model = Sequential()
 model.add(FEATURE_EXTRACTOR)
 model.add(Flatten())
-FEATURE_EXTRACTOR1 = xception.Xception(weights='imagenet',include_top=False,input_shape=targetSize_withdepth)
-model1 = Sequential()
-model1.add(FEATURE_EXTRACTOR1)
-model1.add(Flatten())
-FEATURE_EXTRACTOR2 = resnet_v2.ResNet152V2(weights='imagenet',include_top=False,input_shape=targetSize_withdepth)
-model2 = Sequential()
-model2.add(FEATURE_EXTRACTOR2)
-model2.add(Flatten())
-
-#now we can extract the feature and save them for our images
 features_x = model.predict_generator(train_generator)
 print(type(features_x).__name__)
 print(features_x.shape)
 
+FEATURE_EXTRACTOR1 = xception.Xception(weights='imagenet',include_top=False,input_shape=targetSize_withdepth)
+model1 = Sequential()
+model1.add(FEATURE_EXTRACTOR1)
+model1.add(Flatten())
 features_x1 = model1.predict_generator(train_generator)
 print(type(features_x1).__name__)
 print(features_x1.shape)
 
+FEATURE_EXTRACTOR2 = resnet_v2.ResNet152V2(weights='imagenet',include_top=False,input_shape=targetSize_withdepth)
+model2 = Sequential()
+model2.add(FEATURE_EXTRACTOR2)
+model2.add(Flatten())
 features_x2 = model2.predict_generator(train_generator)
 print(type(features_x2).__name__)
 print(features_x2.shape)
 
-all_features = np.concatenate((features_x, features_x1,features_x2), axis=1)
+FEATURE_EXTRACTOR3 = inception_v3.InceptionV3(weights='imagenet',include_top=False,input_shape=targetSize_withdepth)
+model3 = Sequential()
+model3.add(FEATURE_EXTRACTOR3)
+model3.add(Flatten())
+features_x3 = model3.predict_generator(train_generator)
+print(type(features_x3).__name__)
+print(features_x3.shape)
+
+FEATURE_EXTRACTOR4 = densenet.DenseNet201(weights='imagenet',include_top=False,input_shape=targetSize_withdepth)
+model4 = Sequential()
+model4.add(FEATURE_EXTRACTOR4)
+model4.add(Flatten())
+features_x4 = model4.predict_generator(train_generator)
+print(type(features_x4).__name__)
+print(features_x4.shape)
+
+
+
+all_features = np.concatenate((features_x, features_x1,features_x2,features_x3,features_x4), axis=1)
 
 
 print(type(all_features).__name__)

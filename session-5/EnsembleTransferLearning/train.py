@@ -32,7 +32,7 @@ history = model.compile(optimizer=Adam(), loss="categorical_crossentropy", metri
 
 model.summary()
 
-callBack = myCallBacks()
+callBack = myCallBacks(loss=1E-7)
 model.fit(x_train,y_train,epochs=epochs,shuffle=True,verbose=2,callbacks=[callBack])
 
 
