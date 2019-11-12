@@ -8,15 +8,15 @@
 
 [3. Designing a Neural network model for chart recognition](#3-designing-a-neural-network-model-for-chart-recognition)
 
-[4. Testing model performance](#4-Testing-model-performance)
+[4. Testing model performance](#4-testing-model-performance)
 
-[5. Confusion matrix](#5-Confusion-matrix)
+[5. Confusion matrix](#5-confusion-matrix)
 
-[6. Saving the Model](#6-Saving-the-Model)
+[6. Saving the Model](#6-saving-the-model)
 
-[7. Assignment](#7-Assignment)
+[7. Assignment](#7-assignment)
 
-[8. Observations and Conclusions](#8-Observations-and-Conclusions)  
+[8. Observations and Conclusions](#8-observations-and-conclusions)  
 
 ## 1. What are we going to build
 
