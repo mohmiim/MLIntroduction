@@ -16,13 +16,16 @@ yv = ys
 
 model = Sequential();
 model.add(Dense(units=32,input_dim=2, activation='relu'))
-model.add(Dense(units=16,input_dim=2, activation='relu'))
+model.add(Dense(units=16, activation='relu'))
 model.add(Dense(units=1, activation='sigmoid'))
+
 
 
 model.compile(optimizer="sgd", loss = "mean_squared_error",metrics=['acc'])
 
 history = model.fit(xs, ys, epochs=1000,verbose=2) 
+
+model.summary()
 
 print(model.predict(xs).round())
 

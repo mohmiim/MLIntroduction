@@ -16,7 +16,7 @@ x_test=np.linspace(-3,3,1000)
 y_test=x_test**2
 
 model = Sequential();
-model.add(Dense(units=20,input_dim=1, activation='relu'))
+model.add(Dense(units=10,input_dim=1, activation='relu'))
 model.add(Dense(units=1))
 
 
