@@ -43,7 +43,7 @@ In the figure above, convolution is I\*K the filter K is moved across I one step
 You will notice that the output did shrink in width and height, in the example above the input was 7\*7 but the output was 5\*5. There are multiple or parameters that affects the convolution operation, in the previous example we the filter moved one pixel at a time, this is called the stride which you can control to be suitable for your use case. Another factor is do you do padding or not, in the example above the output image shrank because we did not do padding so the corner pixels could nto be convoluted, while we could have added a rectangle of 0's around the image this would have increased the input size to 9\*9 so the output would have been 7\*7
 
 <p align="center"> 
-<img src="images/pading.png" >
+<img src="images/padding.png" >
 </p>
 
 
