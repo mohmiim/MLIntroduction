@@ -46,7 +46,16 @@ You will notice that the output did shrink in width and height, in the example a
 <img src="images/padding.png" height="350" width="370" >
 </p>
 
-This [notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-3/ImageConv.ipynb "conv sample") shows an image before and after applying a  convolution filter, and how convolution is applied
+The following image will show the the effect of applying a specific convolution filter on an image 
+
+<p align="center"> 
+<img src="images/convSample.png" height="310" width="900" >
+</p>
+
+This [notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-3/ImageConv.ipynb "conv sample") contains code showing uthe effect of the filter on the image, so you can experiment with different values and different images. Some filter values can extract horizontal edges, some extract vertical and so on. 
+
+When we train a convolution Neural Network it try to find the best filters that extract the best features to identify the different classes we are training it to recognize.
+
 
 
 ## 3. Why Convolutional Neural Network
