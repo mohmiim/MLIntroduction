@@ -52,7 +52,7 @@ The following image will show the the effect of applying a specific convolution 
 <img src="images/convSample.png" height="310" width="900" >
 </p>
 
-This [notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-3/ImageConv.ipynb "conv sample") contains code showing uthe effect of the filter on the image, so you can experiment with different values and different images. Some filter values can extract horizontal edges, some extract vertical and so on. 
+This [notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-3/ImageConv.ipynb "conv sample") contains code showing the effect of the filter on the image, so you can experiment with different values and different images. Some filter values can extract horizontal edges, some extract vertical and so on. 
 
 When we train a convolution Neural Network it try to find the best filters that extract the best features to identify the different classes we are training it to recognize.
 
