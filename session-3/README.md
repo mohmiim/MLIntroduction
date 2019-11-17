@@ -56,7 +56,14 @@ This [notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-3/
 
 When we train a convolution Neural Network it try to find the best filters that extract the best features to identify the different classes we are training it to recognize.
 
+In tensorflow to create a convolution layer you use the layer type Conv2D
 
+~~~~{.python}
+from tensorflow.keras.layers import Conv2D
+model.add(Conv2D(64,(3,3),activation=relu))
+~~~~
+
+The previous code add a convolution layer to your model,that contains 64 filters, where each filter is 3\*3 
 
 ## 3. Why Convolutional Neural Network
 
