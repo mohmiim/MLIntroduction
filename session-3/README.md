@@ -117,6 +117,10 @@ model.add(Dense(5,activation='softmax'))
 
 The rest of the code should stay pretty much the same, if you check the output of model.summary() you will notice that this model has 1,737,317 parameters, compared to the 31M+ parameters in the model we created in previous session.
 
+<p align="center"> 
+<img src="images/model.png" height="600" width="300" >
+</p>
+
 This [notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-3/Session_3_first.ipynb "full example") shows a fully working example
 
 ## 6. Compare accuracy and model size of the CNN model to the NN model
