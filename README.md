@@ -13,5 +13,8 @@ The purpose of these sessions is to provide a quick high-level introduction to M
 * [Session 3](https://github.com/mohmiim/MLIntroduction/blob/master/session-3/README.md "Session 3"):
    We will show how we can improve the accuracy of our chart recognizer we did in session 2, by using Convolutional Neural Network. We will also show how this reduces the model size dramatically and speeds up training.
    
-* Session 4:
+* [Session 4](https://github.com/mohmiim/MLIntroduction/blob/master/session-4 "Session 4"):
    We will show how using transfer learning techniques we can improve the accuracy of our chart recognizer we built-in session 3, and make the training process really really fast
+   
+* [Session 5](https://github.com/mohmiim/MLIntroduction/blob/master/session-5 "Session 5"):
+   We will show how can we combine different pre-trained models to improve the accuracy of our model without adding new training samples.
