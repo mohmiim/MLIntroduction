@@ -125,7 +125,8 @@ This [notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-3/
 
 ## 6. Compare accuracy and model size of the CNN model to the NN model
 
-Accuracy should be similar for both models if you used the same network architecture as i did in my code, but the big difference should be in the model size, the CNN model size will be around 7MB while the NN model will be 100's of MBs
+Accuracy of the CNN model will be roughly 3% to 5% better than the NN model.
+Model size is a the big difference, the CNN model size will be around 7MB while the NN model will be 100's of MBs
 
 ## 7. Assignment
 
