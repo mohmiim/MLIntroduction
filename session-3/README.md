@@ -7,13 +7,15 @@
 
 [2. What is Convolutional Neural Network](#2-what-is-convolutional-neural-network)
 
-[3. Why Convolutional Neural Network](#3-why-convolutional-neural-network)
+[3. What is Pooling Layer](#3-what-is-pooling-layer)
 
-[4. Using Convolutional Neural Network for chart recognition](#4-using-convolutional-neural-network-for-chart-recognition)
+[4. Why Convolutional Neural Network](#4-why-convolutional-neural-network)
 
-[5. Compare accuracy of the CNN model to the NN model](#5-compare-accuracy-of-the-cnn-model-to-the-nn-model)
+[5. Using Convolutional Neural Network for chart recognition](#5-using-convolutional-neural-network-for-chart-recognition)
 
-[6. Assignment](#6-assignment)
+[6. Compare accuracy of the CNN model to the NN model](#6-compare-accuracy-of-the-cnn-model-to-the-nn-model)
+
+[7. Assignment](#7-assignment)
 
 ## 1. What is Dense Layer
 
@@ -32,7 +34,7 @@ Can we reduce this, so we can create very complex netwroks without having 100s o
 
 Convolution Neural Network is a special kind of neural network that had been proven to work very well with images. For example recognizing faces, animals, different types of objects and so on.  
 
-To understand how CNN works we need to first understand what is the Convolution operation. Convolution operation is applying a specific filter to the image to extract specific feature by considering small quares of the inpout data and maintain their relationship. Let's assume that our image is I and the Filter is K how can we apply the convolution operation  ?
+To understand how CNN works we need to first understand what is the Convolution operation. Convolution operation is applying a specific filter to the image to extract specific feature by considering small squares of the input data and maintain their relationship. Let's assume that our image is I and the Filter is K how can we apply the convolution operation  ?
 
 <p align="center"> 
 <img src="images/conv.png" >
@@ -65,17 +67,63 @@ model.add(Conv2D(64,(3,3),activation=relu))
 
 The previous code add a convolution layer to your model,that contains 64 filters, where each filter is 3\*3 
 
-## 3. Why Convolutional Neural Network
+## 3. What is Pooling Layer
+
+We learned in the previous section what is convolution layer, it extract features from the layer before it. But these features encode the precise position of the feature in the input, this is not ideal since a small shift in the input will result in a different feature set and can lead to wrong classification. The solution to this is to create a lower resolution version of the extracted features while maintaining the large or important features this is called pooling this will remove the precise details this might be of no value to our recognition task. The pooling layer does not really learn it just apply the pooling operation to the prvious layer output, typically in CNN you find each Convolution layer followed by a pooling layer.
+
+There are different types of pooling, for example Average pooling which calculate the average value for the pooling area and this became the output, another type is Max pooling which output the largest value in the pooling area.
+
+Example of max pooling
+
+<p align="center"> 
+<img src="images/MaxPooling.png" height="310" width="900" >
+</p>
+ 
+ In tensorflow to create a MaxPooling layer you use the layer type MaxPool2D
+
+~~~~{.python}
+from tensorflow.keras.layers import MaxPool2D
+model.add(MaxPool2D((2,2)))
+~~~~
+
+## 4. Why Convolutional Neural Network
+
+One of the main benefits of CNN, is the reduction in the numbers of parameters compared to the similar Dense Layers. This allows us to created much more complex networks and still be able to train them in reasonable amount of time and using reasonable hardware. For example consider a use case where our input is an RGB image of 100 Pixels by 100 pixels, this means our input size is 3\*100\*100 = 30000, LEt see how many parameters would we have if we create a Dense layer of 1000 Node vs Conv layer of 64 filters each filter 3\*3.
+Dense : 30000\*1000 = 30000000 Parameters
+Conv : 64\*3\*3\*3 = 1728 Parameters. 
+
+The reduction in number of parameters will have big  impact on how long it takes to train the Network, this is huge factor since Machine Learning is an iterative process by nature, the faster it takes to train your network the more iterations and experiment you can do with your network and its parameters which will always lead to a better model.
+
+## 5. Using Convolutional Neural Network for chart recognition
+
+Now we are ready to put it all to work, lets see how can we apply CNN to our chart recognition problem. The change is actually quite easy we will use every thing we learned so far. Training set loading, model training,saving/loading and testing will not change at all. the only change will be the model itself and how we build.  
 
 
+Replace the model building code we had in session2 with this code
 
+~~~~{.python}
+from tensorflow.keras.layers import Dense, Flatten, Conv2D, MaxPool2D
+model = Sequential()
+model.add(Conv2D(128,(3,3),input_shape=targetSize_withdepth,activation=relu))
+model.add(MaxPool2D((2,2)))
+model.add(Conv2D(64,(3,3),activation=relu))
+model.add(MaxPool2D((2,2)))
+model.add(Conv2D(32,(3,3),activation=relu))
+model.add(MaxPool2D((2,2)))
+model.add(Flatten())
+model.add(Dense(512,activation=relu))
+model.add(Dense(5,activation='softmax'))
+~~~~
 
-## 4. Using Convolutional Neural Network for chart recognition
+The rest of the code should stay pretty much the same, if you check the output of model.summary() you will notice that this model has 1,737,317 parameters, compared to the 31M+ parameters in the model we created in previous session.
 
+This [notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-3/Session_3_first.ipynb"full example") shows a fully working example
 
+## 6. Compare accuracy and model size of the CNN model to the NN model
 
-## 5. Compare accuracy of the CNN model to the NN model
+Accuracy should be similar for both models if you used the same network architecture as i did in my code, but the big difference should be in the model size, the CNN model size will be around 7MB while the NN model will be 100's of MBs
 
+## 7. Assignment
 
-## 6. Assignment
+Can you modify the model to improve the accuracy, give it a try by copying the provided [notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-3/Session_3_first.ipynb"full example") and modfying it. Good luck
 

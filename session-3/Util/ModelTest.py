@@ -6,19 +6,19 @@ Created on Jun. 2, 2019
 from sklearn.metrics import confusion_matrix, classification_report
 from tensorflow.keras.utils import plot_model
 
+
+def plotModel(model, imagePath="model.png", show_shapes=True,show_layer_names=False,expand_nested=False,dpi=96):
+    plot_model(model,
+                to_file=imagePath,
+                show_shapes=show_shapes,
+                show_layer_names=show_layer_names,
+                expand_nested=expand_nested,
+                dpi=dpi)
+
 class ModelTest:
     def __init__(self,generator=None,model=None):
         self.generator = generator
         self.model = model
-    
-    def plotModel(self,model, imagePath="model.png", show_shapes=True,show_layer_names=False,expand_nested=False,dpi=96):
-        plot_model(model,
-                   to_file=imagePath,
-                   show_shapes=show_shapes,
-                   show_layer_names=show_layer_names,
-                   rankdir=rankdir,
-                   expand_nested=expand_nested,
-                   dpi=dpi)
     
     def test(self):
         if (self.generator==None):

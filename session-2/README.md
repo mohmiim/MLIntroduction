@@ -306,7 +306,7 @@ Try to go back and modify the code we did so far to create a model that recogniz
 
 We did go a long way in this session, instead of just approximating a simple Linear function, to building a model that recognizes chart type form an image. But there are a few things we need to think about. The quality of our model is not great, considering that we are trying to recognize only 2 types of charts. We know we are suffering from  Overfitting issue that we need to deal with. We could try to increase our training set size, but i am  not doing that for now and starting with small training set in the first place on purpose, Because having more labeled samples is not an easy task, and we will learn in session 4 of easy tricks we can do to deal with this issue. Other Options is to add more nodes to our layers or increase the number of layers, but our model already contains 31M parameters to trains (when you save it if you check the file size it will 100MB+), maybe this is an indication that we should take a different approach. In session 3 we will learn a new layer type called Convolution that will help. This is important because Machine learning is an iterative process, and we need to feel comfortable to understand our model and its limitations, so we can get back re-adjust and try again.
 
-All, this being said if you have been following so far you should be proud. You did learn quite a few concepts and build machine learning models, analyzed their results and was able to reason about them. Great Job.     
+All this being said if you have been following so far you should be proud. You did learn quite a few concepts and built machine learning models, analyzed their results and was able to reason about them. Great Job.     
 
 
 

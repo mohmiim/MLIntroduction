@@ -10,9 +10,9 @@ from tensorflow.keras.applications.mobilenet import preprocess_input
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Flatten, Conv2D, MaxPool2D
 from tensorflow.keras.optimizers import Adam
-from tensorflow.nn import relu
-from Util.StopCallBack import myCallBacks
-
+from tensorflow.keras.activations import relu
+from StopCallBack import myCallBacks
+from ModelTest import plotModel
 #first step is to load our data 
 
 #define the root folder for the data 
@@ -59,7 +59,7 @@ step_size_train=train_generator.n//train_generator.batch_size
 print (step_size_train)
 
 history = model.compile(optimizer=Adam(), loss="categorical_crossentropy", metrics=['accuracy'])
-
+plotModel(model)
 model.summary()
 
 model.fit_generator(generator=train_generator,epochs=epochs,steps_per_epoch=step_size_train)
