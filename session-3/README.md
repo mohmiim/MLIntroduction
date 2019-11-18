@@ -13,7 +13,7 @@
 
 [5. Using Convolutional Neural Network for chart recognition](#5-using-convolutional-neural-network-for-chart-recognition)
 
-[6. Compare accuracy of the CNN model to the NN model](#6-compare-accuracy-of-the-cnn-model-to-the-nn-model)
+[6. Compare accuracy and model size of the CNN model to the NN modell](#6-compare-accuracy-and-model-size-of-the-cnn-model-to-the-nn-model)
 
 [7. Assignment](#7-assignment)
 
