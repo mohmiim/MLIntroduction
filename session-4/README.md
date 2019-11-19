@@ -85,6 +85,43 @@ The following diagram shows the flow of the transfer learning process
 
 ## 5. Apply transfer learning to our use-case
 
+The first few steps for loading our data will stay the same as we did in the previous notebook (make sure you have the data augmentation parameters  passed to ImageDataGenerator ) 
+
+The first change is, before we create our model we need to load the exception model without the output layer, and extract the features from our training set. Teh way to do that is using the following code 
+
+~~~~{.python}
+from tensorflow.keras.applications import xception
+
+#LOAD THE PRE_TRAINED MODEL
+FEATURE_EXTRACTOR = xception.Xception(weights='imagenet',include_top=False,input_shape=targetSize_withdepth)
+
+#Extract the features for our images
+features_x = FEATURE_EXTRACTOR.predict_generator(train_generator)
+~~~~
+
+Then we create a simple dense model like this 
+
+~~~~{.python}
+model = Sequential()
+#add our layers
+model.add(Flatten(input_shape=features_x.shape[1:]))
+model.add(Dense(128,activation=relu))
+model.add(Dropout(0.2))
+model.add(Dense(128,activation=relu))
+model.add(Dropout(0.5))
+model.add(Dense(len(y_labels),activation='softmax'))
+model.compile(optimizer=Adam(), loss="categorical_crossentropy", metrics=['accuracy'])
+model.summary()
+
+model.fit(features_x,y_train,epochs=epochs,shuffle=True,verbose=2)
+~~~~
+
+the main difference between what we are doing here and what we did before, is that fact that now we are using the method fit to train the model, and passing the input,the features we extracted, and the output, expected classes to the method to start the training.
+
+This [Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-4/Session_4_Transfer_Learning.ipynb) has the full code 
+
+Run the tests and check the results 
+
 ## 6. Discuss the Result
 
 ## 7. Assignment
