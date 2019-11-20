@@ -124,4 +124,10 @@ Run the tests and check the results
 
 ## 6. Discuss the Result
 
+I found that accuracy ranging from 90% to 93% that is and increase of 10 to 13%. So the conclusion here is that transfer learning really helped us big team, the reason is that the extracted features from the pre-trained model really helped our use case although they had been extracted for a different classification goal. This is a typical finding, when the input is similar (images in this case) even though the classification goals are different the extracted features form one model can be beneficial for the other.
+
+
 ## 7. Assignment
+
+Update the provided [Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-4/Session_4_Transfer_Learning.ipynb) to work with other model from tensorflow.keras.applications and compare the results to xception 
+
