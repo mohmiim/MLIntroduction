@@ -70,6 +70,12 @@ Then lets re-train our model and run the tests, what do you find ?
 
 This [Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-5/Session_5_ensemble.ipynb) has the full code.
 
+In my tests Accuracy went up to 97%
+
+## Congratulations 
+
+If you have been following along the 5 sessions, Congratulations we covered so much, we build simple linear model, approximated non linear functions, built a system for recognizing charts type form an image and improved it is acuracy till we reached 97%. Learned what is Convolution neural network, Training set data augmentation, Transfer learning and Machine Learning model ensemble you should be proud :)
+
 ## 3. Assignment
 
 Can you try different model combinations to produce better results ? 
