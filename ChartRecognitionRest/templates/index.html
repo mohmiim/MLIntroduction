@@ -1,0 +1,71 @@
+<!DOCTYPE HTML>
+
+<html>
+    
+      <script type = "text/javascript">
+      function reqListener () {
+    	  document.getElementById("chart_type").innerHTML = this.responseText;
+    	  console.log(this.responseText);
+      }
+      
+      function previewFile() {
+    	  var preview = document.querySelector('img');
+    	  var file    = document.querySelector('input[type=file]').files[0];
+    	  var reader  = new FileReader();
+
+    	  reader.onloadend = function () {
+    	    preview.src = reader.result;
+    	  }
+
+    	  if (file) {
+    	    reader.readAsDataURL(file);
+    	  } else {
+    	    preview.src = "";
+    	  }
+    	}
+      
+      function submitPhoto(e) 
+      {
+    	  document.getElementById("chart_type").innerHTML = "thinking ...";
+    	  let photoPrev = document.getElementById("prev");
+          let extra = { exrta:'stuff', whichone:23 };
+          let xhr = new XMLHttpRequest();
+          let formData = new FormData();
+          let photo = e.files[0];      
+          
+          formData.append("extra", JSON.stringify(extra));   
+          formData.append("photo", photo);
+          
+          var reader  = new FileReader();
+
+    	  reader.onloadend = function () {
+    		 photoPrev.src = reader.result;
+    	  }
+
+    	  if (photo) {
+    		  reader.readAsDataURL(photo);
+    	  } else {
+    		  photoPrev.src = "";
+    	  }
+          
+          xhr.onreadystatechange = state => { console.log(xhr.status); } // err handling
+          xhr.open("POST", '/predict');    
+          xhr.send(formData);
+          xhr.addEventListener("load", reqListener);
+      }
+      
+      
+      </script>
+		
+   </head>
+   
+   <body>
+      	<input id="image-file" type="file" onchange="submitPhoto(this)" >
+		<br>
+		<img id="prev" src="" height="300" alt="Image preview...">
+		<br>
+		Recognized Type :
+		<p id="chart_type"> None </p>
+		<br><br>
+   </body>
+</html>
