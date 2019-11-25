@@ -70,7 +70,7 @@ Then lets re-train our model and run the tests, what do you find ?
 
 This [Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-5/Session_5_ensemble.ipynb) has the full code.
 
-In my tests Accuracy went up to 97%
+In my tests Accuracy went up to 99%
 
 ## Congratulations 
 
