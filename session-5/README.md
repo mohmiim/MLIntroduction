@@ -1,4 +1,4 @@
-# Session Ensemble 
+# Session 5: Ensemble 
 
 ## What will we cover
 
@@ -18,7 +18,7 @@ Let's try it
 
 ## 2. Using multiple models architecture
 
-How can we use multiple models to extract the features use all these features combined to train our small dense model. The following Diagram shows the general fllow
+How can we use multiple models to extract the features? and how to use all these features to train our small dense model? The following diagram shows the general flow
 
 <p align="center"> 
 <img src="images/ensemble.png" height="450" >
@@ -66,17 +66,17 @@ all_features = np.concatenate((features_x1,features_x2), axis=1)
 
 the rest will be the same as in session 4 but we will use the all_features vector as our training sample. 
 
-Then lets re-train our model and run the tests, what do you find ?
+Then let's re-train our model and run the tests, what do you find?
 
 This [Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-5/Session_5_ensemble.ipynb) has the full code.
 
-In my tests Accuracy went up to 99%
+In my tests, Accuracy went up to 99%
 
 ## Congratulations 
 
-If you have been following along the 5 sessions, Congratulations we covered so much, we build simple linear model, approximated non linear functions, built a system for recognizing charts type form an image and improved it is acuracy till we reached 97%. Learned what is Convolution neural network, Training set data augmentation, Transfer learning and Machine Learning model ensemble you should be proud :)
+If you have been following along the 5 sessions, Congratulations we covered so much, we build simple linear model, approximated non-linear functions, built a system for recognizing charts type form an image and improved it is accuracy till we reached 97%. Learned what is Convolution neural network, Training set data augmentation, Transfer learning and Machine Learning model ensemble you should be proud :)
 
 ## 3. Assignment
 
-Can you try different model combinations to produce better results ? 
+Can you try different model combinations to produce better results? 
 
