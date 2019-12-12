@@ -1,6 +1,6 @@
 # Machine Learning Sessions
 
-The purpose of these sessions is to provide a quick high-level introduction to Machine learning We will cover both Neural Networks and Convolution Neural Networks, also we will cover transfer Learning
+The purpose of these sessions is to provide a quick high-level introduction to Machine learning, We will cover Neural Networks, Convolution Neural Networks, Transfer Learning and Model Ensemble techniques. We will build a system that can recognize a chart type from its image and we will walk through many cycles to take its accuracy from 65% to 99% with only 40 to 60 samples of training for each chart type. Python Notebooks will be provided for each step so you can follow along and experiment with the code yourself.
 
 ## Sessions summary:
 
