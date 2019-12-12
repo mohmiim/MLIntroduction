@@ -15,7 +15,7 @@ import io
 # creates a Flask application, named app
 app = Flask(__name__)
 
-dict_keys = ['bar_chart', 'bubble_chart', 'pie_chart', 'radar_chart', 'treemap_chart']
+dict_keys = ['area_chart', 'bar_chart', 'bubble_chart', 'line_chart', 'pie_chart', 'radar_chart', 'treemap_chart']
 
 
 #default sizes

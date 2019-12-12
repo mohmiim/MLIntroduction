@@ -4,9 +4,7 @@ Created on Dec. 4, 2018
 @author: mohammedmostafa
 '''
 import numpy as np
-from tensorflow.keras.applications import xception,inception_v3,  vgg19, densenet, resnet50
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Flatten
+from tensorflow.keras.applications import xception
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from tensorflow.keras.models import load_model
 from sklearn.metrics import confusion_matrix,classification_report
@@ -18,9 +16,6 @@ y_labels = {}
 
 small_data_folder = "../data/"
 
-
-mainPkg = vgg19
-creator = vgg19.VGG19
 
 #default sizes
 Image_Width = 100
