@@ -179,7 +179,7 @@ We pass the `fit` function the training samples and the `epochs` parameter (to i
 
 When you run the code samples from above, you should see an output similar to this:
 
-<img src="images/epochs.png"  height="300" width="850">  
+<img src="images/epochs.png"  height="300">  
 
 By the time you reach epoch 500, the accuracy should be 1, which means the model is 100% accurate!
 
@@ -230,13 +230,13 @@ xs = np.random.choice(np.arange(-3,3,.01),500)
 ys = xs**2
 ```
 
-we will leave every thingelse the same  and re-run our training. What we get ?
+we will leave every thing else the same  and re-run our training. What we get ?
 
 Your will notice that the loss value does not really improve, and the accuracy is 0, basically the model is failing to approximate the function 
 
 screenshot of the training output
 
-<img src="images/bad_approx.png"  height="300" width="850">
+<img src="images/bad_approx.png"  height="300">
 
 we can visualize the approximation our model made versus the expected values using the following code: 
 
@@ -263,7 +263,7 @@ The reason this is failing is the fact that we are using a single neuron model, 
 
 The solution to this is a Multi-Neuron model.  This is not much different from what we discussed before.  We just add several neurons and connect them together as showing in the following image:
 
-<img src="images/Neural_network_example.png"  height="200" width="200">
+<img src="images/Neural_network_example.png"  height="300">
 
 Every thing we discussed in the single neuron discussion is still the same, the only difference is that we have now more than one neuron and we use the output of each neuron as an input to our output neuron. 
 
@@ -292,13 +292,13 @@ model = Sequential();
 model.add(Dense(units=20,input_dim=1, activation='relu'))
 model.add(Dense(units=1))
 ```
-We do not need to change anything else.  Rerun the training step and let’s see what we get.
+We do not need to change anything else.  Rerun the training step and check what do you get.
 
 Unlike the last run, now we see that the loss value is going down and if we plot the results we have a much better approximation.
 
-<img src="images/good_approx.png"  height="300" width="850">
+<img src="images/good_approx.png"  height="300">
  
-<img src="images/goodchart.png"  height="400" width="400">
+<img src="images/goodchart.png"  height="400">
 
 The Layer type we used here is ```Dense```. This is basically a layer that is connected to all nodes in the layers on its left, and right as in the diagram above. There are different types of layers we will see later in this tutorial.
 
@@ -312,11 +312,11 @@ To see the full code working, you can either get it form the github folder and r
 
    XOR, data for 2 variables looks very simple but it is really none linear. The data will look like that 
    
-<img src="images/xor_table.png"  height="150" width="100"> 
+<img src="images/xor_table.png"  height="200"> 
 
 If we visualize it , it will look like that 
    
-<img src="images/xor.png"  height="400" width="400">
+<img src="images/xor.png"  height="400">
 
 Try to build a model and train it to correctly, generate the correct output for all four possible pairs or input 
 
