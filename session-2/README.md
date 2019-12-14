@@ -20,8 +20,7 @@
 
 ## 1. What are we going to build
 
-   In session 1, we saw how to approximate linear and quadratic functions using Neural networks. This was a simple enough project to get introduced to Tensorflow and how to use it to build Neural Network models. Now it is time to move to a more fun project, a project that will be very hard (if not impossible to do with classic programming). Let's build a system when given an image of a chart it can tell us what type of chart is in the image for example: 
-   If the system receives this image:  
+   In session 1, we saw how to approximate linear and quadratic functions using Neural networks. This was a simple enough project to get introduced to Tensorflow and how to use it to build Neural Network models. Now it is time to move to a more fun project, a project that will be very hard (if not impossible to do with classic programming). Let's build a system when given an image of a chart it can tell us what type of chart is in the image for example, If the system receives this image: 
 
 <p align="center"> 
 <img src="images/bar.png" height="350" width="650">
@@ -36,7 +35,7 @@
    It will say, this is a pie_chart 
    
    First, we need to think about is what will be the input to our model? In all the cases we have seen so far the input was quite simple it was either 1 or 2 simple numbers, but in this case, what would it be?
-   We can not just feed the image as an image to the model for training, we need to represent it as numbers. The easiest way is to feed in the pixel values as the input to the model. Basically, if we have a true-color image we can represent every pixel using 3 integer values to represent the RGB value of the pixel. In other words, if our image is W width and H height in pixels, we represent it as W*H*3 numbers. This way we can feed it to the Neural network and start the training process.
+	We can not just feed the image as an image to the model for training, we need to represent it as numbers. The easiest way is to feed in the pixel values as the input to the model. Basically, if we have a true-color image we can represent every pixel using 3 integer values to represent the RGB value of the pixel. In other words, if�our image is W width and H height in pixels, we represent it as W*H*3 numbers. This way we can feed it to the Neural network and start the training process.
    
    The following diagram shows how this will look for an image that is 28 X 28 pixels
 
@@ -46,11 +45,11 @@
    
 ## 2. Loading images training set using TensorFlow
    In the last section, we discussed how to present images as input to a neural network, let's talk a bit about training sets and testing sets.
-   What we have been doing so far, is called supervised learning, which is training a model by giving it a set of inputs and the expected outputs. Then the model can learn from these input/outputs the rules we need to produce the correct output, These inputs/outputs are called the training set because it had been used to train the model. But how can we check how good is our model?  
+   What we have been doing so far, is called supervised learning, which is training a model by giving it a set of inputs and the expected outputs. Then the model can learn from these input/outputs the rules we need to produce the correct output, These inputs/outputs are called the training set because it had been used to train the model. But how can we check how good is our model?� 
    
    If we use the same inputs we used for the training to validate it, this will be a misleading measure of the quality of the model, since the model have seen these inputs already and knows what should be the output, this can be used only to measure the training accuracy. But in real use-cases, the model will receive inputs it did not see before. This brings us to the testing data set, which is a set of inputs and their outputs that the model did not see during training. we use this testing dataset to measure the model accuracy to see if it is really able to recognize input it did not see before.
    
-   Ok, so we now know we need a training set and testing test. Let's see how we prepare the folders containing our images. We start by creating this folder structure
+   OK, so we now know we need a training set and testing test. Let's see how we prepare the folders containing our images. We start by creating this folder structure
    
 <img src="images/smallData.png" height="150" width="150">
 
@@ -100,11 +99,9 @@ model.compile(optimizer=SGD(),
                metrics=['accuracy'])
    ```
    
-   You will notice that I am using more nodes in each layer than before, and I set my input to be an array of (100,100,3) as we explained before, but neural net Dense layer expects a vector, that is why we use the layer type Flatten to convert our input to a vector
-   
-   You will also notice that my output layer has 2 nodes since i have 2 classes of output to identify, Bar chart and Pie chart, and the loss function I am using here is the categorical crossentropy since my output is more than one class.
-   
-   To get an idea of how big is this model, use the summary function to display it, like this  
+   You will notice that I am using more nodes in each layer than before, and I set my input to be an array of (100,100,3) as we explained before, but neural net Dense layer expects a vector, that is why we use the layer type Flatten to convert our input to a vector.
+	You will also notice that my output layer has 2 nodes since i have 2 classes of output to identify, Bar chart and Pie chart, and the loss function I am using here is the categorical crossentropy since my output is more than one class.
+	To get an idea of how big is this model, use the summary function to display it, like this:
    
    ```python      
  model.summary()
@@ -113,13 +110,13 @@ model.compile(optimizer=SGD(),
    
 <img src="images/nnsummary.png" height="300" width="500">
 
-As you can see this model has 31M parameters to train. To train the model use this code 
+As you can see this model has 31M parameters to train. To train the model use this code
 
 
 ```python
 model.fit_generator(generator=train_generator,epochs=500)
 ```
-   Since we are using ImageDataGenerator to load our data, we use the fit_generator method instead of the fit method, which is the same as the fit method we saw before but it receives a generator as the input instead of the typical array of input and output. 
+   Since we are using ImageDataGenerator to load our data, we use the fit_generator method instead of the fit method, which is the same as the fit method we saw before but it receives a generator as the input instead of the typical array of input and output.
    
 ## 4. Testing model performance
 
@@ -304,9 +301,9 @@ Try to go back and modify the code we did so far to create a model that recogniz
 
 ## 8. Observations and Conclusions
 
-We did go a long way in this session, instead of just approximating a simple Linear function, to building a model that recognizes chart type form an image. But there are a few things we need to think about. The quality of our model is not great, considering that we are trying to recognize only 2 types of charts. We know we are suffering from  Overfitting issue that we need to deal with. We could try to increase our training set size, but i am  not doing that for now and starting with small training set in the first place on purpose, Because having more labeled samples is not an easy task, and we will learn in session 4 of easy tricks we can do to deal with this issue. Other Options is to add more nodes to our layers or increase the number of layers, but our model already contains 31M parameters to trains (when you save it if you check the file size it will 100MB+), maybe this is an indication that we should take a different approach. In session 3 we will learn a new layer type called Convolution that will help. This is important because Machine learning is an iterative process, and we need to feel comfortable to understand our model and its limitations, so we can get back re-adjust and try again.
+We did go a long way in this session, instead of just approximating a simple Linear function, to building a model that recognizes chart type form an image. But there are a few things we need to think about. The quality of our model is not great, considering that we are trying to recognize only 2 types of charts. We know we are suffering from Overfitting issue that we need to deal with. We could try to increase our training set size, but i am  not doing that for now and starting with small training set in the first place on purpose, Because having more labeled samples is not an easy task, and we will learn in session 4 of easy tricks we can do to deal with this issue. Other Options is to add more nodes to our layers or increase the number of layers, but our model already contains 31M parameters to trains (when you save it if you check the file size it will 100MB+), maybe this is an indication that we should take a different approach. In session 3 we will learn a new layer type called Convolution that will help. This is important because Machine learning is an iterative process, and we need to feel comfortable to understand our model and its limitations, so we can get back re-adjust and try again.
 
-All this being said if you have been following so far you should be proud. You did learn quite a few concepts and built machine learning models, analyzed their results and was able to reason about them. Great Job.     
+All this being said if you have been following so far you should be proud. You did learn quite a few concepts and built machine learning models, analyzed their results and was able to reason about them. Great Job. �   
 
 
 
