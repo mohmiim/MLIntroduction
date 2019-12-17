@@ -35,7 +35,7 @@
    It will say, this is a pie_chart 
    
    First, we need to think about is what will be the input to our model? In all the cases we have seen so far the input was quite simple it was either 1 or 2 simple numbers, but in this case, what would it be?
-	We can not just feed the image as an image to the model for training, we need to represent it as numbers. The easiest way is to feed in the pixel values as the input to the model. Basically, if we have a true-color image we can represent every pixel using 3 integer values to represent the RGB value of the pixel. In other words, if�our image is W width and H height in pixels, we represent it as W*H*3 numbers. This way we can feed it to the Neural network and start the training process.
+	We can not just feed the image as an image to the model for training, we need to represent it as numbers. The easiest way is to feed in the pixel values as the input to the model. Basically, if we have a true-color image we can represent every pixel using 3 integer values to represent the RGB value of the pixel. In other words, if�our image is W width and H height in pixels, we represent it as W*H*3 numbers. This way we can feed it to the Neural network and start the training process.
    
    The following diagram shows how this will look for an image that is 28 X 28 pixels
 
@@ -45,7 +45,7 @@
    
 ## 2. Loading images training set using TensorFlow
    In the last section, we discussed how to present images as input to a neural network, let's talk a bit about training sets and testing sets.
-   What we have been doing so far, is called supervised learning, which is training a model by giving it a set of inputs and the expected outputs. Then the model can learn from these input/outputs the rules we need to produce the correct output, These inputs/outputs are called the training set because it had been used to train the model. But how can we check how good is our model?� 
+   What we have been doing so far, is called supervised learning, which is training a model by giving it a set of inputs and the expected outputs. Then the model can learn from these input/outputs the rules we need to produce the correct output, These inputs/outputs are called the training set because it had been used to train the model. But how can we check how good is our model?
    
    If we use the same inputs we used for the training to validate it, this will be a misleading measure of the quality of the model, since the model have seen these inputs already and knows what should be the output, this can be used only to measure the training accuracy. But in real use-cases, the model will receive inputs it did not see before. This brings us to the testing data set, which is a set of inputs and their outputs that the model did not see during training. we use this testing dataset to measure the model accuracy to see if it is really able to recognize input it did not see before.
    
@@ -154,7 +154,7 @@ To do this, we need to understand a few new terms
 
 **F1 Score:**  
    
-   F1 Score is the weighted average of Precision and Recall. Therefore, this score takes both false positives and false negatives into account. Intuitively it is not as easy to understand as accuracy, but F1 is usually more useful than accuracy, especially if you have an uneven class distribution. Accuracy works best if false positives and false negatives have similar cost. If the cost of false positives and false negatives are very different, it’s better to look at both Precision and Recall.
+   F1 Score is the weighted average of Precision and Recall. Therefore, this score takes both false positives and false negatives into account. Intuitively it is not as easy to understand as accuracy, but F1 is usually more useful than accuracy, especially if you have an uneven class distribution. Accuracy works best if false positives and false negatives have similar cost. If the cost of false positives and false negatives are very different, it's better to look at both Precision and Recall.
    
    F1 Score = 2*(Recall * Precision) / (Recall + Precision)
    
@@ -303,7 +303,7 @@ Try to go back and modify the code we did so far to create a model that recogniz
 
 We did go a long way in this session, instead of just approximating a simple Linear function, to building a model that recognizes chart type form an image. But there are a few things we need to think about. The quality of our model is not great, considering that we are trying to recognize only 2 types of charts. We know we are suffering from Overfitting issue that we need to deal with. We could try to increase our training set size, but i am  not doing that for now and starting with small training set in the first place on purpose, Because having more labeled samples is not an easy task, and we will learn in session 4 of easy tricks we can do to deal with this issue. Other Options is to add more nodes to our layers or increase the number of layers, but our model already contains 31M parameters to trains (when you save it if you check the file size it will 100MB+), maybe this is an indication that we should take a different approach. In session 3 we will learn a new layer type called Convolution that will help. This is important because Machine learning is an iterative process, and we need to feel comfortable to understand our model and its limitations, so we can get back re-adjust and try again.
 
-All this being said if you have been following so far you should be proud. You did learn quite a few concepts and built machine learning models, analyzed their results and was able to reason about them. Great Job. �   
+All this being said if you have been following so far you should be proud. You did learn quite a few concepts and built machine learning models, analyzed their results and was able to reason about them. Great Job. �   
 
 
 
