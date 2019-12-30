@@ -1,7 +1,7 @@
 '''
 Created on Jun. 2, 2019
 
-@author: mohammedmostaqfa
+@author: mohammedmostafa
 '''
 import os
 from tensorflow.keras.preprocessing.image import ImageDataGenerator

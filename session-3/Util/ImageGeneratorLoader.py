@@ -1,7 +1,7 @@
 '''
 Created on Jun. 2, 2019
 
-@author: mohammedmostaqfa
+@author: mohammedmostafa
 '''
 import matplotlib.pyplot as plt
 

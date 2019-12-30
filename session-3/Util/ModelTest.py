@@ -1,7 +1,7 @@
 '''
 Created on Jun. 2, 2019
 
-@author: mohammedmostaqfa
+@author: mohammedmostafa
 '''
 from sklearn.metrics import confusion_matrix, classification_report
 from tensorflow.keras.utils import plot_model
