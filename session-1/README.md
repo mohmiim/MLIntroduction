@@ -348,7 +348,7 @@ the expected output should be
  [1.]
  [0.]]
 
-<a href="https://github.ibm.com/BusinessAnalytics/machine-learning-sessions/blob/master/session-1/ReallySimple/XOR.py">Solution</a> 
+<a href="https://github.com/mohmiim/MLIntroduction/blob/master/session-1/ReallySimple/XOR.py">Solution</a> 
 
 or You can use [this Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-1/Session_1_XOR.ipynb) to see the note book, then click on the Open in Colab button to run it and change the code as you like 
    
