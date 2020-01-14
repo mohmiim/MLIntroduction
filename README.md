@@ -24,3 +24,5 @@ The purpose of these sessions is to provide a quick high-level introduction to M
    
 * [Session 7](https://github.com/mohmiim/MLIntroduction/tree/master/ChartRecognitionRest "Session 7"):
    Wrap the model by a rest service and create a docker image to allow deploying it easily. (code only, write-up coming soon)
+   
+* Session 8 : End to End simple GAN   (Work in Progress)
