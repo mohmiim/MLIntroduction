@@ -109,7 +109,7 @@ model.add(Dense(128,activation=relu))
 model.add(Dropout(0.1))
 model.add(Dense(64,activation=relu))
 model.add(Dense(len(y_labels),activation='softmax'))
-history = model.compile(ptimizer=Adam(lr=0.0001), loss="categorical_crossentropy", metrics=['accuracy'])
+history = model.compile(optimizer=Adam(lr=0.0001), loss="categorical_crossentropy", metrics=['accuracy'])
 model.summary()
 
 model.fit(features_x,y_train,epochs=epochs,shuffle=True,verbose=2)
