@@ -19,10 +19,12 @@ The purpose of these sessions is to provide a quick high-level introduction to M
 * [Session 5](https://github.com/mohmiim/MLIntroduction/blob/master/session-5 "Session 5"):
    Combine different pre-trained models to improve the accuracy of the model without adding new training samples.
    
-* [Session 6](https://github.com/mohmiim/MLIntroduction/tree/master/Visualize "Session 6"):
+* Session 6 : Inroduction to forcasting with deeplearning   (sample being built)  
+   
+* [Session 7](https://github.com/mohmiim/MLIntroduction/tree/master/Visualize "Session 6"):
    How the model see your image through the different layers. (code only, write-up coming soon)
    
-* [Session 7](https://github.com/mohmiim/MLIntroduction/tree/master/ChartRecognitionRest "Session 7"):
+* [Session 8](https://github.com/mohmiim/MLIntroduction/tree/master/ChartRecognitionRest "Session 7"):
    Wrap the model by a rest service and create a docker image to allow deploying it easily. (code only, write-up coming soon)
    
-* Session 8 : End to End simple GAN   (Work in Progress)
+* Session 9 : End to End simple GAN   (sample done, writup in progress)
