@@ -69,7 +69,7 @@ train_generator = train_data_generator.flow_from_directory("../smallData/train",
 
 What did we do in this code? first step we created the ImageDataGenerator, when you create an ImageDataGenerator you can pass it parameters to control how it works, for example, you can pass it a rescale factor that will be multiplied by all pixel values (to make all values range between 0 and 1), you can also pass it a pre-processing function that will be called on all inputs this can be your own function or one of the tensorflow.keras functions, i found that using `` tensorflow.keras.applications.mobilenet.preprocess_input `` function usually produce good results for me, that is why you will find me passing it in the code when I create the image generator.
 
-Then we called the method flow_from_directory to create our train data generator, this method receives the folder to load the images from, target size it will scale the images to fit (in this case we used 100 X 100), and the patch size, the patch size is basically the number of images to be yielded from the generator per batch.
+Then we called the method flow_from_directory to create our train data generator, this method receives the folder to load the images from, target size it will scale the images to fit (in this case we used 100 X 100), and the batch size, the batch size is basically the number of images to be yielded from the generator per batch.
 
 
 * Dealing with files in google colab
