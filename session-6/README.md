@@ -1,4 +1,4 @@
-# Introduction to timeseries forecasting with deeplearning 
+# Introduction to time series forecasting with deeplearning 
 
 
 ## What will we cover
