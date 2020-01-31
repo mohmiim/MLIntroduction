@@ -11,7 +11,7 @@
 
 [4. Sequence Models](#4-sequence-models)
 
-[5. Picking our data set](#5-picking-our-data-set)
+[5. Picking our dataset](#5-picking-our-dataset)
 
 [6. Prepare Data for input to Tensorflow model](#6-prepare-data-for-input-to-tensorflow-model)
 
@@ -88,10 +88,10 @@ This is the base idea of sequence models, but we will not really use RNNs becaus
 
 LSTM are a variation of RNN, that deal specifically with the long-term dependency problem because it remember information for long time.
 
-The details of how LSTMS works is beyond the scope of this tutorial and i suggest goign through the [amazing deeplearing specialization by Andrew NG](https://www.deeplearning.ai/deep-learning-specialization/) on coursera to get in the details (course 5) 
+The details of how LSTMS works is beyond the scope of this tutorial and i suggest goign through the [amazing deeplearing specialization by Andrew NG](https://www.deeplearning.ai/deep-learning-specialization/) on coursera to get in the details (course 5)  
 
-##5. Picking our data set
-##6. Prepare Data for input to Tensorflow model
-##7. Design our Tensorflow model
-##8. Putting it all together
-##9. Conclusion
+## 5. Picking our dataset  
+## 6. Prepare Data for input to Tensorflow model  
+## 7. Design our Tensorflow model  
+## 8. Putting it all together  
+## 9. Conclusion
