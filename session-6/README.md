@@ -9,6 +9,8 @@
 
 [3. Time series attributes](#3-time-series-attributes)
 
+[4. Sequence Models](#4-sequence-models)
+
 ## 1. What is Forecasting
 
 Forecasting, is the act of using historical data as an input to learn and make predictions about the direction of future trends. 
@@ -55,3 +57,25 @@ Typical time series will contain all three
 <p align="center"> 
 <img src="images/all.png" height="300">
 </p>
+
+## 4. Sequence Models
+
+Time to start talk Machine Learning, In the previous sessions we did learn many types of Machine learning layers and models, like Neural Networks and Convolution Neural Networks (CNN). Time series will require us to learn a new type or Models which is called sequence models. The name almost till it all, in these models order does matter, because the data it is trying to learn are order sensitive. This is important in many applications for example in Natural Language Processing where the order or words affects how we understand the sentence, also in time series analysis without the correct order our analysis will be invalid.
+
+The most basic type of sequence models is Recurrent Neural Networks, where the output of the previous step impact the out of the next step
+
+The next diagram, show how the output of the previous step is fed into the next step
+
+<p align="center"> 
+<img src="images/RNN.png" height="300">
+</p>
+
+This is the base idea of sequence models, but we will not really use RNNs because there are cases where RNN will suffer. These cases are the ones where the output depends on context very early in the sequence. RNN can be adjust to handle cases like these but there is a nother type of network that can handle these cases much easier this type is Long Short Term Memory in short LSTM
+
+**LSTM:**
+
+LSTM are a variation of RNN, that deal specifically with the long-term dependency problem because it remember information for long time.
+
+The details of how LSTMS works is beyond the scope of this tutorial and i suggest goign through the [amazing deeplearing specialization by Andrew NG](https://www.deeplearning.ai/deep-learning-specialization/) on coursera to get in the details (course 5) 
+
+
