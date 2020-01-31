@@ -173,7 +173,7 @@ The out put of this code should be
 - next we want to createthe sliding window 
 
 ~~~~{.python}
-dataset = dataset.window(2, shift=1, drop_remainder=True)
+dataset = dataset.window(3, shift=1, drop_remainder=True)
 dataset = dataset.flat_map(lambda window: window.batch(2))
 for window in dataset:
 	print(window.numpy())
