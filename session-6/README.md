@@ -13,7 +13,7 @@
 
 [5. Picking our dataset](#5-picking-our-dataset)
 
-[6. Prepare Data for input to Tensorflow model](#6-prepare-data-for-input-to-tensorflow-model)
+[6. Prepare Data for training Tensorflow model](#6-prepare-data-for-training-tensorflow-model)
 
 [7. Design our Tensorflow model](#7-design-our-tensorflow-model)
 
@@ -91,7 +91,131 @@ LSTM are a variation of RNN, that deal specifically with the long-term dependenc
 The details of how LSTMS works is beyond the scope of this tutorial and i suggest goign through the [amazing deeplearing specialization by Andrew NG](https://www.deeplearning.ai/deep-learning-specialization/) on coursera to get in the details (course 5)  
 
 ## 5. Picking our dataset  
-## 6. Prepare Data for input to Tensorflow model  
+
+We mentioned in previous section that we can have univariate or multivariate forecasting and the difference between both. So we will pick 2 data sets to tackle one is univariate and one is multivariate
+
+**[Sunspots:](https://github.com/mohmiim/MLIntroduction/tree/master/session-6/data/Sunspots.csv)**  
+Univarate data set that contains the monthly sunspot data since 1749
+
+<p align="center"> 
+<img src="images/sunspots.png" height="300">
+</p>
+
+**[Individual household electric power consumption:](https://archive.ics.uci.edu/ml/datasets/individual+household+electric+power+consumption)** 
+Multivariate dataset made available by [UCI Machine Learning repository](https://archive.ics.uci.edu/ml/datasets.php), besside being a Multivariate dataset it had some missing values which is good because this is what you will ctually find in real life datasets.
+
+<p align="center"> 
+<img src="images/energy.png" height="300">
+</p>
+
+## 6. Prepare Data for training Tensorflow model
+
+What does it mean to prepare data for training ?. Lets consider the simplest form of a time series 
+
+~~~~{.python}
+1  
+2  
+3  
+4  
+5  
+6  
+7
+~~~~
+
+This is just a sequence of numbers, but as we have seen in the previous sessions to train a model we need input and output so how can we convert a list like that to a training set?
+
+
+~~~~{.python}
+[1 2]
+[2 3]
+[3 4]
+[4 5]
+[5 6]
+[6 7]  
+~~~~
+
+when we do that we did convert our input to a set of sequences, we can doa similar thing to the output where the output will be the next item in the original sequence
+
+~~~~{.python}
+[1 2] [3]
+[2 3] [4]
+[3 4] [5]
+[4 5] [6]
+[5 6] [7]
+~~~~
+
+Tensor flow actually provide some nice utilities to make it easy to do that 
+lets look at some code
+
+- first we let's create our simple list of numbers
+
+~~~~{.python}
+import tensorflow as tf
+dataset = tf.data.Dataset.range(10)
+for val in dataset: print(val.numpy())
+~~~~
+ 
+The out put of this code should be 
+
+~~~~{.python}
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+~~~~
+
+- next we want to createthe sliding window 
+
+~~~~{.python}
+dataset = dataset.window(2, shift=1, drop_remainder=True)
+dataset = dataset.flat_map(lambda window: window.batch(2))
+for window in dataset:
+	print(window.numpy())
+~~~~
+
+We used the window function on the dataset, we pass it how long is the window and how many numbers it should shift between each window, then the drop_remainder flag determines what will happen if we have partial windows at the end, should they be kept or dropped.
+After that we call the numpy method to convert it to numpy arrays
+ 
+the output of this will be 
+
+~~~~{.python}
+[0 1 2]
+[1 2 3]
+[2 3 4]
+[3 4 5]
+[4 5 6]
+[5 6 7]
+[6 7 8]
+[7 8 9]
+~~~~
+
+the last step is to convert it make it X , y for training and labels. Which is done using simple array API's like that :
+
+~~~~{.python}
+dataset = dataset.map(lambda window: (window[:-1], window[-1:]))
+for X,y in dataset:
+	print(X.numpy(), y.numpy())
+~~~~
+
+The output will look like this 
+
+~~~~{.python}
+[0 1] [2]
+[1 2] [3]
+[2 3] [4]
+[3 4] [5]
+[4 5] [6]
+[5 6] [7]
+[6 7] [8]
+[7 8] [9]
+~~~~
+ 
 ## 7. Design our Tensorflow model  
 ## 8. Putting it all together  
 ## 9. Conclusion
