@@ -217,5 +217,48 @@ The output will look like this
 ~~~~
  
 ## 7. Design our Tensorflow model  
+
+So we talked about Sequence models, and how to prepare time series data for model training, it is time to design our model 
+Since it is a time series we know we will need to use sequence model, so we will go with LSTM, but through running many experiemnts it was found that having a convolution layer before the LSTM leads to better results so we will do that in our model. But ofcourse you can try to add and remove layers to see for your self 
+
+**Example model:**
+
+~~~~{.python}
+model = Sequential()
+model.add(Conv1D(filters=32, kernel_size=5, strides=1, padding="causal",
+                 activation="relu", input_shape=[None,1]))
+model.add(LSTM(64, return_sequences=True))
+model.add(LSTM(64, return_sequences=True))
+model.add(LSTM(32))
+model.add(Dense(30, activation='relu'))
+model.add(Dense(10, activation='relu'))
+model.add(Dense(1))
+~~~~
+
+this code very similar to the models we created in the previous sessions, the only new thing we introduced here is the use of the layer LSTM which is pretty straightforward, just provide how many units are in the LSTM and if you will connect it to another Layer you need to set return_sequence=True
+ 
+
 ## 8. Putting it all together  
+
+**Read the data:**
+we start by reading the CSV file data as it is, hen extract the columns we need like this:
+ 
+~~~~{.python}
+with open('data/Sunspots.csv') as csvfile:
+    reader = csv.reader(csvfile, delimiter=',')
+    next(reader)
+    for row in reader:
+        sunspots.append(float(row[2]))
+        time_step.append(int(row[0]))
+
+series = np.array(sunspots)
+time = np.array(time_step)
+~~~~
+
+if we plot both time and series we will get this figure
+
+<p align="center"> 
+<img src="images/data.png" height="300">
+</p>
+
 ## 9. Conclusion
