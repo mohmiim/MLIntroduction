@@ -174,7 +174,7 @@ The out put of this code should be
 
 ~~~~{.python}
 dataset = dataset.window(3, shift=1, drop_remainder=True)
-dataset = dataset.flat_map(lambda window: window.batch(2))
+dataset = dataset.flat_map(lambda window: window.batch(3))
 for window in dataset:
 	print(window.numpy())
 ~~~~
@@ -260,5 +260,84 @@ if we plot both time and series we will get this figure
 <p align="center"> 
 <img src="images/data.png" height="300">
 </p>
+
+
+To check how many data points are in this CSV, we can just print the shape of the series array 
+
+~~~~{.python}
+print(series.shape)
+~~~~
+
+The output should be 
+
+~~~~{.python}
+(3235,)
+~~~~
+
+The reason we are doing this, is to decide how many rows we will use to train the modle and how many we will keep for validation 
+So we quite few data points here, so we are not going to do 80/20 split rather we will take 3000  data points for training and keep the last 235 data points for testing 
+
+Lets do the splitting
+
+~~~~{.python}
+SAMPLES_COUNT = 3000
+X_train = series[:SAMPLES_COUNT]
+X_valid = series[SAMPLES_COUNT:]
+print(X_train.shape)
+print(X_valid.shape)
+~~~~
+
+I defined the samples count as a variable, in case you want to play with it to see its impact on the model. I alos print our the shape of each array to confirm our split. You should get this output
+
+~~~~{.python}
+(3000,)
+(235,)
+~~~~
+
+But as we discussed before, the array is just a vector of numbers, and we want to train using sequences. So we will use the tensorflow dataset and its window function as explained [here](#6-prepare-data-for-training-tensorflow-model) 
+
+
+~~~~{.python}
+from tensorflow import expand_dims
+import tensorflow
+windowSize = 60
+batchSize = 256
+print(X_train.shape)
+#adjust the shape from (3000,) to (3000,1)
+X_train = expand_dims(X_train, axis=-1)
+print(X_train.shape)
+#convert to tensorflow dataset
+dataSet = tensorflow.data.Dataset.from_tensor_slices(X_train)
+#convert from vector to sequence, remember when we want to have a window of 2 in we used 3 since the last item will be the output
+dataSet = dataSet.window(windowSize + 1, shift=1, drop_remainder=True)
+dataSet = dataSet.flat_map(lambda w: w.batch(windowSize + 1))
+#it is important to shuffle the training data set
+dataSet = dataSet.shuffle(1000)
+#split X and y for [1,2,...,N] will be [1,2,,,,N-1][N]
+dataSet = dataSet.map(lambda w: (w[:-1], w[-1:]))
+dataSet = dataSet.batch(batchSize).prefetch(1)
+~~~~
+
+Now we have a data set, with both X and y where X contains sequences of 60  items  and Y is one item for the predicted output after this sequences. It is also divided into patches of 256 sequence each and shuffled so we are ready to build and start the training of our model 
+
+~~~~{.python}
+from tensorflow.keras.layers import LSTM,Conv1D,Dense,Lambda
+from tensorflow.keras.utils import plot_model
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.optimizers import SGD
+from tensorflow.keras.losses import Huber
+model = Sequential()
+model.add(Conv1D(filters=32, kernel_size=5, strides=1, padding="causal",
+                 activation="relu", input_shape=[None,1]))
+model.add(LSTM(64, return_sequences=True))
+model.add(LSTM(64, return_sequences=True))
+model.add(Dense(30, activation='relu'))
+model.add(Dense(10, activation='relu'))
+model.add(Dense(1))
+model.add(Lambda(lambda x: x*400))
+model.compile(loss=Huber(),optimizer= SGD(lr=1e-8, momentum=0.9),metrics=["mae"])
+model.summary()
+history = model.fit(dataSet, epochs=100)
+~~~~
 
 ## 9. Conclusion
