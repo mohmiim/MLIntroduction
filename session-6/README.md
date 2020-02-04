@@ -17,7 +17,7 @@
 
 [7. Design our Tensorflow model](#7-design-our-tensorflow-model)
 
-[8. Putting it all together](#8-putting-it-all-together)
+[8. Univariate single step forecasting ](#8-univariate-single-step-forecasting)
 
 [9. Conclusion](#9-conclusion)
 
@@ -238,106 +238,123 @@ model.add(Dense(1))
 this code very similar to the models we created in the previous sessions, the only new thing we introduced here is the use of the layer LSTM which is pretty straightforward, just provide how many units are in the LSTM and if you will connect it to another Layer you need to set return_sequence=True
  
 
-## 8. Putting it all together  
+## 8. Univariate single step forecasting  
+
+In Single step forecasting, we are forecasting only one point in the future, we can chain the prediction to predict more but there is a better way to do that and we will cover it later
 
 **Read the data:**
-we start by reading the CSV file data as it is, hen extract the columns we need like this:
+
+We start by reading the CSV file data as it is:
  
 ~~~~{.python}
-with open('data/Sunspots.csv') as csvfile:
-    reader = csv.reader(csvfile, delimiter=',')
-    next(reader)
-    for row in reader:
-        sunspots.append(float(row[2]))
-        time_step.append(int(row[0]))
-
-series = np.array(sunspots)
-time = np.array(time_step)
+def loadData(pathToFile,sampleCount=None, timeIndex = 0 , dataIndex=1):
+    time = []
+    data = []
+    plt.figure(figsize=(10, 6))
+    with open(pathToFile) as csvfile:
+        reader = csv.reader(csvfile, delimiter=',')
+        next(reader)
+        for row in reader:
+            data.append(float(row[dataIndex]))
+            time.append(int(row[timeIndex]))
+    
+    series = np.array(data)
+    time = np.array(time)
+    if sampleCount != None :
+        train, valid = split(sampleCount, series)
+        ttrain, tvalid = split(sampleCount, time)
+        showSeries(ttrain, train, show=False)
+        showSeries(tvalid, valid)
+        return ttrain, train , tvalid, valid
+    else :
+        showSeries(time, series)
+        return time,series
 ~~~~
 
-if we plot both time and series we will get this figure
+This utility function, reads the csv file, then create both the time and series columns based on the passed index, then will split the data into training and test using the split utility function 
+
+~~~~{.python}
+def split(sampleCount, series):
+    X_train = series[:sampleCount]
+    X_valid = series[sampleCount:]
+    return X_train, X_valid
+~~~~
+
+Lastly, it draws the output using the utility function showSerier, note: ignore the extra parameter "show", which i use only in the none notebook version of the code
+
+~~~~{.python}
+def showSeries(time, series, show=True):
+    plt.plot(time, series)
+    plt.xlabel("Time")
+    plt.ylabel("Value")
+    plt.grid(True)
+~~~~
+
+the output should look like this 
 
 <p align="center"> 
-<img src="images/data.png" height="300">
+<img src="images/data.png" height="350">
 </p>
 
 
-To check how many data points are in this CSV, we can just print the shape of the series array 
+As we discussed before we need to create sequences to train our model, the following method will create the sequences using the window function we discussed in the data preparation section 
 
 ~~~~{.python}
-print(series.shape)
+def sequenceData(train,window_size, output=True, shuffle= True) :
+    if output : window_size = window_size + 1
+    dataset = tf.data.Dataset.from_tensor_slices(train)
+    dataset = dataset.window(window_size, shift=1, drop_remainder=True)
+    dataset = dataset.flat_map(lambda w: w.batch(window_size + 1))
+    if shuffle :
+        dataset = dataset.shuffle(1000)
+    
+    X = []
+    y = []
+    if output :
+        dataset = dataset.map(lambda w: (w[:-1], w[-1:]))
+        for a,b in dataset:
+            X.append(a.numpy())
+            y.append(b.numpy())
+    else :
+        for f in dataset :
+            X .append(f.numpy())
+    return np.asarray(X), np.asarray(y)
 ~~~~
 
-The output should be 
+to load the data and create the sequenced training set here is the code
 
 ~~~~{.python}
-(3235,)
-~~~~
-
-The reason we are doing this, is to decide how many rows we will use to train the modle and how many we will keep for validation 
-So we quite few data points here, so we are not going to do 80/20 split rather we will take 3000  data points for training and keep the last 235 data points for testing 
-
-Lets do the splitting
-
-~~~~{.python}
-SAMPLES_COUNT = 3000
-X_train = series[:SAMPLES_COUNT]
-X_valid = series[SAMPLES_COUNT:]
+time_train, train, time_valid, valid = loadData("/tmp/sunspots.csv",3000, 0, 2)
+X_train, y_train = sequenceData(train,60)
 print(X_train.shape)
-print(X_valid.shape)
+print(y_train.shape)
 ~~~~
 
-I defined the samples count as a variable, in case you want to play with it to see its impact on the model. I alos print our the shape of each array to confirm our split. You should get this output
+the result should be
 
 ~~~~{.python}
-(3000,)
-(235,)
+(2940, 60)
+(2940, 1)
 ~~~~
 
-But as we discussed before, the array is just a vector of numbers, and we want to train using sequences. So we will use the tensorflow dataset and its window function as explained [here](#6-prepare-data-for-training-tensorflow-model) 
-
+now it is time to create our model 
 
 ~~~~{.python}
-from tensorflow import expand_dims
-import tensorflow
-windowSize = 60
-batchSize = 256
-print(X_train.shape)
-#adjust the shape from (3000,) to (3000,1)
-X_train = expand_dims(X_train, axis=-1)
-print(X_train.shape)
-#convert to tensorflow dataset
-dataSet = tensorflow.data.Dataset.from_tensor_slices(X_train)
-#convert from vector to sequence, remember when we want to have a window of 2 in we used 3 since the last item will be the output
-dataSet = dataSet.window(windowSize + 1, shift=1, drop_remainder=True)
-dataSet = dataSet.flat_map(lambda w: w.batch(windowSize + 1))
-#it is important to shuffle the training data set
-dataSet = dataSet.shuffle(1000)
-#split X and y for [1,2,...,N] will be [1,2,,,,N-1][N]
-dataSet = dataSet.map(lambda w: (w[:-1], w[-1:]))
-dataSet = dataSet.batch(batchSize).prefetch(1)
+def create_Conv_Lstm_model() :
+	model = Sequential()
+	model.add(TimeDistributed(Conv1D(FILTERS_COUNT, KERNER_SIZE, activation='relu',
+	                                 input_shape=(None,window_size,1))))
+	model.add(TimeDistributed(Conv1D(FILTERS_COUNT, KERNER_SIZE, activation='relu')))
+	model.add(TimeDistributed(MaxPooling1D()))
+	model.add(TimeDistributed(Flatten()))
+	model.add(LSTM(NODES, activation='relu'))
+	model.add(Dense(NODES, activation='relu'))
+	model.add(Dense(1))
+	model.compile(loss='mse', optimizer='adam')
+	return model
 ~~~~
 
-Now we have a data set, with both X and y where X contains sequences of 60  items  and Y is one item for the predicted output after this sequences. It is also divided into patches of 256 sequence each and shuffled so we are ready to build and start the training of our model 
+our training data shape is (2940,60) but conv need a 3d array, which means we will need to expand out training array dimenstions by 1
 
-~~~~{.python}
-from tensorflow.keras.layers import LSTM,Conv1D,Dense,Lambda
-from tensorflow.keras.utils import plot_model
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.optimizers import SGD
-from tensorflow.keras.losses import Huber
-model = Sequential()
-model.add(Conv1D(filters=32, kernel_size=5, strides=1, padding="causal",
-                 activation="relu", input_shape=[None,1]))
-model.add(LSTM(64, return_sequences=True))
-model.add(LSTM(64, return_sequences=True))
-model.add(Dense(30, activation='relu'))
-model.add(Dense(10, activation='relu'))
-model.add(Dense(1))
-model.add(Lambda(lambda x: x*400))
-model.compile(loss=Huber(),optimizer= SGD(lr=1e-8, momentum=0.9),metrics=["mae"])
-model.summary()
-history = model.fit(dataSet, epochs=100)
-~~~~
 
 ## 9. Conclusion
