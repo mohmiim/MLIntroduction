@@ -427,6 +427,6 @@ You should get something close to this output, error should be around 22 or so, 
 <img src="images/output.png" height="250">
 </p>
 
-
+[This notebook](https://colab.research.google.com/github/mohmiim/MLIntroduction/blob/master/session-6/UniSingleForecast.ipynb) contains the full implementation. Try to play with it, change the number of nodes or add more layers and see the effect, maybe change the patch size or the sliding window size and reason about the results.
 
 ## 9. Conclusion
