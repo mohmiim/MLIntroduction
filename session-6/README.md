@@ -337,24 +337,96 @@ the result should be
 (2940, 1)
 ~~~~
 
-now it is time to create our model 
+Now it is time to create our model, we talked about Sequence models and obviously time series is a set of sequences. So, we can try to use just LSTM models to build our forecasting model> But we actually can help LSTM a bit more, by adding Conv layer on before the this can help the model quite a bit, since as we saw before Conv layers are good at identifying patterns so it can extract local temporal patterns from the input which will enable LSTM to do a better job.
 
 ~~~~{.python}
-def create_Conv_Lstm_model() :
-	model = Sequential()
-	model.add(TimeDistributed(Conv1D(FILTERS_COUNT, KERNER_SIZE, activation='relu',
-	                                 input_shape=(None,window_size,1))))
-	model.add(TimeDistributed(Conv1D(FILTERS_COUNT, KERNER_SIZE, activation='relu')))
-	model.add(TimeDistributed(MaxPooling1D()))
-	model.add(TimeDistributed(Flatten()))
-	model.add(LSTM(NODES, activation='relu'))
-	model.add(Dense(NODES, activation='relu'))
-	model.add(Dense(1))
-	model.compile(loss='mse', optimizer='adam')
-	return model
+def createConvLstmModel() :
+  model = Sequential()
+  model.add(Conv1D(FILTERS_COUNT, KERNER_SIZE, activation='relu', input_shape=(window_size,1)))
+  model.add(MaxPooling1D())
+  model.add(Conv1D(FILTERS_COUNT, KERNER_SIZE, activation='relu', input_shape=(window_size,1)))
+  model.add(Dropout(0.5))
+  model.add(MaxPooling1D())
+  model.add(LSTM(NODES,activation='relu'))
+  model.add(Dense(1))
+  model.compile(loss='mse', optimizer='adam')
+  return model
 ~~~~
 
-our training data shape is (2940,60) but conv need a 3d array, which means we will need to expand out training array dimenstions by 1
+The output of model.summary() should be 
+
+~~~~{.python}
+Model: "sequential"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv1d (Conv1D)              (None, 56, 128)           768       
+_________________________________________________________________
+max_pooling1d (MaxPooling1D) (None, 28, 128)           0         
+_________________________________________________________________
+conv1d_1 (Conv1D)            (None, 24, 128)           82048     
+_________________________________________________________________
+dropout (Dropout)            (None, 24, 128)           0         
+_________________________________________________________________
+max_pooling1d_1 (MaxPooling1 (None, 12, 128)           0         
+_________________________________________________________________
+lstm (LSTM)                  (None, 150)               167400    
+_________________________________________________________________
+dense (Dense)                (None, 1)                 151       
+=================================================================
+Total params: 250,367
+Trainable params: 250,367
+Non-trainable params: 0
+
+~~~~
+
+
+This is quite simple model, not too much to it. We have 2 Convolution layers followed by  LSTM layer then our output
+
+Let's create our training function, keeping in mind that the convolution layer requires a 3D array input, so we will need to reshape our training input
+
+~~~~{.python}
+def fitConvLstm(X_train, y_train) :
+  X_train = X_train.reshape((X_train.shape[0],X_train.shape[1], 1))
+  print(X_train.shape)
+  return model.fit(X_train, y_train, epochs=EPOCHS, batch_size=BATCH_SIZE)
+~~~~
+
+The last major piece we will require is a validation function, that will use our validation data as input to our model then it will calculate th emean squared error between our prediction and the real data and plot them 
+
+~~~~{.python}
+def lstmValidation(model, train, test):
+  predictions = list()
+  history = [x for x in train]
+  history = np.asarray(history)
+  for i in range(len(test)):
+    x_input = np.array(history[-window_size:]).reshape((1, window_size, 1))
+    x_input = (x_input-train_mean)/train_std
+    yhat = model.predict(x_input)[0]
+    yhat = (yhat*train_std) + train_mean
+    predictions.append(yhat)
+    history = np.append(history, test[i])
+  error  = sqrt(mean_squared_error(test, predictions)) 
+  showSeries(range(0,len(test)), test)
+  showSeries(range(0,len(test)), predictions)
+  print(' > %.3f' % error)
+  return error
+~~~~
+
+lets trigger the training and plot the results 
+
+~~~~{.python}
+model = createConvLstmModel()
+fitConvLstm(X_train,y_train)
+lstmValidation(model,train, valid)
+~~~~
+
+You should get something close to this output, error should be around 22 or so, not too bad considering how littile effort we put into preparing the data. 
+
+<p align="center"> 
+<img src="images/output.png" height="250">
+</p>
+
 
 
 ## 9. Conclusion
