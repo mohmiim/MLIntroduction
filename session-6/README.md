@@ -11,7 +11,7 @@
 
 [4. Sequence Models](#4-sequence-models)
 
-[5. Picking our dataset](#5-picking-our-dataset)
+[5. Picking our datasets](#5-picking-our-datasets)
 
 [6. Prepare Data for training Tensorflow model](#6-prepare-data-for-training-tensorflow-model)
 
@@ -90,7 +90,7 @@ LSTM are a variation of RNN, that deal specifically with the long-term dependenc
 
 The details of how LSTMS works is beyond the scope of this tutorial and i suggest goign through the [amazing deeplearing specialization by Andrew NG](https://www.deeplearning.ai/deep-learning-specialization/) on coursera to get in the details (course 5)  
 
-## 5. Picking our dataset  
+## 5. Picking our datasets  
 
 We mentioned in previous section that we can have univariate or multivariate forecasting and the difference between both. So we will pick 2 data sets to tackle one is univariate and one is multivariate
 
@@ -101,11 +101,14 @@ Univarate data set that contains the monthly sunspot data since 1749
 <img src="images/sunspots.png" height="300">
 </p>
 
-**[Individual household electric power consumption:](https://archive.ics.uci.edu/ml/datasets/individual+household+electric+power+consumption)** 
-Multivariate dataset made available by [UCI Machine Learning repository](https://archive.ics.uci.edu/ml/datasets.php), besside being a Multivariate dataset it had some missing values which is good because this is what you will ctually find in real life datasets.
+**[Weather data:](https://www.bgc-jena.mpg.de/wetter/weather_data.html)**   
+
+Multivariate dataset made available by [Max Planck Institute for Biogeochemistry](https://www.bgc-jena.mpg.de/index.php/Main/HomePage), observations in this data set are collected every 10 minutes which means one hour will be recorded over 6 observations, meaning one day will be represented by 6*24  = 144 rows of data
+
+The next graph shows how the data looks for 3 of the 22 variables collected 
 
 <p align="center"> 
-<img src="images/energy.png" height="300">
+<img src="images/weather.png" height="300">
 </p>
 
 ## 6. Prepare Data for training Tensorflow model
