@@ -5,7 +5,7 @@
 
 [1. What is Forecasting](#1-what-is-forecasting)
 
-[2. Goal of the session](#2-goal-of-the-session)
+[2. The Goal of the session](#2-the-goal-of-the-session)
 
 [3. Time series attributes](#3-time-series-attributes)
 
@@ -25,34 +25,34 @@
 
 ## 1. What is Forecasting
 
-Forecasting, is the act of using historical data as an input to learn and make predictions about the direction of future trends. 
+Forecasting is the act of using historical data as an input to learn and make predictions about the direction of future trends. 
 Formal definition if Y = {y<sub>1</sub>,y<sub>2</sub>, .... y<sub>n</sub>}then forecasting is finding the values of y<sub>n+h</sub> where h is the horizon of the forecast
-It is important to keep in mind that it is important to know what type of forecasting you are trying to do  
-**Univariate time Series:** where only one variable is changing over time, for example if we have a sensor recording temperature over time   
-**Multivariate time series:** more than one variable is changing over time, for example accelerometer where X,Y and Z are recorded over time 
+It is important to keep in mind that it is important to know what type of forecasting you are trying to do  
+**Univariate time Series:** where only one variable is changing over time, for example, if we have a sensor recording temperature over time   
+**Multivariate time series:** more than one variable is changing over time, for example, accelerometer where X, Y, and Z are recorded over time 
 
-## 2. Goal of the session
+## 2. The Goal of the session
 
-Our goal is to show how can we build a deeplearning model to do forecasting of Multivariate time series?. I will not get in the discussion about deeplearning VS classical statistics for time series forecasting. Quick search will show that it is being debated even for univariate time series with papers supporting both sides, so i will leave that to you as a self reading after you finish the tutorial 
+Our goal is to show how can we build a deep learning model to do forecasting of Multivariate time series?. I will not get in the discussion about deep learning VS classical statistics for time series forecasting. A quick search will show that it is being debated even for univariate time series with papers supporting both sides, so I will leave that to you as a self-reading after you finish the tutorial 
 
 ## 3. Time series Attributes
 
-Before we jump into the Machine Learning aspect of this tutorial it is important to make sure we understand few basic attributes of time series  
+Before we jump into the Machine Learning aspect of this tutorial it is important to make sure we understand a few basic attributes of time series  
 
-**trend:** a systematic linear or nonlinear component that changes over time and does not repeat  
+**trend:** a systematic linear or nonlinear component that changes over time and does not repeat  
 
 <p align="center"> 
 <img src="images/trend.png" height="300">
 </p>
 
 
-**Seasonality:** a systematic linear or nonlinear component that changes over time and repeat  
+**Seasonality:** a systematic linear or nonlinear component that changes over time and repeats  
 
 <p align="center"> 
 <img src="images/seasonal.png" height="300">
 </p>
 
-In real life data you will find both trend and seasonality together
+In real-life data you will find both trend and seasonality together
 
 <p align="center"> 
 <img src="images/both.png" height="300">
@@ -72,30 +72,30 @@ Typical time series will contain all three
 
 ## 4. Sequence Models
 
-Time to start talk Machine Learning, In the previous sessions we did learn many types of Machine learning layers and models, like Neural Networks and Convolution Neural Networks (CNN). Time series will require us to learn a new type or Models which is called sequence models. The name almost till it all, in these models order does matter, because the data it is trying to learn are order sensitive. This is important in many applications for example in Natural Language Processing where the order or words affects how we understand the sentence, also in time series analysis without the correct order our analysis will be invalid.
+Time to start talk Machine Learning, In the previous sessions we did learn many types of Machine learning layers and models, like Neural Networks and Convolution Neural Networks (CNN). Time series will require us to learn a new type or Models which is called sequence models. The name almost till it all, in these models order does matter because the data it is trying to learn are order sensitive. This is important in many applications for example in Natural Language Processing where the order or words affect how we understand the sentence, also in time series analysis without the correct order our analysis will be invalid.
 
 The most basic type of sequence models is Recurrent Neural Networks, where the output of the previous step impact the out of the next step
 
-The next diagram, show how the output of the previous step is fed into the next step
+The next diagram shows how the output of the previous step is fed into the next step
 
 <p align="center"> 
 <img src="images/RNN.png" height="300">
 </p>
 
-This is the base idea of sequence models, but we will not really use RNNs because there are cases where RNN will suffer. These cases are the ones where the output depends on context very early in the sequence. RNN can be adjust to handle cases like these but there is a nother type of network that can handle these cases much easier this type is Long Short Term Memory in short LSTM
+This is the base idea of sequence models, but we will not really use RNNs because there are cases where RNN will suffer. These cases are the ones where the output depends on context very early in the sequence. RNN can be adjusted to handle cases like these but there is another type of network that can handle these cases much easier this type is Long Short Term Memory in short LSTM
 
 **LSTM:**
 
-LSTM are a variation of RNN, that deal specifically with the long-term dependency problem because it remember information for long time.
+LSTM is a variation of RNN, that deals specifically with the long-term dependency problem because it remembers information for a long time.
 
-The details of how LSTMS works is beyond the scope of this tutorial and i suggest goign through the [amazing deeplearing specialization by Andrew NG](https://www.deeplearning.ai/deep-learning-specialization/) on coursera to get in the details (course 5)  
+The details of how LSTMS works is beyond the scope of this tutorial and i suggest going through the [amazing deep learning specialization by Andrew NG](https://www.deeplearning.ai/deep-learning-specialization/) on coursera to get in the details (course 5)  
 
 ## 5. Picking our datasets  
 
-We mentioned in previous section that we can have univariate or multivariate forecasting and the difference between both. So we will pick 2 data sets to tackle one is univariate and one is multivariate
+We mentioned in the previous section that we can have univariate or multivariate forecasting and the difference between both. So we will pick 2 data sets to tackle one is univariate and one is multivariate
 
-**[Sunspots:](https://github.com/mohmiim/MLIntroduction/tree/master/session-6/data/Sunspots.csv)**  
-Univarate data set that contains the monthly sunspot data since 1749
+**[Sunspots:](https://github.com/mohmiim/MLIntroduction/tree/master/session-6/data/Sunspots.csv)**  
+Univariate data set that contains the monthly sunspot data since 1749
 
 <p align="center"> 
 <img src="images/sunspots.png" height="300">
@@ -113,7 +113,7 @@ The next graph shows how the data looks for 3 of the 22 variables collected
 
 ## 6. Prepare Data for training Tensorflow model
 
-What does it mean to prepare data for training ?. Lets consider the simplest form of a time series 
+What does it mean to prepare data for training ?. Let's consider the simplest form of a time series 
 
 ~~~~{.python}
 1  
@@ -137,7 +137,7 @@ This is just a sequence of numbers, but as we have seen in the previous sessions
 [6 7]  
 ~~~~
 
-when we do that we did convert our input to a set of sequences, we can doa similar thing to the output where the output will be the next item in the original sequence
+We did convert our input to a set of sequences, we can do a similar thing for the output where the output will be the next item in the original sequence
 
 ~~~~{.python}
 [1 2] [3]
@@ -148,9 +148,9 @@ when we do that we did convert our input to a set of sequences, we can doa simil
 ~~~~
 
 Tensor flow actually provide some nice utilities to make it easy to do that 
-lets look at some code
+let's look at some code
 
-- first we let's create our simple list of numbers
+- First, we  create our simple list of numbers
 
 ~~~~{.python}
 import tensorflow as tf
@@ -158,7 +158,7 @@ dataset = tf.data.Dataset.range(10)
 for val in dataset: print(val.numpy())
 ~~~~
  
-The out put of this code should be 
+The output of this code should be 
 
 ~~~~{.python}
 0
@@ -173,7 +173,7 @@ The out put of this code should be
 9
 ~~~~
 
-- next we want to createthe sliding window 
+- Next we want to create the sliding window 
 
 ~~~~{.python}
 dataset = dataset.window(3, shift=1, drop_remainder=True)
@@ -183,9 +183,9 @@ for window in dataset:
 ~~~~
 
 We used the window function on the dataset, we pass it how long is the window and how many numbers it should shift between each window, then the drop_remainder flag determines what will happen if we have partial windows at the end, should they be kept or dropped.
-After that we call the numpy method to convert it to numpy arrays
- 
-the output of this will be 
+After that, we call the numpy method to convert it to numpy arrays
+ 
+The output will be:
 
 ~~~~{.python}
 [0 1 2]
@@ -198,7 +198,7 @@ the output of this will be
 [7 8 9]
 ~~~~
 
-the last step is to convert it make it X , y for training and labels. Which is done using simple array API's like that :
+The last step is to convert it to X , y for training and labels. Which is done using simple array API's like that :
 
 ~~~~{.python}
 dataset = dataset.map(lambda window: (window[:-1], window[-1:]))
@@ -206,7 +206,7 @@ for X,y in dataset:
 	print(X.numpy(), y.numpy())
 ~~~~
 
-The output will look like this 
+The output will look like this:
 
 ~~~~{.python}
 [0 1] [2]
@@ -222,7 +222,7 @@ The output will look like this
 ## 7. Design our Tensorflow model  
 
 So we talked about Sequence models, and how to prepare time series data for model training, it is time to design our model 
-Since it is a time series we know we will need to use sequence model, so we will go with LSTM, but through running many experiemnts it was found that having a convolution layer before the LSTM leads to better results so we will do that in our model. But ofcourse you can try to add and remove layers to see for your self 
+Since it is a time series we know we will need to use a sequence model, so we will go with LSTM, but through running many experiments it was found that having a convolution layer before the LSTM leads to better results so we will do that in our model. But of course, you can try to add and remove layers to see for your self 
 
 **Example model:**
 
@@ -238,12 +238,12 @@ model.add(Dense(10, activation='relu'))
 model.add(Dense(1))
 ~~~~
 
-this code very similar to the models we created in the previous sessions, the only new thing we introduced here is the use of the layer LSTM which is pretty straightforward, just provide how many units are in the LSTM and if you will connect it to another Layer you need to set return_sequence=True
+This code is very similar to the models we created in the previous sessions, the only new thing we introduced here is the use of the layer LSTM which is pretty straightforward, just provide how many units are in the LSTM and if you will connect it to another Layer you need to set return_sequence=True
  
 
 ## 8. Univariate single step forecasting  
 
-In Single step forecasting, we are forecasting only one point in the future, we can chain the prediction to predict more but there is a better way to do that and we will cover it later
+In Single-step forecasting, we are forecasting only one point in the future, we can chain the prediction to predict more but there is a better way to do that and we will cover it later
 
 **Read the data:**
 
@@ -283,7 +283,7 @@ def split(sampleCount, series):
     return X_train, X_valid
 ~~~~
 
-Lastly, it draws the output using the utility function showSerier, note: ignore the extra parameter "show", which i use only in the none notebook version of the code
+Lastly, it draws the output using the utility function showSeries, note: ignore the extra parameter "show", which I use only in the none notebook version of the code
 
 ~~~~{.python}
 def showSeries(time, series, show=True):
@@ -293,14 +293,14 @@ def showSeries(time, series, show=True):
     plt.grid(True)
 ~~~~
 
-the output should look like this 
+The output should look like this: 
 
 <p align="center"> 
 <img src="images/data.png" height="350">
 </p>
 
 
-As we discussed before we need to create sequences to train our model, the following method will create the sequences using the window function we discussed in the data preparation section 
+As we discussed previously we need to create sequences to train our model, the following method will create the sequences using the window function we discussed in the data preparation section 
 
 ~~~~{.python}
 def sequenceData(train,window_size, output=True, shuffle= True) :
@@ -324,7 +324,7 @@ def sequenceData(train,window_size, output=True, shuffle= True) :
     return np.asarray(X), np.asarray(y)
 ~~~~
 
-to load the data and create the sequenced training set here is the code
+To load the data and create the sequenced training set here is the code
 
 ~~~~{.python}
 time_train, train, time_valid, valid = loadData("/tmp/sunspots.csv",3000, 0, 2)
@@ -333,7 +333,7 @@ print(X_train.shape)
 print(y_train.shape)
 ~~~~
 
-the result should be
+The result should be:
 
 ~~~~{.python}
 (2940, 60)
@@ -356,7 +356,7 @@ def createConvLstmModel() :
   return model
 ~~~~
 
-The output of model.summary() should be 
+The output of model.summary() should be:
 
 ~~~~{.python}
 Model: "sequential"
@@ -384,7 +384,7 @@ Non-trainable params: 0
 ~~~~
 
 
-This is quite simple model, not too much to it. We have 2 Convolution layers followed by  LSTM layer then our output
+This is quite a simple model, not too much to it. We have 2 Convolution layers followed by  LSTM layer then our output
 
 Let's create our training function, keeping in mind that the convolution layer requires a 3D array input, so we will need to reshape our training input
 
@@ -395,7 +395,7 @@ def fitConvLstm(X_train, y_train) :
   return model.fit(X_train, y_train, epochs=EPOCHS, batch_size=BATCH_SIZE)
 ~~~~
 
-The last major piece we will require is a validation function, that will use our validation data as input to our model then it will calculate th emean squared error between our prediction and the real data and plot them 
+The last major piece we will require is a validation function, that will use our validation data as input to our model then it will calculate the mean squared error between our prediction and the real data and plot them 
 
 ~~~~{.python}
 def lstmValidation(model, train, test):
@@ -416,7 +416,7 @@ def lstmValidation(model, train, test):
   return error
 ~~~~
 
-lets trigger the training and plot the results 
+Let's trigger the training and plot the results 
 
 ~~~~{.python}
 model = createConvLstmModel()
@@ -424,7 +424,7 @@ fitConvLstm(X_train,y_train)
 lstmValidation(model,train, valid)
 ~~~~
 
-You should get something close to this output, error should be around 22 or so, not too bad considering how littile effort we put into preparing the data. 
+You should get something close to this output, the error should be around 22 or so, not too bad considering how little effort we put into preparing the data. 
 
 <p align="center"> 
 <img src="images/output.png" height="250">
@@ -434,9 +434,9 @@ You should get something close to this output, error should be around 22 or so, 
 
 ## 9. Multivariate multistep forecasting  
 
-We are going to use the Weather data from the link mentioned in section 5, the data on the web site is available as separate csv files, one for every 6 month since 2003 till now. I included a the Python code I wrote to combine csv files in a folder into one csv file just in case you want to do your own experimentations. I created one combined CSV file for the data from 2015 till now.
+We are going to use the Weather data from the link mentioned in section 5, the data on the web site is available as separate csv files, one for every 6 months since 2003 till now. I included the Python code I wrote to combine csv files in a folder into one csv file just in case you want to do your own experimentations. I created one combined CSV file for the data from 2015 till now.
 
-let's load the data, this time we will use Pandas
+Let's load the data, this time we will use Pandas
 
 ~~~~{.python}
 df = pd.read_csv("/tmp/weather.csv")
@@ -463,13 +463,13 @@ print(data_mean)
 print(data_std)
 ~~~~
 
-This code should look familiar, please note that we split our data to use 260000 point for training and the rest for validation
+This code should look familiar, please note that we split our data to use 260000 points for training and the rest for validation
 
-Then, we need to create sequences to traing out model, like before. But there is one major difference. In the previous example we were predicting only one step in the future but now we want to do multiple steps. What would this affect?  Think about the output of the model, previously the output was one point in the future, now it will be N points where N is the number of steps to predict. This also means that in our training y will be N wide as well where N is the number of steps to predict.
+Then, we need to create sequences to train our model, like before. But there is one major difference. In the previous example, we were predicting only one step in the future but now we want to do multiple steps. What would this affect?  Think about the output of the model, previously the output was one point in the future, now it will be N points where N is the number of steps to predict. This also means that in our training y will be N wide as well where N is the number of steps to predict.
 
 Another point to consider, is the fact that the data is captured every 10 minutes, we predict on the minute level or we can go higher and work on the hour level (meaning we will be using a stride of 6 within our sliding window, we will make this a parameter so we cna adjust it as we like)
 
-let's adjust our sequence generation function 
+Let's adjust our sequence generation function 
 
 ~~~~{.python}
 def sequenceData(dataset, target, start_index, end_index, history_size,target_size, step):
@@ -487,7 +487,7 @@ def sequenceData(dataset, target, start_index, end_index, history_size,target_si
 
 Time to create our training and validation data using the sequence data function, and convert it to tensorfflow data set and shuffle it 
 
-we will use a window of 5 days, since the file has data every 10 minutes so, it is 6 rows per hour meaning  5 days = 5 * 24 * 6 = 720 data point window (if we do it on 10 minutes bases), we will set the STEP to 6 to basically work per hours instead of 10 minutes. We want to predict the temp for the next 12 hours, which is basically 6*12 = 72 point for y
+we will use a window of 5 days. The file has data every 10 minutes so, it is 6 rows per hour meaning  5 days = 5 * 24 * 6 = 720 data point window (if we do it on 10 minutes bases), we will set the STEP to 6 to basically work per hours instead of 10 minutes. We want to predict the temp for the next 12 hours, which is basically 6*12 = 72 point for y
 
 ~~~~{.python}
 LOOK_AHEAD = 72
@@ -507,32 +507,39 @@ val_data = tf.data.Dataset.from_tensor_slices((X_val, y_val))
 val_data = val_data.batch(BATCH_SIZE)
 ~~~~
 
-every thing else should be very similar to what we did in the last example. We create a model
+Everything else should be very similar to what we did in the last example.
+Create a model:
 
 ~~~~{.python}
 def createModel() :
     model = Sequential()
-    model.add(LSTM(32,return_sequences=True,input_shape=X_train.shape[-2:]))
+    model.add(Conv1D(128, 5, activation='relu', input_shape=X_train.shape[-2:]))
+    model.add(MaxPooling1D())
+    model.add(Conv1D(128, 5, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(MaxPooling1D())
+    model.add(LSTM(32,return_sequences=True,activation='relu'))
     model.add(LSTM(16, activation='relu'))
     model.add(Dense(72))
-    model.compile(optimizer=tf.keras.optimizers.Adam(), loss='mae')
+    #model.compile(optimizer=tf.keras.optimizers.Adam(), loss='mse')
+    model.compile(optimizer=tf.keras.optimizers.RMSprop(clipvalue=1.0), loss='mae')
     return model
 ~~~~
 
-Then we train it
+Then we train it:
 
 ~~~~{.python}
 history = model.fit(train_data, epochs=EPOCHS)
 ~~~~
 
-Then we can use any sequences from the validation data set, call predict and plot real vs predicted
+Use any sequences from the validation data set, call predict and plot real vs predicted
 
 ~~~~{.python}
 for X, y in val_data.take(3):
   prediction =  model.predict(X)[0]
 ~~~~
 
-Here are some sample output i got after training my model:
+Here is sample output I got after training my model:
 
 <p align="center"> 
 <img src="images/multi1.png" height="350">
@@ -546,7 +553,13 @@ Here are some sample output i got after training my model:
 <img src="images/multi3.png" height="350">
 </p>
 
+<p align="center"> 
+<img src="images/multi4.png" height="350">
+</p>
 
+** [This notebook]()** has the full code 
+
+This conclude the tutorial, I included extra datasets in the data folder so you can try different cases. Try to think how can you tweak this model to generate multiple output variables as well as multiple steps
 
 
 

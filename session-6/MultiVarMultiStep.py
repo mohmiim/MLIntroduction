@@ -117,10 +117,16 @@ for x, y in train_data.take(1):
 
 def createModel() :
     model = Sequential()
-    model.add(LSTM(32,return_sequences=True,input_shape=X_train.shape[-2:]))
+    model.add(Conv1D(128, 5, activation='relu', input_shape=X_train.shape[-2:]))
+    model.add(MaxPooling1D())
+    model.add(Conv1D(128, 5, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(MaxPooling1D())
+    model.add(LSTM(32,return_sequences=True,activation='relu'))
     model.add(LSTM(16, activation='relu'))
     model.add(Dense(72))
-    model.compile(optimizer=tf.keras.optimizers.Adam(), loss='mae')
+    #model.compile(optimizer=tf.keras.optimizers.Adam(), loss='mse')
+    model.compile(optimizer=tf.keras.optimizers.RMSprop(clipvalue=1.0), loss='mae')
     return model
 
 model  = createModel()
