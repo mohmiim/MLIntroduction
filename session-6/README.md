@@ -19,7 +19,7 @@
 
 [8. Univariate single step forecasting ](#8-univariate-single-step-forecasting)
 
-[9. Conclusion](#9-conclusion)
+[9. Multivariate multistep forecasting](#9-multivariate-multistep-forecasting)
 
 
 
@@ -432,4 +432,124 @@ You should get something close to this output, error should be around 22 or so, 
 
 [This notebook](https://colab.research.google.com/github/mohmiim/MLIntroduction/blob/master/session-6/UniSingleForecast.ipynb) contains the full implementation. Try to play with it, change the number of nodes or add more layers and see the effect, maybe change the patch size or the sliding window size and reason about the results.
 
-## 9. Conclusion
+## 9. Multivariate multistep forecasting  
+
+We are going to use the Weather data from the link mentioned in section 5, the data on the web site is available as separate csv files, one for every 6 month since 2003 till now. I included a the Python code I wrote to combine csv files in a folder into one csv file just in case you want to do your own experimentations. I created one combined CSV file for the data from 2015 till now.
+
+let's load the data, this time we will use Pandas
+
+~~~~{.python}
+df = pd.read_csv("/tmp/weather.csv")
+columnsToConsider = ['p (mbar)', 'T (degC)', 'rho (g/m**3)']
+features = df[columnsToConsider]
+features.index = df['Date Time']
+~~~~
+
+The dataset has 22 columns we will take Temperature column and only 2 other columns plus time to keep things simple
+
+Then, lets split our data into training and validation 
+
+~~~~{.python}
+TRAIN_DATA_SIZE = 260000
+dataset = features.values
+data_mean = dataset[:TRAIN_DATA_SIZE].mean(axis=0)
+data_std = dataset[:TRAIN_DATA_SIZE].std(axis=0)
+dataset = (dataset-data_mean)/data_std
+training_data = dataset[:TRAIN_DATA_SIZE]
+validation_data = dataset[TRAIN_DATA_SIZE:]
+print(len(training_data))
+print(len(validation_data))
+print(data_mean)
+print(data_std)
+~~~~
+
+This code should look familiar, please note that we split our data to use 260000 point for training and the rest for validation
+
+Then, we need to create sequences to traing out model, like before. But there is one major difference. In the previous example we were predicting only one step in the future but now we want to do multiple steps. What would this affect?  Think about the output of the model, previously the output was one point in the future, now it will be N points where N is the number of steps to predict. This also means that in our training y will be N wide as well where N is the number of steps to predict.
+
+Another point to consider, is the fact that the data is captured every 10 minutes, we predict on the minute level or we can go higher and work on the hour level (meaning we will be using a stride of 6 within our sliding window, we will make this a parameter so we cna adjust it as we like)
+
+let's adjust our sequence generation function 
+
+~~~~{.python}
+def sequenceData(dataset, target, start_index, end_index, history_size,target_size, step):
+    X = []
+    y = []
+    start_index = start_index + history_size
+    if end_index is None:
+        end_index = len(dataset) - target_size
+    for i in range(start_index, end_index):
+        indices = range(i-history_size, i, step)
+        X.append(dataset[indices])
+        y.append(target[i:i+target_size])
+    return np.array(X), np.array(y)
+~~~~
+
+Time to create our training and validation data using the sequence data function, and convert it to tensorfflow data set and shuffle it 
+
+we will use a window of 5 days, since the file has data every 10 minutes so, it is 6 rows per hour meaning  5 days = 5 * 24 * 6 = 720 data point window (if we do it on 10 minutes bases), we will set the STEP to 6 to basically work per hours instead of 10 minutes. We want to predict the temp for the next 12 hours, which is basically 6*12 = 72 point for y
+
+~~~~{.python}
+LOOK_AHEAD = 72
+STEP = 6
+WINDOW_SIZE = 720
+BATCH_SIZE = 256
+BUFFER_SIZE = 1000
+X_train, y_train = sequenceData(dataset, dataset[:, 1], 0,
+                                 TRAIN_DATA_SIZE, WINDOW_SIZE,
+                                 LOOK_AHEAD, STEP)
+X_val, y_val = sequenceData(dataset, dataset[:, 1],
+                            TRAIN_DATA_SIZE, None, WINDOW_SIZE,
+                            LOOK_AHEAD, STEP)
+train_data = tf.data.Dataset.from_tensor_slices((X_train, y_train))
+train_data = train_data.shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
+val_data = tf.data.Dataset.from_tensor_slices((X_val, y_val))
+val_data = val_data.batch(BATCH_SIZE)
+~~~~
+
+every thing else should be very similar to what we did in the last example. We create a model
+
+~~~~{.python}
+def createModel() :
+    model = Sequential()
+    model.add(LSTM(32,return_sequences=True,input_shape=X_train.shape[-2:]))
+    model.add(LSTM(16, activation='relu'))
+    model.add(Dense(72))
+    model.compile(optimizer=tf.keras.optimizers.Adam(), loss='mae')
+    return model
+~~~~
+
+Then we train it
+
+~~~~{.python}
+history = model.fit(train_data, epochs=EPOCHS)
+~~~~
+
+Then we can use any sequences from the validation data set, call predict and plot real vs predicted
+
+~~~~{.python}
+for X, y in val_data.take(3):
+  prediction =  model.predict(X)[0]
+~~~~
+
+Here are some sample output i got after training my model:
+
+<p align="center"> 
+<img src="images/multi1.png" height="350">
+</p>
+
+<p align="center"> 
+<img src="images/multi2.png" height="350">
+</p>
+
+<p align="center"> 
+<img src="images/multi3.png" height="350">
+</p>
+
+
+
+
+
+
+
+
