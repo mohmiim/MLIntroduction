@@ -557,7 +557,7 @@ Here is sample output I got after training my model:
 <img src="images/multi4.png" height="350">
 </p>
 
-** [This notebook]()** has the full code 
+** [This notebook](https://colab.research.google.com/github/mohmiim/MLIntroduction/blob/master/session-6/MultiVarMultiStep.ipynb)** has the full code 
 
 This conclude the tutorial, I included extra datasets in the data folder so you can try different cases. Try to think how can you tweak this model to generate multiple output variables as well as multiple steps
 
