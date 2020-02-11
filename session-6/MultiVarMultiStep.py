@@ -1,25 +1,19 @@
-'''
-Created on Feb 2, 2020
-
-@author: miim
-'''
-
-
-from dataPrep import loadData,sequenceData, plot_series
 import pandas as pd
 import matplotlib.pyplot as plt
 import csv
+import os
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM,Conv1D,Dense,Lambda,Flatten
+from tensorflow.keras.layers import LSTM,Conv1D,Dense,MaxPooling1D,Flatten, Conv1D, Dropout,ConvLSTM2D,RepeatVector,TimeDistributed
 from tensorflow.keras.optimizers import SGD
 from tensorflow.keras.losses import Huber
+import StopCallBack
+from tensorflow.keras.models import load_model
 from math import sqrt
 
-CSV_FILE = "data/combined_csv.csv"
 
-df = pd.read_csv(CSV_FILE)
+df = pd.read_csv("data/combined_csv.csv")
 
 
 columnsToConsider = ['p (mbar)', 'T (degC)', 'rho (g/m**3)']
@@ -30,7 +24,7 @@ features.index = df['Date Time']
 features.plot(subplots=True)
 plt.show()
 
-TRAIN_DATA_SIZE = 256
+TRAIN_DATA_SIZE = 260000
 
 dataset = features.values
 
@@ -69,11 +63,10 @@ def sequenceData(dataset, target, start_index, end_index, history_size,target_si
 LOOK_AHEAD = 72
 STEP = 6
 WINDOW_SIZE = 720
-BATCH_SIZE = 20000
+BATCH_SIZE = 256
 BUFFER_SIZE = 1000
-
-
-
+SEQ = 5
+N_LENGTH = int((WINDOW_SIZE/STEP)/SEQ)
 
 X_train, y_train = sequenceData(dataset, dataset[:, 1], 0,
                                  TRAIN_DATA_SIZE, WINDOW_SIZE,
@@ -88,7 +81,13 @@ print(y_train.shape)
 print(X_val.shape)
 print(y_val.shape)
 
+CONVLSTM = True
 
+if CONVLSTM:
+    print(X_train.shape)
+    X_train = X_train.reshape(X_train.shape[0],SEQ,1,N_LENGTH,X_train.shape[2])
+    X_val = X_val.reshape(X_val.shape[0],SEQ,1,N_LENGTH,X_val.shape[2])
+    print(X_train.shape)
 
 train_data = tf.data.Dataset.from_tensor_slices((X_train, y_train))
 train_data = train_data.shuffle(BUFFER_SIZE).batch(BATCH_SIZE)
@@ -111,33 +110,73 @@ def multi_step_plot(history, true_future, prediction):
                  label='Predicted Future')
         plt.legend(loc='upper left')
     plt.show()
-
+    
 for x, y in train_data.take(1):
-    multi_step_plot(x[0], y[0], np.array([0]))
-
-def createModel() :
-    model = Sequential()
-    model.add(Conv1D(128, 5, activation='relu', input_shape=X_train.shape[-2:]))
-    model.add(MaxPooling1D())
-    model.add(Conv1D(128, 5, activation='relu'))
-    model.add(Dropout(0.5))
-    model.add(MaxPooling1D())
-    model.add(LSTM(32,return_sequences=True,activation='relu'))
-    model.add(LSTM(16, activation='relu'))
-    model.add(Dense(72))
-    #model.compile(optimizer=tf.keras.optimizers.Adam(), loss='mse')
-    model.compile(optimizer=tf.keras.optimizers.RMSprop(clipvalue=1.0), loss='mae')
+    if CONVLSTM :
+        print(x[0].shape)
+        x = x[0].numpy().reshape(SEQ*N_LENGTH,x.shape[4])
+        print(x.shape)
+        multi_step_plot(x, y[0], np.array([0]))
+    else:
+        multi_step_plot(x[0], y[0], np.array([0]))
+    
+def createConv_LSTMModel() :
+    path = "model/model2e.h5"
+    if os.path.isfile(path) :
+        print("Loaded Model =====>")
+        model = load_model(path)
+    else :
+        model = Sequential()
+        model.add(Conv1D(512, 5, activation='relu', input_shape=X_train.shape[-2:]))
+        model.add(Conv1D(512, 5, activation='relu'))
+        model.add(MaxPooling1D())
+        model.add(LSTM(144,return_sequences=True,activation='relu'))
+        model.add(LSTM(72, activation='relu'))
+        model.add(Dense(72))
+        model.compile(optimizer=tf.keras.optimizers.Adam(), loss='mae')
     return model
 
-model  = createModel()
+def createLSTMModel() :
+    model = Sequential()
+    model.add(LSTM(32,return_sequences=True,activation='relu',input_shape=X_train.shape[-2:]))
+    model.add(LSTM(16, activation='relu'))
+    model.add(Dense(72))
+    model.compile(optimizer=tf.keras.optimizers.Adam(), loss='mae',metrics=['acc'])
+    return model
+
+def createConvLSTM() :
+    model = Sequential()
+    print(X_train.shape[2])
+    model.add(ConvLSTM2D(64, (1,3), activation='relu', input_shape=(SEQ, 1, N_LENGTH, X_train.shape[4]))) 
+    model.add(Flatten())
+    model.add(RepeatVector(72))
+    model.add(LSTM(200, activation='relu', return_sequences=True))
+    model.add(TimeDistributed(Dense(100, activation='relu')))
+    model.add(TimeDistributed(Dense(1)))
+    model.compile(loss='mse', optimizer='adam')
+    return model
+
+if CONVLSTM:    
+    model  = createConvLSTM()
+else:
+    model = createLSTMModel()
+    
 model.summary()
 
 EVALUATION_INTERVAL = 200
 EPOCHS = 10
 
-history = model.fit(train_data, epochs=EPOCHS)
 
-model.save("model/model.h5")
+    
+history = model.fit(train_data, epochs=EPOCHS,callbacks=[StopCallBack.myCallBacks(loss= 0.02)])
 
-for x, y in val_data.take(3):
-  multi_step_plot(x[0], y[0], multi_step_model.predict(x)[0])
+#model.save("model/model3.h5")
+
+for X, y in val_data.take(3):
+    if CONVLSTM:
+        multi_step_plot(X[0].numpy().reshape(SEQ*N_LENGTH,X.shape[4]), y[0], model.predict(X)[0])
+    else :
+        multi_step_plot(X[0], y[0], model.predict(X)[0])
+        
+    
+
