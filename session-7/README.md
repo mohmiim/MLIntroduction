@@ -44,17 +44,13 @@ The generator responsibility is to generate images. It takes input which is a ve
 <img src="images/generator.png" height="400">
 </p>
 
-
-
-
-
-
-
-
-
-
-
 ## 2. How to design a model to generate images
+
+We have session in the previous sessions how to create classifiers using many different techniques. This covers the discriminator, But the generator is a new kind of a problem we did not face till now. 
+Generator job is to receive a vector of random points as input and output a full image. So far when we dealt with images we have been using Conv2D layers to down sample an image to set of features, but here we want to do the opposite where we want to up-sample from a set of features to real image. There are different techniques to achieve that and Keras has a nice layer that we will be using extensively in this session to achieve the goal up sampling this layer is **Conv2DTranspose** this layer will learn how to up-sample during our training process as you will see in the next few sections.
+
+Conv2D
+
 
 ## 3. How to train GAN]
 
