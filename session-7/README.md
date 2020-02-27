@@ -9,7 +9,7 @@
 
 [3. How to train GAN](#3-how-to-train-gan)
 
-[4. GAN best practice](#4-gan-best-practice)
+[4. GAN Tips and Tricks](#4-gan-tips-and-tricks)
 
 [5. Generating hand written digits](#5-generating-hand-written-digits)
 
@@ -57,7 +57,7 @@ One big difference between, **Conv2DTranspose** and **Conv2D** is the effect of 
 
 ## 3. How to train GAN
 
-As discussed in **[What is GAN]**(#1-what-is-gan), GAN actually consists of 2 models, the discriminator and the generator, and we are trying to train both at the same time and they affect each other, as a result GAN training is a bit more involved than the training we did in previous sessions.
+As discussed in **[What is GAN](#1-what-is-gan)**, GAN actually consists of 2 models, the discriminator and the generator, and we are trying to train both at the same time and they affect each other, as a result GAN training is a bit more involved than the training we did in previous sessions.
 
 Lets see what happens during one epoch while training GAN, during one epoch we need to update the weights of both the discriminator model and the generator model.  
 
@@ -82,7 +82,22 @@ The following figure shows the GAN model used to train the generator:
 <img src="images/GANModel.png" height="500">
 </p>
 
-## 4. GAN best practice
+## 4. GAN Tips and Tricks
+
+GAN training as seen in **[How to train GAN](#3-how-to-train-gan)**, is quite involved. And a lot of the training process and parameters adjustment is a trial and error kind of approach. This being said, there are many successfully trained GAN models out there, and people shared their tips and tricks on how to train a GAN
+Here few:  
+
+* Use LeakyReLU instead or Relu for the activation of hidden layers with slope of 0.2
+* Use gaussian weight initialization for the weights, using RandomNormal from Keras
+* Use Adam optimizer with lr = 0.0002 and beta-1=0.5 but if your model suffer from model collapse (it starts to generate the same image from many inputs), lower the learning rate
+* Scale your image input to [-1,1] instead of [0,1]
+* Add noise to the training, by miss-labeling some samples (like 5%)
+* Use label smoothing, so instead of using 1 for real use 0.8 to 1.0 and instead of using 0 for fake use 0 to 0.2
+* when training the discriminator, do the training on 2 steps one patch with only fake and one patch with only real
+* instead of using pooling layer in the discriminator, use stride of (2,2)
+* consider using BatchNormilization layer before the activation (i got mixed result for this one)
+
+These are just few tips and tricks, your results might be different and you should feel comfortable mixing and matching and changing the hyperparameters 
 
 ## 5. Generating hand written digits
 
