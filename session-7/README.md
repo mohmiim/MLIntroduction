@@ -101,6 +101,98 @@ These are just few tips and tricks, your results might be different and you shou
 
 ## 5. Generating hand written digits
 
+Time to have some fun :) , let's try to create a GAN capable of generating images for hand written digits. 
+
+we will use the [mnist](http://yann.lecun.com/exdb/mnist/) data set to train our model, keras already have function to load this data set for you 
+
+Let's define a function that will load the data, and scale it to [-1,1]  
+
+~~~~{.python}
+from numpy import expand_dims
+from keras.datasets.mnist import load_data
+
+def loadSamples():
+  (trainX, _), (_, _) = load_data()
+  # conv layer needs 3d array, so we will expand the dimensions
+  X = expand_dims(trainX, axis=-1)
+  X = X.astype('float32')
+  # scale to [-1,1]
+  X = X - 127.5 / 127.5
+  print(X.shape)
+  return X
+~~~~
+
+this code, will load all the samples and scale the image data to [-1,1], and print out the shape of the samples array
+when you call this function you should get this output
+
+ ~~~~{.python}
+(60000, 28, 28, 1)
+~~~~
+
+which is correct since our samples are 60000 sample, and each one is 28*28 pixel
+
+we will make our generator accept an input of 100 random numbers (latent space of size 100), let's create function that can generate any number of inputs in this latent space
+
+ ~~~~{.python}
+from numpy.random import randn
+
+LATENT_DIM = 100
+
+def generate_latent_input(latentDim, count):
+  X = randn(latentDim * count)
+  X = X.reshape((count,latentDim))
+  X = X.astype('float32')
+  return X
+~~~~
+
+We have a function that loads the real samples, and we have function that generate random input latent space, but we need a function to generate fake samples, lets create it 
+
+~~~~{.python}
+def create_generated_samples(generator, latentDim, count,labels_count):
+  X = generate_latent_input(latentDim, count)
+  gen_images = generator.predict(X)
+  # labels here will be fake ==> 0
+  y = zeros((count,1))
+  return gen_images, y
+~~~~
+
+We still need another utility function, when we train out model we train it using patches, so we need a function that return a patch for real samples. Lets create it 
+
+~~~~{.python}
+def generate_real_samples(dataset, n_samples):
+  index = randint(0, dataset.shape[0], n_samples)
+  X = images[index]
+  # mark them as real
+  y = ones((n_samples, 1))
+  return X, y
+~~~~
+
+we are ready to create our first model, the discriminator. Discriminator contains convolution block that we will be repeating multiple times, so it is better to have a function that create this block since this will make our code much easier and much smaller
+
+~~~~{.python}
+from tensorflow.keras.layers import LeakyReLU,
+from tensorflow.keras.layers import Conv2D
+from tensorflow.keras.initializers import RandomNormal 
+
+DISC_FILTER_SIZE = 5
+DISC_LEAKY_ALPHA = 0.2 
+
+init = RandomNormal(stddev=0.02)
+
+def createDiscConvLayer(model):
+  model.add(Conv2D(128,
+                   (DISC_FILTER_SIZE,DISC_FILTER_SIZE),
+                   strides=(2, 2),
+                   padding='same',
+                   kernel_initializer=init))
+  model.add(LeakyReLU(alpha=DISC_LEAKY_ALPHA))
+  return newLayer
+~~~~
+
+The createDiscConvLayer function does not really introduce any thing complex, it is just add a convolution layer, but it follow some of the tips and tricks we mentioned before. For example, it uses strides instead of pooling layers, it uses a Gaussian weight initializer and it uses leaky relu instead or relu for activation. Please note that i tried to make hyperparameters defined as constants outside the methods so we can play with them easily. 
+
+Let's create our model 
+
 ## 6. Generating flower images
 
 ## 7. Conditional GAN
