@@ -148,7 +148,7 @@ def generate_latent_input(latentDim, count):
 We have a function that loads the real samples, and we have function that generate random input latent space, but we need a function to generate fake samples, lets create it 
 
 ~~~~{.python}
-def create_generated_samples(generator, latentDim, count,labels_count):
+def create_generated_samples(generator, latentDim, count):
   X = generate_latent_input(latentDim, count)
   gen_images = generator.predict(X)
   # labels here will be fake ==> 0
@@ -161,7 +161,7 @@ We still need another utility function, when we train out model we train it usin
 ~~~~{.python}
 def generate_real_samples(dataset, n_samples):
   index = randint(0, dataset.shape[0], n_samples)
-  X = images[index]
+  X = dataset[index]
   # mark them as real
   y = ones((n_samples, 1))
   return X, y
@@ -373,7 +373,54 @@ Non-trainable params: 545,169
 ___________________________________
 ~~~~
 
+Now we are ready to write our training function, our implementation will follow the exact steps mentioned in  **[How to train GAN](#3-how-to-train-gan)**
 
+~~~~{.python}
+import math
+
+def train(generator, discriminator, gan, dataset, latent_dim, n_epochs=12000, n_batch=128):
+  batches_count = math.ceil(dataset.shape[0] / n_batch)
+  half_batch = int(n_batch / 2)
+  # manually enumerate epochs
+  for i in range(n_epochs):
+    # enumerate batches over the training set
+    for j in range(batches_count):
+      # get randomly selected 'real' samples
+      X_real, y_real = generate_real_samples(dataset, n_batch)
+      # generate 'fake' examples
+      X_fake, y_fake = create_generated_samples(generator, latent_dim, half_batch)
+      # update discriminator model weights
+      lossReal, _ = discriminator.train_on_batch(X_real, y_real)
+      lossFake, _ = discriminator.train_on_batch(X_fake, y_fake)
+      # prepare points in latent space as input for the generator
+      X_gan = generate_latent_input(latent_dim, n_batch)
+      # mark fake as real
+      y_gan = ones((n_batch, 1))
+      # update the generator via the discriminator's error
+      loss_generator = gan.train_on_batch(X_gan, y_gan)
+      # summarize loss on this batch
+      print('>Epoch:%d, Patch:%d/%d, lossReal=%.3f, lossFake=%.f lossGenerator=%.3f' % (i+1, j+1, batches_count, lossReal,lossFake, loss_generator))
+      if i%10 == 0 :
+        generateSampleOutput(i+1,generator,4)
+~~~~
+
+Our training function, calls a utility method every 10 epochs to save sample output of our generator 
+
+Now we have every thing we need to create the model, load the sample and start the training. Let's put it togetehr
+
+~~~~{.python}
+dataset  = loadSamples()
+
+# create the discriminator
+discriminator = create_discriminator()
+# create the generator
+generator = create_generator(LATENT_DIM)
+# create the gan
+gan = create_gan(generator, discriminator)
+
+# train model
+train(generator, discriminator, gan, dataset, LATENT_DIM)
+~~~~
 
 
 ## 6. Generating flower images
