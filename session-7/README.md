@@ -125,7 +125,7 @@ def loadSamples():
 this code, will load all the samples and scale the image data to [-1,1], and print out the shape of the samples array
 when you call this function you should get this output
 
- ~~~~{.python}
+~~~~{.python}
 (60000, 28, 28, 1)
 ~~~~
 
@@ -133,7 +133,7 @@ which is correct since our samples are 60000 sample, and each one is 28*28 pixel
 
 we will make our generator accept an input of 100 random numbers (latent space of size 100), let's create function that can generate any number of inputs in this latent space
 
- ~~~~{.python}
+~~~~{.python}
 from numpy.random import randn
 
 LATENT_DIM = 100
@@ -170,7 +170,7 @@ def generate_real_samples(dataset, n_samples):
 we are ready to create our first model, the discriminator. Discriminator contains convolution block that we will be repeating multiple times, so it is better to have a function that create this block since this will make our code much easier and much smaller
 
 ~~~~{.python}
-from tensorflow.keras.layers import LeakyReLU,
+from tensorflow.keras.layers import LeakyReLU
 from tensorflow.keras.layers import Conv2D
 from tensorflow.keras.initializers import RandomNormal 
 
@@ -180,18 +180,201 @@ DISC_LEAKY_ALPHA = 0.2
 init = RandomNormal(stddev=0.02)
 
 def createDiscConvLayer(model):
-  model.add(Conv2D(128,
-                   (DISC_FILTER_SIZE,DISC_FILTER_SIZE),
-                   strides=(2, 2),
-                   padding='same',
-                   kernel_initializer=init))
-  model.add(LeakyReLU(alpha=DISC_LEAKY_ALPHA))
-  return newLayer
+    model.add(Conv2D(128,
+                     (DISC_FILTER_SIZE,DISC_FILTER_SIZE),
+                     strides=(2, 2),
+                     padding='same',
+                     kernel_initializer=init))
+    model.add(LeakyReLU(alpha=DISC_LEAKY_ALPHA))
+    return model
 ~~~~
 
-The createDiscConvLayer function does not really introduce any thing complex, it is just add a convolution layer, but it follow some of the tips and tricks we mentioned before. For example, it uses strides instead of pooling layers, it uses a Gaussian weight initializer and it uses leaky relu instead or relu for activation. Please note that i tried to make hyperparameters defined as constants outside the methods so we can play with them easily. 
+The createDiscConvLayer function does not really introduce any thing complex, it is just add a convolution layer, but it follow some of the tips and tricks we mentioned before. For example, it uses strides instead of pooling layers, it uses a Gaussian weight initializer and it uses leaky relu instead or relu for activation. Please note that I tried to make hyperparameters defined as constants outside the methods so we can play with them easily. 
 
-Let's create our model 
+Let's create our model:
+
+~~~~{.python}
+DISC_DROPOUT = 0.4
+INPUT_SIZE = (28,28,1)
+def create_discriminator(input_shape=INPUT_SIZE):
+    print("Creating Discriminator")
+    model = Sequential()
+    model.add(Conv2D(40, (DISC_FILTER_SIZE,DISC_FILTER_SIZE),
+                      padding='same',
+                      kernel_initializer=init,
+                      input_shape=input_shape))
+    model.add(LeakyReLU(alpha=DISC_LEAKY_ALPHA))
+    # down sample to 14 X 14
+    createDiscConvLayer(model)
+    # down sample to 7 X 7
+    createDiscConvLayer(model)
+    model.add(Flatten())
+    model.add(Dropout(DISC_DROPOUT))
+    activation = 'sigmoid'
+    loss= 'binary_crossentropy'
+    model.add(Dense(1, activation=activation))
+    # compile model
+    opt = Adam(lr=0.0002, beta_1=0.5)
+    model.compile(loss=loss, optimizer=opt, metrics=['accuracy'])
+    print("Created Discriminator")
+    model.summary()
+    return model
+~~~~
+
+This model should look very familar, it is our typical binary classifier we implement using convolution, if you run this function you should see this output
+
+~~~~{.python}
+Creating Discriminator
+Created Discriminator
+Model: "sequential_1"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv2d_3 (Conv2D)            (None, 28, 28, 40)        1040      
+_________________________________________________________________
+leaky_re_lu_3 (LeakyReLU)    (None, 28, 28, 40)        0         
+_________________________________________________________________
+conv2d_4 (Conv2D)            (None, 14, 14, 128)       128128    
+_________________________________________________________________
+leaky_re_lu_4 (LeakyReLU)    (None, 14, 14, 128)       0         
+_________________________________________________________________
+conv2d_5 (Conv2D)            (None, 7, 7, 128)         409728    
+_________________________________________________________________
+leaky_re_lu_5 (LeakyReLU)    (None, 7, 7, 128)         0         
+_________________________________________________________________
+flatten_1 (Flatten)          (None, 6272)              0         
+_________________________________________________________________
+dropout_1 (Dropout)          (None, 6272)              0         
+_________________________________________________________________
+dense (Dense)                (None, 1)                 6273      
+=================================================================
+Total params: 545,169
+Trainable params: 545,169
+Non-trainable params: 0
+~~~~
+
+We now have our discriminator, we need to create the generator. To make our life easier we will create a utility function that creates the upsampling block that we will reuse in our model
+
+~~~~{.python}
+from tensorflow.keras.layers import Conv2DTranspose
+
+GEN_FILTER_SIZE = 4
+GEN_LEAKY_ALPHA = 0.2
+
+def addGenConvTransPoseLayer(model):
+  model.add(Conv2DTranspose(128, (GEN_FILTER_SIZE,GEN_FILTER_SIZE),
+                            strides=(2,2),
+                            padding='same',
+                            kernel_initializer=init))
+  model.add(LeakyReLU(GEN_LEAKY_ALPHA))
+~~~~
+
+It is very similar to the function we created for the discriminator, but here we use Conv2DTranspose since we will be up-sampling
+
+Then we create the generator itself
+
+~~~~{.python}
+from tensorflow.keras.layers import Reshape
+
+def create_generator(latent_dim = LATENT_DIM):
+    print("Creating Genertor")
+    model = Sequential()
+    # foundation for 28*28 image
+    n_nodes = 16 * 7 * 7
+    model.add(Dense(n_nodes, input_dim=latent_dim))
+    model.add(LeakyReLU(alpha=GEN_LEAKY_ALPHA))
+    model.add(Reshape((7, 7, 16)))
+    # upsample to 14 * 14
+    addGenConvTransPoseLayer(model)
+    # upsample to 28*28
+    addGenConvTransPoseLayer(model)
+    # output layer
+    model.add(Conv2D(1, (7,7),
+                     activation='tanh',
+                     padding='same',
+                     kernel_initializer=init))
+    print("Created Generator")
+    model.summary()
+    return model
+~~~~
+
+This code, will be basically the opposite of the convolution model for classification, one important point is to make sure that the output of this model matches the shape of the input images to the discriminator
+
+if you run this method, you should get
+
+~~~~{.python}
+Creating Genertor
+Created Generator
+Model: "sequential_2"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+dense_1 (Dense)              (None, 784)               79184     
+_________________________________________________________________
+leaky_re_lu_6 (LeakyReLU)    (None, 784)               0         
+_________________________________________________________________
+reshape (Reshape)            (None, 7, 7, 16)          0         
+_________________________________________________________________
+conv2d_transpose (Conv2DTran (None, 14, 14, 128)       32896     
+_________________________________________________________________
+leaky_re_lu_7 (LeakyReLU)    (None, 14, 14, 128)       0         
+_________________________________________________________________
+conv2d_transpose_1 (Conv2DTr (None, 28, 28, 128)       262272    
+_________________________________________________________________
+leaky_re_lu_8 (LeakyReLU)    (None, 28, 28, 128)       0         
+_________________________________________________________________
+conv2d_6 (Conv2D)            (None, 28, 28, 1)         6273      
+=================================================================
+Total params: 380,625
+Trainable params: 380,625
+Non-trainable params: 0
+~~~~
+
+Note that the output of the generator model is (28,28,1) which matches the inout of the discriminator model
+
+We have now our Discriminator model, and our Generator model, lets create the GAN model that we will use to train the generator
+
+~~~~{.python}
+def create_gan(generator, discriminator):
+  print("Creating GAN")
+  # freeze the weights of the discriminator
+  discriminator.trainable = False
+  # connect them
+  model = Sequential()
+  # add generator
+  model.add(generator)
+  # add the discriminator
+  model.add(discriminator)
+  # compile model
+  opt = Adam(lr=0.0002, beta_1=0.5)
+  loss= 'binary_crossentropy'
+  model.compile(loss=loss, optimizer=opt)
+  print("Created GAN")
+  model.summary()
+return model
+~~~~
+
+if you run this code you should get the following output
+
+~~~~{.python}
+Creating GAN
+Created GAN
+Model: "sequential_5"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+sequential_3 (Sequential)    (None, 28, 28, 1)         380625    
+_________________________________________________________________
+sequential_4 (Sequential)    (None, 1)                 545169    
+=================================================================
+Total params: 925,794
+Trainable params: 380,625
+Non-trainable params: 545,169
+___________________________________
+~~~~
+
+
+
 
 ## 6. Generating flower images
 
