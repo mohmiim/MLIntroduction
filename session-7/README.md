@@ -97,7 +97,9 @@ Here few:
 * instead of using pooling layer in the discriminator, use stride of (2,2)
 * consider using BatchNormilization layer before the activation (i got mixed result for this one)
 
-These are just few tips and tricks, your results might be different and you should feel comfortable mixing and matching and changing the hyperparameters 
+These are just few tips and tricks, your results might be different and you should feel comfortable mixing and matching and changing the hyperparameters  
+ 
+For full list [check out this NIPS 2016 session](https://github.com/mohmiim/ganhacks)   
 
 ## 5. Generating hand written digits
 
