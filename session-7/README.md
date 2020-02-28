@@ -94,8 +94,8 @@ Here few:
 * Add noise to the training, by miss-labeling some samples (like 5%)
 * Use label smoothing, so instead of using 1 for real use 0.8 to 1.0 and instead of using 0 for fake use 0 to 0.2
 * when training the discriminator, do the training on 2 steps one patch with only fake and one patch with only real
-* instead of using pooling layer in the discriminator, use stride of (2,2)
-* consider using BatchNormilization layer before the activation (i got mixed result for this one)
+* Instead of using pooling layer in the discriminator, use stride of (2,2)
+* Consider using BatchNormilization layer before the activation (i got mixed result for this one)
 
 These are just few tips and tricks, your results might be different and you should feel comfortable mixing and matching and changing the hyperparameters  
  
