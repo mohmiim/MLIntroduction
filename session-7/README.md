@@ -576,6 +576,90 @@ Non-trainable params: 0
 _________________________________________________________________
 ~~~~
 
+Next we need to change the generator, to reflect the image dimensions and color depth changes. The Generator Conv2dTranspose block will not change it will stay the same as what we had in the numbers sample, the only change we will do is the filter size we will increase it to 5 . But the create_generator method need to change to generate image with the correct size and color depth 
+
+~~~~{.python}
+def create_generator(latent_dim = LATENT_DIM):
+from tensorflow.keras.layers import Reshape
+
+def create_generator(latent_dim = LATENT_DIM):
+    print("Creating Genertor")
+    model = Sequential()
+    # foundation for 64x64 image
+    n_nodes = 128 * 5 * 5
+    model.add(Dense(n_nodes, input_dim=latent_dim))
+    model.add(LeakyReLU(alpha=0.2))
+    model.add(Reshape((5, 5, 128)))
+    # up sacle to 10 * 10
+    addGenConvTransPoseLayer(model)
+    # upsample to 20*20
+    addGenConvTransPoseLayer(model)
+    # upsample to 40*40
+    addGenConvTransPoseLayer(model)
+    # upsample to 80*80
+    addGenConvTransPoseLayer(model)
+    # output layer
+    model.add(Conv2D(3, (5,5),
+                     activation='tanh',
+                     padding='same',
+                     kernel_initializer=init))
+    print("Created Generator")
+    model.summary()
+    return model
+~~~~
+
+This should look very familiar, The main thing to note is the fact that we are using tanh as the activation function for the output since our images are scaled to [-1,1]
+
+If you call this function, you shoudl get this output
+
+~~~~{.python}
+Creating Genertor
+Created Generator
+Model: "sequential_2"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+dense_2 (Dense)              (None, 3200)              323200    
+_________________________________________________________________
+leaky_re_lu_6 (LeakyReLU)    (None, 3200)              0         
+_________________________________________________________________
+reshape_1 (Reshape)          (None, 5, 5, 128)         0         
+_________________________________________________________________
+conv2d_transpose (Conv2DTran (None, 10, 10, 128)       409728    
+_________________________________________________________________
+leaky_re_lu_7 (LeakyReLU)    (None, 10, 10, 128)       0         
+_________________________________________________________________
+conv2d_transpose_1 (Conv2DTr (None, 20, 20, 128)       409728    
+_________________________________________________________________
+leaky_re_lu_8 (LeakyReLU)    (None, 20, 20, 128)       0         
+_________________________________________________________________
+conv2d_transpose_2 (Conv2DTr (None, 40, 40, 128)       409728    
+_________________________________________________________________
+leaky_re_lu_9 (LeakyReLU)    (None, 40, 40, 128)       0         
+_________________________________________________________________
+conv2d_transpose_3 (Conv2DTr (None, 80, 80, 128)       409728    
+_________________________________________________________________
+leaky_re_lu_10 (LeakyReLU)   (None, 80, 80, 128)       0         
+_________________________________________________________________
+conv2d_5 (Conv2D)            (None, 80, 80, 3)         9603      
+=================================================================
+Total params: 1,971,715
+Trainable params: 1,971,715
+Non-trainable params: 0
+_________________________________________________________________
+~~~~
+
+No other change is required to the code, run the training and see what do you get  ?
+
+Here is a sample output:
+
+<p align="center"> 
+<img src="images/floweroutput.png" height="500">
+</p>
+
+This **[Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-7/FlowerGenerator.ipynb)** has the full working code, try to play with it and see if you can make it better
+
+
 
 
 
