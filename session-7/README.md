@@ -438,4 +438,150 @@ This **[Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-
 
 ## 6. Generating flower images
 
+In the last section we generated images of hand written digits, but these were small grey scale images. Can we generate true colour images with a bit more details?
+
+Let's try and see what will we get. Fires we need to pick a data set, i am going to use [this flowers data set](https://www.robots.ox.ac.uk/~vgg/data/flowers/102/), it contains images of flowers from 102 category.
+
+first thing we would need to do is to update our loadSamples method, so it loads RGB images and return them in the correct shape
+
+~~~~{.python}
+from PIL import Image
+import numpy as np
+from tensorflow.keras.preprocessing.image import img_to_array
+
+def load_samples(location = "data/outline/",width=112, height=112,mode='L') :
+  folder = location
+  size = (width,height)
+  onlyfiles = [f for f in os.listdir(folder) if os.path.isfile(os.path.join(folder, f))]
+  data_set = np.zeros((len(onlyfiles), size[0], size[1], 3))
+  print("Working with {0} images".format(len(onlyfiles)))
+  print("Image examples: ")
+  i=0
+  for _file in onlyfiles:
+    if i%100 == 0:
+      print('.',end="")
+    img = Image.open(folder + _file).convert(mode) 
+    img = img.resize(size)
+    x = img_to_array(img)  
+    data_set[i] = x
+    i = i +1
+  print(data_set.shape)
+  data_set = data_set.astype('float32')
+  data_set = (data_set - 127.5) / 127.5
+  return data_set    
+~~~~
+
+Our modified load_samples method is a bit more flexible than the one we had before, it allows you to pass the source folder for the images, the target image widht and height and the image color mode (default to grey scale).
+
+All other methods will stay the same, except the discriminator model creation, and the generator model creation, let's create the discriminator:
+
+First, we update our conv block method to increase the number of filters.
+
+~~~~{.python}
+from tensorflow.keras.layers import LeakyReLU
+from tensorflow.keras.layers import Conv2D
+from tensorflow.keras.initializers import RandomNormal 
+
+DISC_FILTER_SIZE = 5
+DISC_LEAKY_ALPHA = 0.2 
+
+init = RandomNormal(stddev=0.02)
+def createDiscConvLayer(model):
+    model.add(Conv2D(128, (DISC_FILTER_SIZE,DISC_FILTER_SIZE),
+                     strides=(2, 2),
+                     padding='same',
+                     kernel_initializer=init))
+    model.add(LeakyReLU(alpha=DISC_LEAKY_ALPHA))
+~~~~
+
+Time to update our discriminator model by increasing the conv block to deal witht he bigger input image and update the input to reflect the correct image input 
+
+~~~~{.python}
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dropout,Flatten
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.optimizers import Adam
+
+INPUT_SIZE = (80,80,3)
+DISC_DROPOUT = 0.4
+def create_discriminator(input_shape=INPUT_SIZE):
+    print("Creating Discriminator")
+    model = Sequential()
+    model.add(Conv2D(40, (DISC_FILTER_SIZE,DISC_FILTER_SIZE),
+                      padding='same',
+                      kernel_initializer=init,
+                      input_shape=input_shape))
+    model.add(LeakyReLU(alpha=DISC_LEAKY_ALPHA))
+    # down sample to 40 X 40
+    createDiscConvLayer(model)
+    # down sample to 20 X 20
+    createDiscConvLayer(model)
+    # down sample to 10 X 10
+    createDiscConvLayer(model)
+    # down sample to 5 X 5
+    createDiscConvLayer(model)
+
+    model.add(Flatten())
+    model.add(Dropout(DISC_DROPOUT))
+    activation = 'sigmoid'
+    loss= 'binary_crossentropy'
+    model.add(Dense(1, activation=activation))
+    # compile model
+    opt = Adam(lr=0.0002, beta_1=0.5)
+    model.compile(loss=loss, optimizer=opt, metrics=['accuracy'])
+    print("Created Discriminator")
+    model.summary()
+    plot_model(model,to_file="discriminator.png", show_shapes=True)
+    return model
+~~~~
+
+If you call the create_discriminator function you should get this output
+
+~~~~{.python}
+Creating Discriminator
+Created Discriminator
+Model: "sequential"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+conv2d (Conv2D)              (None, 80, 80, 40)        3040      
+_________________________________________________________________
+leaky_re_lu (LeakyReLU)      (None, 80, 80, 40)        0         
+_________________________________________________________________
+conv2d_1 (Conv2D)            (None, 40, 40, 128)       128128    
+_________________________________________________________________
+leaky_re_lu_1 (LeakyReLU)    (None, 40, 40, 128)       0         
+_________________________________________________________________
+conv2d_2 (Conv2D)            (None, 20, 20, 128)       409728    
+_________________________________________________________________
+leaky_re_lu_2 (LeakyReLU)    (None, 20, 20, 128)       0         
+_________________________________________________________________
+conv2d_3 (Conv2D)            (None, 10, 10, 128)       409728    
+_________________________________________________________________
+leaky_re_lu_3 (LeakyReLU)    (None, 10, 10, 128)       0         
+_________________________________________________________________
+conv2d_4 (Conv2D)            (None, 5, 5, 128)         409728    
+_________________________________________________________________
+leaky_re_lu_4 (LeakyReLU)    (None, 5, 5, 128)         0         
+_________________________________________________________________
+flatten (Flatten)            (None, 3200)              0         
+_________________________________________________________________
+dropout (Dropout)            (None, 3200)              0         
+_________________________________________________________________
+dense (Dense)                (None, 1)                 3201      
+=================================================================
+Total params: 1,363,553
+Trainable params: 1,363,553
+Non-trainable params: 0
+_________________________________________________________________
+~~~~
+
+
+
+
+
+
+
+
+
 ## 7. Conditional GAN
