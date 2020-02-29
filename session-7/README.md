@@ -105,6 +105,8 @@ For full list [check out this NIPS 2016 session](https://github.com/mohmiim/ganh
 
 Time to have some fun :) , let's try to create a GAN capable of generating images for hand written digits. 
 
+**Note**: *training GAN takes time, so you need a GPU otherwise the training will take forever and will not be fast enough to try different parameters, it is better make if you are using Colab to enable GPU. I also provided the samples as stand-alone Pyhton files so you can run them on your local GPU if you have one*.
+
 we will use the [mnist](http://yann.lecun.com/exdb/mnist/) data set to train our model, keras already have function to load this data set for you 
 
 Let's define a function that will load the data, and scale it to [-1,1]  
@@ -651,10 +653,11 @@ _________________________________________________________________
 
 No other change is required to the code, run the training and see what do you get  ?
 
-Here is a sample output:
+Here is some sample output:
 
 <p align="center"> 
 <img src="images/floweroutput.png" height="500">
+<img src="images/floweroutput2.png" height="500">
 </p>
 
 This **[Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-7/FlowerGenerator.ipynb)** has the full working code, try to play with it and see if you can make it better
