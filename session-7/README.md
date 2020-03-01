@@ -660,4 +660,12 @@ Here is some sample output:
      </div>
 </div>
 
-This **[Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-7/FlowerGenerator.ipynb)** has the full working code, try to play with it and see if you can make it better
+This **[Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-7/FlowerGenerator.ipynb)** has the full working code, try to play with it and see if you can make it better  
+
+I added a python file [CreateAnimation](https://github.com/mohmiim/MLIntroduction/blob/master/session-7/CreateAnimation.py), this file enable you to pass a specific folder and it will take all PNG images in this folder then create an animated gif using them. Here is the animated gif showing the output from our model over time (it might be a good idea to seed yor random generator before generating so you can see how specific image change over time, unlike what i am doing here)
+
+<p align="center"> 
+<img src="images/movie-all.gif" height="500">
+</p>
+
+This concludes our session, happy learning.
