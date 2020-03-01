@@ -652,7 +652,7 @@ No other change is required to the code, run the training and see what do you ge
 Here is some sample output:
 
 <div style="display:flex">
-	<div style="flex:1;padding-right:5px;">
+	<div style="flex:1;padding-right:1px;">
 		<img src="images/outputflower.png" height="500">
      </div>
      <div style="flex:1;padding-left:5px;">
