@@ -15,30 +15,26 @@
 
 [6. Generating flower images](#6-generating-flower-images)
 
-[7. Conditional GAN](#7-conditional-gan)
-
-
-
 
 ## 1. What is GAN
 
-Generative Adversarial Networks, are machine learning models able to learn from existing images of a specific domain then generate new images based on the features it learned form the training images. GANs follow a zero-sum game in their training where you have 2 models almost fighting againest each other one is the discriminator model which try to learning how to detect the real images form the generated images, and a generator model which try to generate images with enough quality to trick the discriminator into thinking they are real.
+Generative Adversarial Networks are machine learning models able to learn from existing images of a specific domain then generate new images based on the features it learned from the training images. GANs follow a zero-sum game in their training where you have 2 models almost fighting against each other one is the discriminator model which try to learn how to detect the real images from the generated images and a generator model which try to generate images with enough quality to trick the discriminator into thinking they are real.
 
-It is a cop and thief game, where the thief is trying to confuse the cop and the cop is tryign to catch the thief. For example imagine a discriminator (cop) model, trained to detect images of money, while a generator (thief) is trying to generate fake money with enough quality to confuse the cop. Any time the discriminator detect the fake images as fake that is an indication for the generator that it needs to do better, and  vice versa. 
+It is a cop and thief game, where the thief is trying to confuse the cop and the cop is trying to catch the thief. For example imagine a discriminator (cop) model, trained to detect images of money, while a generator (thief) is trying to generate fake money with enough quality to confuse the cop. Any time the discriminator detects the fake images as fake that is an indication for the generator that it needs to do better, and vice versa.
 
 <p align="center"> 
 <img src="images/GvsD.png" height="200">
 </p>
 
 **Discriminator:**
-The discriminator is typically a simple model architecture, and it will look svery similar to models we built in the previous sessions, it is just a classifier trained to take an image and classify it as real or fake.
+The discriminator is typically a simple model architecture, and it will look very similar to models we built in the previous sessions, it is just a classifier trained to take an image and classify it as real or fake.
 
 <p align="center"> 
 <img src="images/discriminator.png" height="400">
 </p>
 
 **Generator:**
-The generator responsibility is to generate images. It takes input which is a vector of random numbers (called latent space), and generate and image as output. We will get in the details of the Generator in later section
+The generator's responsibility is to generate images. It takes input which is a vector of random numbers (called latent space) and generates an image as output. We will get in the details of the Generator in a later section
 
 <p align="center"> 
 <img src="images/generator.png" height="400">
@@ -46,8 +42,8 @@ The generator responsibility is to generate images. It takes input which is a ve
 
 ## 2. How to design a model to generate images
 
-We have session in the previous sessions how to create classifiers using many different techniques. This covers the discriminator, But the generator is a new kind of a problem we did not face till now. 
-Generator job is to receive a vector of random points as input and output a full image. So far when we dealt with images we have been using Conv2D layers to down sample an image to set of features, but here we want to do the opposite where we want to up-sample from a set of features to real image. There are different techniques to achieve that and Keras has a nice layer that we will be using extensively in this session to achieve the goal up sampling this layer is **Conv2DTranspose** this layer will learn how to up-sample during our training process as you will see in the next few sections.
+We have seen in the previous sessions how to create classifiers using many different techniques. This covers the discriminator, But the generator is a new kind of a problem we did not face till now. 
+The generator job is to receive a vector of random points as input and output a full image. So far when we dealt with images we have been using Conv2D layers to downsample an image to set of features, but here we want to do the opposite where we want to up-sample from a set of features to real image. There are different techniques to achieve that and Keras has a nice layer that we will be using extensively in this session to achieve the goal up sampling this layer is **Conv2DTranspose** this layer will learn how to up-sample during our training process as you will see in the next few sections.
 
 One big difference between, **Conv2DTranspose** and **Conv2D** is the effect of the strides parameter, doe example if you set the strides parameter to (2,2) in **Conv2D** it will basically half the size of your image (an image of 20X20 will become 10X10) while in **Conv2DTranspose** it will double the size of the image (an image of 20X20 will become 40X40).
 
@@ -57,14 +53,14 @@ One big difference between, **Conv2DTranspose** and **Conv2D** is the effect of 
 
 ## 3. How to train GAN
 
-As discussed in **[What is GAN](#1-what-is-gan)**, GAN actually consists of 2 models, the discriminator and the generator, and we are trying to train both at the same time and they affect each other, as a result GAN training is a bit more involved than the training we did in previous sessions.
+As discussed in **[What is GAN](#1-what-is-gan)**, GAN actually consists of 2 models, the discriminator and the generator, and we are trying to train both at the same time and they affect each other, as a result, GAN training is a bit more involved than the training we did in previous sessions.
 
-Lets see what happens during one epoch while training GAN, during one epoch we need to update the weights of both the discriminator model and the generator model.  
+Let's see what happens during one epoch while training GAN, during one epoch we need to update the weights of both the discriminator model and the generator model.  
 
 **Discriminator update** :
   
 We want to train a discriminator that will be able to classify images as real or fake, this means during one epoch a set of fake and real images will be passed to the discriminator and it will use these samples to classify them as real or fake meaning it will try to update the weights of the discriminator to produce the correct classifications. 
-specific example, lets say we want to create a model able to generate paintings of trees, what we will need is to find a good data set of tree paintings (this will be our real samples), assume our samples size is 400 tree paintings, we need a similar number of fake images of tree paintings, How can we get these?. Well, this is where the generator comes into play, we create a set of 400 inputs for our generator, pass these through the generator, it will generate 400 fake tree paintings (it does not matter that the generator is not trained yet, we will see how it all connect shortly). Now we have 400 real tree paintings, and 400 fake tree painting, we label them as such then call the discriminator model to do one update (fit) using these samples (the 800 images), this will result in updating the discriminator weights to achieve the task of detecting the fake from the real images.
+specific example, let's say we want to create a model able to generate paintings of trees, what we will need is to find a good data set of tree paintings (this will be our real samples), assume our samples size is 400 tree paintings, we need a similar number of fake images of tree paintings, How can we get these?. Well, this is where the generator comes into play, we create a set of 400 inputs for our generator, pass these through the generator, it will generate 400 fake tree paintings (it does not matter that the generator is not trained yet, we will see how it all connect shortly). Now we have 400 real tree paintings, and 400 fake tree painting, we label them as such then call the discriminator model to do one update (fit) using these samples (the 800 images), this will result in updating the discriminator weights to achieve the task of detecting the fake from the real images.
 
 The following figure shows the Discriminator model training process:
 
@@ -74,7 +70,7 @@ The following figure shows the Discriminator model training process:
 
 **Generator update** :  
  
-The Generator goal is a bit different, it is goal is to generate good enough images that the discriminator think they are real. During one epoch we updated the discriminator weights (as per previous section), then we need to update the generator weights too. the input to the generator is a vector or numbers (the latent space), so it is easy to randomly generate set of those, but we wnat the generator to generate realistic images that can confuse the discriminator, to do what we create a model where we stack the generator on top of the discriminator, this means that the output of the generator is passed to the discriminator. If we train this model to classify these fake images as real, it means it will update the weights in a way that make the generator generate real images, but there is a caveat here, the update will try to update both the discriminator and generator weights since they are in the same model, and this means we are messing up the training we did in the previous section, we just want to update the generator model weights in this step, this is easily fixable, we can do that by freezing the discriminator weights in this model, this way it will just update the generator weights which is exactly what we want.  
+The Generator goal is a bit different, it is goal is to generate good enough images that the discriminator thinks they are real. During one epoch we updated the discriminator weights (as per the previous section), then we need to update the generator weights too. the input to the generator is a vector of numbers (the latent space), so it is easy to randomly generate set of those, but we want the generator to generate realistic images that can confuse the discriminator, to do what we create a model where we stack the generator on top of the discriminator, this means that the output of the generator is passed to the discriminator. If we train this model to classify these fake images as real, it means it will update the weights in a way that make the generator generate real images, but there is a caveat here, the update will try to update both the discriminator and generator weights since they are in the same model, and this means we are messing up the training we did in the previous section, we just want to update the generator model weights in this step, this is easily fixable, we can do that by freezing the discriminator weights in this model, this way it will just update the generator weights which is exactly what we want.  
 
 The following figure shows the GAN model used to train the generator:
 
@@ -84,10 +80,10 @@ The following figure shows the GAN model used to train the generator:
 
 ## 4. GAN Tips and Tricks
 
-GAN training as seen in **[How to train GAN](#3-how-to-train-gan)**, is quite involved. And a lot of the training process and parameters adjustment is a trial and error kind of approach. This being said, there are many successfully trained GAN models out there, and people shared their tips and tricks on how to train a GAN
-Here few:  
+GAN training as seen in **[How to train GAN](#3-how-to-train-gan)**, is quite involved. And a lot of the training process and parameter adjustment is a trial and error kind of approach. This being said, there are many successfully trained GAN models out there, and people shared their tips and tricks on how to train a GAN
+Here are few:  
 
-* Use LeakyReLU instead or Relu for the activation of hidden layers with slope of 0.2
+* Use LeakyReLU instead or Relu for the activation of hidden layers with a slope of 0.2
 * Use gaussian weight initialization for the weights, using RandomNormal from Keras
 * Use Adam optimizer with lr = 0.0002 and beta-1=0.5 but if your model suffer from model collapse (it starts to generate the same image from many inputs), lower the learning rate
 * Scale your image input to [-1,1] instead of [0,1]
@@ -95,21 +91,21 @@ Here few:
 * Use label smoothing, so instead of using 1 for real use 0.8 to 1.0 and instead of using 0 for fake use 0 to 0.2
 * when training the discriminator, do the training on 2 steps one patch with only fake and one patch with only real
 * Instead of using pooling layer in the discriminator, use stride of (2,2)
-* Consider using BatchNormilization layer before the activation (i got mixed result for this one)
+* Consider using BatchNormilization layer before the activation (i got a mixed result for this one)
 
-These are just few tips and tricks, your results might be different and you should feel comfortable mixing and matching and changing the hyperparameters  
+These are just a few tips and tricks, your results might be different and you should feel comfortable mixing and matching and changing the hyperparameters  
  
 For full list [check out this NIPS 2016 session](https://github.com/mohmiim/ganhacks)   
 
 ## 5. Generating hand written digits
 
-Time to have some fun :) , let's try to create a GAN capable of generating images for hand written digits. 
+Time to have some fun :), let's try to create a GAN capable of generating images for handwritten digits. 
 
-**Note**: *training GAN takes time, so you need a GPU otherwise the training will take forever and will not be fast enough to try different parameters, it is better make if you are using Colab to enable GPU. I also provided the samples as stand-alone Pyhton files so you can run them on your local GPU if you have one*.
+**Note**: *training GAN takes time, so you need a GPU otherwise the training will take forever and will not be fast enough to try different parameters, it is better if you are using Colab to enable GPU. I also provided the samples as stand-alone Python files so you can run them on your local GPU if you have one*.
 
-we will use the [mnist](http://yann.lecun.com/exdb/mnist/) data set to train our model, keras already have function to load this data set for you 
+we will use the [mnist](http://yann.lecun.com/exdb/mnist/) data set to train our model, keras already have a function to load this data set for you 
 
-Let's define a function that will load the data, and scale it to [-1,1]  
+Let's define a function that will load the data, and scale it to [-1,1]  
 
 ~~~~{.python}
 from numpy import expand_dims
@@ -126,16 +122,16 @@ def loadSamples():
   return X
 ~~~~
 
-this code, will load all the samples and scale the image data to [0,1], and print out the shape of the samples array
-when you call this function you should get this output
+This code, will load all the samples and scale the image data to [0,1], and print out the shape of the samples array
+When you call this function you should get this output
 
 ~~~~{.python}
 (60000, 28, 28, 1)
 ~~~~
 
-which is correct since our samples are 60000 sample, and each one is 28*28 pixel
+Which is correct since our samples are 60000 samples, and each one is 28*28 pixel
 
-we will make our generator accept an input of 100 random numbers (latent space of size 100), let's create function that can generate any number of inputs in this latent space
+We will make our generator accept an input of 100 random numbers (latent space of size 100), let's create a function that can generate any number of inputs in this latent space
 
 ~~~~{.python}
 from numpy.random import randn
@@ -149,7 +145,7 @@ def generate_latent_input(latentDim, count):
   return X
 ~~~~
 
-We have a function that loads the real samples, and we have function that generate random input latent space, but we need a function to generate fake samples, lets create it 
+We have a function that loads the real samples, and we have a function that generates random input latent space, but we need a function to generate fake samples, let's create it 
 
 ~~~~{.python}
 def create_generated_samples(generator, latentDim, count):
@@ -160,7 +156,7 @@ def create_generated_samples(generator, latentDim, count):
   return gen_images, y
 ~~~~
 
-We still need another utility function, when we train out model we train it using patches, so we need a function that return a patch for real samples. Lets create it 
+We still need another utility function, when we train our model we train it using patches, so we need a function that returns a patch for real samples. Let's create it 
 
 ~~~~{.python}
 def generate_real_samples(dataset, n_samples):
@@ -171,7 +167,7 @@ def generate_real_samples(dataset, n_samples):
   return X, y
 ~~~~
 
-we are ready to create our first model, the discriminator. Discriminator contains convolution block that we will be repeating multiple times, so it is better to have a function that create this block since this will make our code much easier and much smaller
+We are ready to create our first model, the discriminator. Discriminator contains convolution block that we will be repeating multiple times, so it is better to have a function that creates this block since this will make our code much easier and much smaller
 
 ~~~~{.python}
 from tensorflow.keras.layers import LeakyReLU
@@ -194,7 +190,7 @@ def createDiscConvLayer(model):
   return model
 ~~~~
 
-The createDiscConvLayer function does not really introduce any thing complex, it is just add a convolution layer, but it follow some of the tips and tricks we mentioned before. For example, it uses strides instead of pooling layers, it uses a Gaussian weight initializer and it uses leaky relu instead or relu for activation. Please note that I tried to make hyperparameters defined as constants outside the methods so we can play with them easily. 
+The createDiscConvLayer function does not really introduce anything complex, it just adds a convolution layer, but it follows some of the tips and tricks we mentioned before. For example, it uses strides instead of pooling layers, it uses a Gaussian weight initializer and it uses leaky relu instead or relu for activation. Please note that I tried to make hyperparameters defined as constants outside the methods so we can play with them easily. 
 
 Let's create our model:
 
@@ -227,7 +223,7 @@ def create_discriminator(input_shape=INPUT_SIZE):
     return model
 ~~~~
 
-This model should look very familar, it is our typical binary classifier we implement using convolution, if you run this function you should see this output
+This model should look very familiar, it is our typical binary classifier we implement using convolution if you run this function you should see this output
 
 ~~~~{.python}
 Creating Discriminator
@@ -302,7 +298,7 @@ def create_generator(latent_dim = LATENT_DIM):
 
 ~~~~
 
-This code, will be basically the opposite of the convolution model for classification, one important point is to make sure that the output of this model matches the shape of the input images to the discriminator
+This code will be doing the opposite of the convolution model for classification, one important point is to make sure that the output of this model matches the shape of the input images to the discriminator
 
 if you run this method, you should get
 
@@ -335,9 +331,9 @@ Non-trainable params: 0
 _________________________________________________________________
 ~~~~
 
-Note that the output of the generator model is (28,28,1) which matches the inout of the discriminator model
+Note that the output of the generator model is (28,28,1) which matches the input of the discriminator model
 
-We have now our Discriminator model, and our Generator model, lets create the GAN model that we will use to train the generator
+We have now our Discriminator model and our Generator model. Let's create the GAN model that we will use to train the generator
 
 ~~~~{.python}
 def create_gan(generator, discriminator):
@@ -359,7 +355,7 @@ def create_gan(generator, discriminator):
 return model
 ~~~~
 
-if you run this code you should get the following output
+If you run this code you should get the following output
 
 ~~~~{.python}
 Creating GAN
@@ -412,7 +408,7 @@ def train(generator, discriminator, gan, dataset, latent_dim, n_epochs0, n_batch
 
 Our training function, calls a utility method every 10 epochs to save sample output of our generator 
 
-Now we have every thing we need to create the model, load the sample and start the training. Let's put it together
+Now we have everything we need to create the model, load the sample and start the training. Let's put it together
 
 ~~~~{.python}
 dataset  = loadSamples()
@@ -440,11 +436,11 @@ This **[Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-
 
 ## 6. Generating flower images
 
-In the last section we generated images of hand written digits, but these were small grey scale images. Can we generate true colour images with a bit more details?
+In the last section we generated images of handwritten digits, but these were small greyscale images. Can we generate true-color images with a bit more details?
 
-Let's try and see what will we get. Fires we need to pick a data set, i am going to use [this flowers data set](https://www.robots.ox.ac.uk/~vgg/data/flowers/102/), it contains images of flowers from 102 category.
+Let's try and see what will we get. Fires we need to pick a data set, I am going to use [this flower data set](https://www.robots.ox.ac.uk/~vgg/data/flowers/102/), it contains images of flowers from 102 categories.
 
-first thing we would need to do is to update our loadSamples method, so it loads RGB images and return them in the correct shape
+The first thing we would need to do is to update our loadSamples method, so it loads RGB images and returns them in the correct shape
 
 ~~~~{.python}
 from PIL import Image
@@ -473,11 +469,11 @@ def load_samples(location = "data/outline/",width=112, height=112,mode='L') :
   return data_set    
 ~~~~
 
-Our modified load_samples method is a bit more flexible than the one we had before, it allows you to pass the source folder for the images, the target image widht and height and the image color mode (default to grey scale).
+Our modified load_samples method is a bit more flexible than the one we had before, it allows you to pass the source folder for the images, the target image width, and height and the image color mode (default to greyscale).
 
 All other methods will stay the same, except the discriminator model creation, and the generator model creation, let's create the discriminator:
 
-First, we update our conv block method to increase the number of filters.
+First, we update our convolution block method to increase the number of filters.
 
 ~~~~{.python}
 from tensorflow.keras.layers import LeakyReLU
@@ -496,7 +492,7 @@ def createDiscConvLayer(model):
     model.add(LeakyReLU(alpha=DISC_LEAKY_ALPHA))
 ~~~~
 
-Time to update our discriminator model by increasing the conv block to deal witht he bigger input image and update the input to reflect the correct image input 
+Time to update our discriminator model by increasing the convolution block to deal with the bigger input image and update the input to reflect the correct image input 
 
 ~~~~{.python}
 from tensorflow.keras.models import Sequential
@@ -578,7 +574,7 @@ Non-trainable params: 0
 _________________________________________________________________
 ~~~~
 
-Next we need to change the generator, to reflect the image dimensions and color depth changes. The Generator Conv2dTranspose block will not change it will stay the same as what we had in the numbers sample, the only change we will do is the filter size we will increase it to 5 . But the create_generator method need to change to generate image with the correct size and color depth 
+Next, we need to change the generator, to reflect the image dimensions and color depth changes. The Generator Conv2dTranspose block will not change it will stay the same as what we had in the numbers sample, the only change we will do is the filter size we will increase it to 5. But the create generator method needs to change to generate an image with the correct size and color depth 
 
 ~~~~{.python}
 def create_generator(latent_dim = LATENT_DIM):
@@ -612,7 +608,7 @@ def create_generator(latent_dim = LATENT_DIM):
 
 This should look very familiar, The main thing to note is the fact that we are using tanh as the activation function for the output since our images are scaled to [-1,1]
 
-If you call this function, you shoudl get this output
+If you call this function, you should get this output
 
 ~~~~{.python}
 Creating Genertor
@@ -651,24 +647,17 @@ Non-trainable params: 0
 _________________________________________________________________
 ~~~~
 
-No other change is required to the code, run the training and see what do you get  ?
+No other change is required to the code, run the training and see what do you get?
 
 Here is some sample output:
 
-<p align="center"> 
-<img src="images/floweroutput.png" height="500">
-<img src="images/floweroutput2.png" height="500">
-</p>
+<div style="display:flex">
+	<div style="flex:1;padding-right:5px;">
+		<img src="images/outputflower.png" height="500">
+     </div>
+     <div style="flex:1;padding-left:5px;">
+          <img src="images/outputflower1.png" height="500">
+     </div>
+</div>
 
 This **[Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-7/FlowerGenerator.ipynb)** has the full working code, try to play with it and see if you can make it better
-
-
-
-
-
-
-
-
-
-
-## 7. Conditional GAN
