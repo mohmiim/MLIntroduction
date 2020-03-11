@@ -1,0 +1,15 @@
+<!DOCTYPE HTML>
+
+<html>
+   </head>
+   <body>
+   		<p id ="generated_image" align="center"></p>
+    		<script type="text/javascript">
+            	var parent = document.getElementById("generated_image");
+           		var image = document.createElement("img");
+            	image.setAttribute("src", "http://127.0.0.1:5000/generateFlower?rev="+new Date().getTime());
+            	image.setAttribute("height", "160");
+            	parent.appendChild(image);
+    		</script> 
+   </body>
+</html>
