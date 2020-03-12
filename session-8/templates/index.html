@@ -10,6 +10,10 @@
             	image.setAttribute("src", "http://127.0.0.1:5000/generateFlower?rev="+new Date().getTime());
             	image.setAttribute("height", "160");
             	parent.appendChild(image);
+            	var number = document.createElement("img");
+            	image.setAttribute("src", "http://127.0.0.1:5000/generateNumber?rev="+new Date().getTime());
+            	image.setAttribute("height", "160");
+            	parent.appendChild(number);
     		</script> 
    </body>
 </html>

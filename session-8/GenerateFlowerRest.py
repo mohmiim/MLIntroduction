@@ -19,7 +19,7 @@ import os
 app = Flask(__name__)
 
 FLOWER_MODEL_FILE = "model/flowerGAN.h5"
-DIGITS_MODEL_FILE = "/Users/mohammedmostaqfa/Desktop/dev/MLIntroduction/session-8/model/numGAN.h5"
+DIGITS_MODEL_FILE = "model/model_11.h5"
 
 #loading our pre-trained models
 flowerModel = load_model(FLOWER_MODEL_FILE)
@@ -52,6 +52,24 @@ def generateFlower():
     # generate images
     imageData =  generateSampleOutput(flowerModel,X)
     img = Image.fromarray(imageData.astype('uint8'))
+    # create file-object in memory
+    file_object = io.BytesIO()
+
+    # write PNG in file-object
+    img.save(file_object, 'PNG')
+
+    # move to beginning of file so `send_file()` it will read from start    
+    file_object.seek(0)
+    fileName = str(datetime.datetime.now().timestamp()) + ".png" 
+    return send_file(file_object,attachment_filename=fileName, mimetype='image/PNG')
+
+
+@app.route('/generateNumber', methods=['GET'])
+def generateNumber():
+    X = generate_latent_input(LATENT_DIM)
+    # generate images
+    imageData =  generateSampleOutput(digitsModel,X)
+    img = Image.fromarray(imageData.astype('uint8'),'L')
     # create file-object in memory
     file_object = io.BytesIO()
 
