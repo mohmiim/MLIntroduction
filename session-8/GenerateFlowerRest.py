@@ -19,7 +19,7 @@ import os
 app = Flask(__name__)
 
 FLOWER_MODEL_FILE = "model/flowerGAN.h5"
-DIGITS_MODEL_FILE = "model/model_11.h5"
+DIGITS_MODEL_FILE = "model/numGAN.h5"
 
 #loading our pre-trained models
 flowerModel = load_model(FLOWER_MODEL_FILE)
@@ -42,6 +42,12 @@ def generateSampleOutput(generator,X):
     y = generator.predict([X])
     imageData = y[0]
     imageData = (imageData * 127.5 ) + 127.5
+    return imageData
+
+def generateSampleNumberOutput(generator,X):
+    y = generator.predict([X])
+    imageData = y[0]
+    imageData = (imageData * 255)
     return imageData
 
 
@@ -68,8 +74,11 @@ def generateFlower():
 def generateNumber():
     X = generate_latent_input(LATENT_DIM)
     # generate images
-    imageData =  generateSampleOutput(digitsModel,X)
+    imageData =  generateSampleNumberOutput(digitsModel,X)
+    imageData = 255 - imageData
+    imageData = imageData.reshape((imageData.shape[0],imageData.shape[1]))
     img = Image.fromarray(imageData.astype('uint8'),'L')
+    img = img.convert('1')
     # create file-object in memory
     file_object = io.BytesIO()
 

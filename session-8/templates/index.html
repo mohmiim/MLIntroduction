@@ -3,17 +3,21 @@
 <html>
    </head>
    <body>
-   		<p id ="generated_image" align="center"></p>
+   		<p> Generate Flower: </p>
+   		<p id ="generated_image">  </p>
+   		<p> Generate Digit: </p>
+   		<p id ="generated_digit">  </p>
     		<script type="text/javascript">
-            	var parent = document.getElementById("generated_image");
+            	var flowerParent = document.getElementById("generated_image");
            		var image = document.createElement("img");
             	image.setAttribute("src", "http://127.0.0.1:5000/generateFlower?rev="+new Date().getTime());
             	image.setAttribute("height", "160");
-            	parent.appendChild(image);
+            	flowerParent.appendChild(image);
+            	var digitParent = document.getElementById("generated_digit");
             	var number = document.createElement("img");
-            	image.setAttribute("src", "http://127.0.0.1:5000/generateNumber?rev="+new Date().getTime());
-            	image.setAttribute("height", "160");
-            	parent.appendChild(number);
+            	number.setAttribute("src", "http://127.0.0.1:5000/generateNumber?rev="+new Date().getTime());
+            	number.setAttribute("height", "160");
+            	digitParent.appendChild(number);
     		</script> 
    </body>
 </html>
