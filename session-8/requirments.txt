@@ -1,6 +1,5 @@
 numpy>=1.15.1
-bottle>=0.12.13
-bottle-websocket>=0.2.9
+matplotlib
 flask
 Pillow
 h5py

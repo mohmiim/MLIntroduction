@@ -3,21 +3,23 @@
 <html>
    </head>
    <body>
-   		<p> Generate Flower: </p>
-   		<p id ="generated_image">  </p>
    		<p> Generate Digit: </p>
    		<p id ="generated_digit">  </p>
-    		<script type="text/javascript">
-            	var flowerParent = document.getElementById("generated_image");
-           		var image = document.createElement("img");
-            	image.setAttribute("src", "http://127.0.0.1:5000/generateFlower?rev="+new Date().getTime());
-            	image.setAttribute("height", "160");
-            	flowerParent.appendChild(image);
-            	var digitParent = document.getElementById("generated_digit");
-            	var number = document.createElement("img");
-            	number.setAttribute("src", "http://127.0.0.1:5000/generateNumber?rev="+new Date().getTime());
-            	number.setAttribute("height", "160");
-            	digitParent.appendChild(number);
-    		</script> 
+    	<script type="text/javascript">
+            var digitParent = document.getElementById("generated_digit");
+            var number = document.createElement("img");
+            number.setAttribute("src", "http://127.0.0.1:5000/generateNumber?rev="+new Date().getTime());
+            number.setAttribute("height", "56");
+            digitParent.appendChild(number);
+    	</script> 
+    	<p> Generate Flower: </p>
+    	<p id ="generated_flower">  </p>
+    	<script type="text/javascript">
+            var flowerParent = document.getElementById("generated_flower");
+           	var image = document.createElement("img");
+            image.setAttribute("src", "http://127.0.0.1:5000/generateFlower?rev="+new Date().getTime());
+            image.setAttribute("height", "160");
+            flowerParent.appendChild(image);
+    	</script> 
    </body>
 </html>
