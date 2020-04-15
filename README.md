@@ -8,7 +8,7 @@ The purpose of these sessions is to provide a quick high-level introduction to M
    Introduction to Machine Learning, building examples showing how to use TensorFlow to approximate a simple linear function, a quadratic function, and XOR.
 
 * **[Session 2](https://github.com/mohmiim/MLIntroduction/tree/master/session-2/README.md "Session 2")**: 
-   How to recognize the type of a chart from an image that include the chart. We will cover How to load images and prepare them to be suitable for use in Neural Network training.
+   How to recognize the type of chart from an image that includes the chart. We will cover How to load images and prepare them to be suitable for use in Neural Network training.
    
 * **[Session 3](https://github.com/mohmiim/MLIntroduction/blob/master/session-3/README.md "Session 3")**:
    Improve the accuracy of the chart recognizer done in session 2, by using Convolutional Neural Network. We will also show how this reduces the model size dramatically and speeds up training.
