@@ -22,10 +22,13 @@ The purpose of these sessions is to provide a quick high-level introduction to M
 * **[Session 6](https://github.com/mohmiim/MLIntroduction/tree/master/session-6):** Introduction to time series forecasting with deeplearning
 
 * **[Session 7](https://github.com/mohmiim/MLIntroduction/tree/master/session-7) :** Introduction to Generative Adversarial Networks (GAN)
-* **[Session 8](https://github.com/mohmiim/MLIntroduction/tree/master/Visualize "Session 6"):**
+
+* **[Session 8](https://github.com/mohmiim/MLIntroduction/tree/master/image-caption) :** Introduction to Image Caption Generation (Comming soon)
+
+* **[Session 9](https://github.com/mohmiim/MLIntroduction/tree/master/Visualize "Session 6"):**
    How the model see your image through the different layers. (code only, write-up coming soon)
    
-* **[Session 9](https://github.com/mohmiim/MLIntroduction/tree/master/ChartRecognitionRest "Session 7"):**
+* **[Session 10](https://github.com/mohmiim/MLIntroduction/tree/master/ChartRecognitionRest "Session 7"):**
    Wrap the model by a rest service and create a docker image to allow deploying it easily. (code only, write-up coming soon)
    
 
