@@ -186,7 +186,7 @@ By the time you reach epoch 500, the accuracy should be 1, which means the model
 Let's try our model with some value it hasn't seen before:
 
 ```python
-print(model.predict([10.0]))
+print(model.predict(np.array([10.0])))
 ```
 You will get a result very close to 17, which is (2 X 10 - 3). This means that the very simple neural net we created managed to approximate the function correctly by just seeing a few sample inputs and outputs.
 
