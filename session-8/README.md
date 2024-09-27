@@ -9,6 +9,8 @@ is both unsupervised and semi supervised.
 
 Large language model uses exciting very well know techniques in deeplearning (and we covered some of them in previous sessions) like Neural networks, Transformer architecture and so pn
 
+## How large is large
+
 We can not underestimate the L in LLM models, the size of the model is what makes it powerful, and it is what makes it hard to train. The model has billions of parameters, and it requires a lot of computational resources to train. But also require powerful GPU and lots of memory at inference time
 
 here are some examples of some LLM models sizes
@@ -32,3 +34,12 @@ here are some examples of some LLM models sizes
   </tbody>
 </table>
 
+## Transformer architecture
+
+To understand  the inner works of LLM models, we need to understand the transformer architecture, and how it is used in LLM models. The transformer
+architecture is a type of neural network that is designed to process sequences of data. It is made up of two main components: the encoder and the decoder. 
+The encoder takes the input sequence and processes it to create a representation of the input data. The decoder takes the representation created by the 
+encoder and uses it to generate the output sequence. It all started with the amazing paper "Attention is all you need" by Vaswani et al. in 2017. here 
+is a link for it [Attention is all you need](https://arxiv.org/abs/1706.03762)
+
+In this Session we will delve into the transformer architecture and how it is used in LLM models.
