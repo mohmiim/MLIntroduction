@@ -43,3 +43,22 @@ encoder and uses it to generate the output sequence. It all started with the ama
 is a link for it [Attention is all you need](https://arxiv.org/abs/1706.03762)
 
 In this Session we will delve into the transformer architecture and how it is used in LLM models.
+
+## Is it really smart
+
+Well, it depends :) 
+Typically we used to train what i would call a base model that gets really good at predicting the next word in a sentence, but it
+is not very good at understanding the context of the sentence and does not operate in an assistance kind of a way.
+So, how cna we deal with that and how can we make it look smart and act like a human here comes RLHF (Reinforcement Learning from Human Feedback)
+
+That is a mouth Full, but it is a technique that is used to train the model to generate text that is more coherent and relevant to the input text
+and sounds like a human responding to your input.
+
+Think about it as 2 blocks of training, the first block is the base model that is trained to predict the next word in a sentence, and the second
+block is the RLHF block that is trained to generate text that is more coherent and relevant to the input text.
+
+This a Visualization of the simplified flow we are talking about
+<p align="center"> 
+<img src="images/RLHF.png" height="350" width="650">
+</p>
+
