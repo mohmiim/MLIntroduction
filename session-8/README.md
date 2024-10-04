@@ -62,3 +62,38 @@ This a Visualization of the simplified flow we are talking about
 <img src="images/RLHF.png" height="350" width="650">
 </p>
 
+## Recap
+
+We design a BaseModel that uses transformer architecture. Then we train it on a large corpus of text to predict, Then we
+get to the fine tuning part, where we create a data set that capture alot of Q&A from human conversation and use that to
+fine tune the model which will make the model start to respond as a human rather than just sentence completions.
+
+### RLHF (Reinforcement Learning from Human Feedback)
+All, this being done we move to the RLHF step, where we would like the model to learn from human feedback, a simplified
+flow for this might look like this:
+
+- For a specific prompt get the model responses.
+- A human rank the responses
+- This data is used to train a Reward model
+- A policy is optimised against the reward model using PPO (Proximal Policy Optimization, it is used to train the agent's decision Fn) RL algorithm
+- A new prompt is sampled
+- The PPO model is initialized using the trained policy
+- The policy is used to generate output
+- The Reward model is used to calculate the Reward
+- The reward is used to update the policy using PPO
+
+This is a very high-level overview of how RLHF works, and there are many details that are not covered here. But this should give you a good idea of how it works.
+
+## How to train LLM models and what is the Architecture
+
+The training process for LLM models is a complex and time-consuming process. It requires a large amount of training 
+data, a large amount of computational resources, and a lot of time. The training process typically takes several weeks
+to complete.
+
+The next diagram shows in a high level the typical model architecture
+
+<p align="center"> 
+<img src="images/FullDiagramSimple.png">
+</p>
+
+
