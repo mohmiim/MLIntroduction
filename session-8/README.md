@@ -96,4 +96,57 @@ The next diagram shows in a high level the typical model architecture
 <img src="images/FullDiagramSimple.png">
 </p>
 
+I find the best way to get better understanding of a model, is to go through the architecture diagram piece by piece and 
+try to digest it is one piece ata a time.
 
+### we will start with the embedding block:
+
+<p align="center"> 
+<img src="images/embedding.png" height="200" width="200">
+</p>
+
+Machine learning models can not work with text directly, so we need to convert the text into a numerical representation
+that the model can work with. This is done using an embedding layer. The embedding layer takes the input text and
+converts it into a vector of numbers that represents the text. 
+
+The Question now is how can we convert a word to embedding vector, that represents it well in other words a vector that
+captures the essence of the word. We can train the model to learn the best representation 
+
+Think about a word as a point in a high-dimensional space, where each dimension represents a different aspect of the 
+word. The embedding layer learns to map the word to a point in this space that captures the meaning of the word.
+
+WE can include the embedding layer in the model, and train it along with the rest of the model. Like this 
+
+```python
+import tensorflow as tf
+from tensorflow.keras.layers import Embedding
+from tensorflow.keras.models import Sequential
+
+model = Sequential()
+model.add(Embedding(input_dim=10000, output_dim=15, input_length=100))
+......
+model.compile('adam', 'mse')
+model.summary()
+```
+
+But we can also use pre-trained embeddings, like GloVe, Word2Vec, Bert, or FastText. These embeddings are trained on a 
+large corpus of text and capture the meaning of words in a way that is useful for many different tasks. 
+We can use these pre-trained embeddings as the initial weights for the embedding layer in our model. Like this
+
+Ok, this is all good but let's go a bit more deeper and see how this works
+
+Embedding is still an ML layer, so its input can not be just text it has to be a number. We need to 
+convert the text to a number, this is done using a tokenizer. The tokenizer takes the text and converts it into a 
+set of numbers a very simple one could be just to convert each word to a number, using a simple dictionary typically 
+referred to as the vocab table, where each word is mapped to a number.
+
+for example, the sentence "I love machine learning" could be converted to [1, 40, 52, 60] where 1 is the number for "I",
+40 is the number for "love", 52 is the number for "machine", and 60 is the number for "learning".
+
+<p align="center"> 
+<img src="images/tok.png" height="350" width="350">
+</p>
+
+A fantastic tool that can help you understand embedding visually and how words are clustered is [Tensorflow projector](https://projector.tensorflow.org/)  
+
+### The Positional Embedding block
