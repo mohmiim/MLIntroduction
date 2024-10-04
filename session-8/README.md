@@ -102,7 +102,7 @@ try to digest it is one piece ata a time.
 ### we will start with the embedding block:
 
 <p align="center"> 
-<img src="images/embedding.png" height="200" width="200">
+<img src="images/embedding.png" height="332" width="336">
 </p>
 
 Machine learning models can not work with text directly, so we need to convert the text into a numerical representation
@@ -144,7 +144,24 @@ for example, the sentence "I love machine learning" could be converted to [1, 40
 40 is the number for "love", 52 is the number for "machine", and 60 is the number for "learning".
 
 <p align="center"> 
-<img src="images/tok.png" height="350" width="350">
+<img src="images/tok.png" height="350" width="370">
+</p>
+
+To get even a better intuition of what is Embedding imagine if we have a model, that we trained to do some sort of text 
+classification, general simple architecture could be like this
+
+<p align="center"> 
+<img src="images/classification_model.png" height="450" width="470">
+</p>
+
+The input to this model will be the output from our tokenizer. Now this model in its internal hidden layers did learn 
+(from the training process) a lot about the words and their relationships and so on (see earlier previous sessions for
+more details) imagine now we take the output of the last hidden layer and use it as the embedding layer for the next
+model basically we remove the output layer and use the output of the last hidden layer as out embedding, our embedding
+vector will be the size of the last hidden layer output. This diagram will look something like that:
+
+<p align="center">
+<img src="images/embedding_model.png" height="450" width="470">
 </p>
 
 A fantastic tool that can help you understand embedding visually and how words are clustered is [Tensorflow projector](https://projector.tensorflow.org/)  
