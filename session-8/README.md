@@ -167,3 +167,6 @@ vector will be the size of the last hidden layer output. This diagram will look 
 A fantastic tool that can help you understand embedding visually and how words are clustered is [Tensorflow projector](https://projector.tensorflow.org/)  
 
 ### The Positional Embedding block
+
+## stay tuned for more
+
