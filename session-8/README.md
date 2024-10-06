@@ -166,7 +166,84 @@ vector will be the size of the last hidden layer output. This diagram will look 
 
 A fantastic tool that can help you understand embedding visually and how words are clustered is [Tensorflow projector](https://projector.tensorflow.org/)  
 
-### The Positional Embedding block
+### The Positional Encoding block
+
+<p align="center">
+<img src="images/pos.png" height="66" width="264">
+</p>
+
+Order of words and the position of a word in a sentence is important, and the model needs to know the position of each 
+word in the sentence. 
+Recurrence neural networks and LSTM  can handle this easily, [see the forecasting session](https://github.com/mohmiim/MLIntroduction/tree/master/session-6),
+but in the case of transformers, we need to provide this info to the model.
+This is done using a positional encoding layer. The positional encoding layer takes the position of each word in the
+sentence and converts it into a vector of numbers that represents the position of the word, Which get added to the
+word embedding as shown in previous figure.
+
+In summary, Position encoding is teh approach used to maintain the knowledge of the order of objects in a sequence. This
+is technique is used used only when dealing with natural language but you can apply it any time were order is important
+and you would like to use transformer architecture.
+
+In position Encoding we assign each position a unique representation, and the representation is mapped to the position
+similar to vocab table, but in this case, we use a mathematical function to map the position to a vector of numbers.
+
+The following diagram shows a simple example of how positional encoding works.
+
+<p align="center">
+<img src="images/positionalEncoding.png" height="360" width="931">
+</p>
+
+
+In the [Attentionis all you need](https://arxiv.org/abs/1706.03762) paper, the authors used a combination of sine and cosine functions to encode the 
+position similar to this:
+
+P(K, 2i) = sin(K/n^(2i/d_model))
+P(K, 2i+1) = cos(K/n^(2i/d_model))
+
+n: defined scalar, in teh paper it was 10,000
+K: position of the word
+d: dimension of the positional encoding.
+i: column index, 0<= i < d/2
+
+Python code to implement this could be like this:
+
+```python   
+import numpy as np
+N = 10000
+D = 512
+
+def get_position_encoding(seq_len, d = D, n=N):
+    P = np.zeros((seq_len, d))
+    for k in range(seq_len):
+        for i in np.arange(int(d / 2)):
+            denominator = np.power(n, 2 * i / d)
+            P[k, 2 * i] = np.sin(k / denominator)
+            P[k, 2 * i + 1] = np.cos(k / denominator)
+    return P
+
+P = get_position_encoding(seq_len=3, d=4, n=10000)
+print(P)
+```
+
+Output should be 
+
+```
+[[ 0.          1.          0.          1.        ]
+ [ 0.84147098  0.54030231  0.00999983  0.99995   ]
+ [ 0.90929743 -0.41614684  0.01999867  0.99980001]]
+```
+
+You will notice that positional encoding is fixed not learned, and it is added to the word embedding. The encoding
+matrix is calculated once and get reused by all inputs.
+
+At this stage We covered this part of the architecture
+
+<p align="center">
+<img src="images/pos+emb.png" height="201" width="275">
+</p>
+
+We have the word embedding and the positional encoding, and we can feed them to the transformer encoder
+
 
 ## stay tuned for more
 
