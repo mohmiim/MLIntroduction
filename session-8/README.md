@@ -236,13 +236,18 @@ Output should be
 You will notice that positional encoding is fixed not learned, and it is added to the word embedding. The encoding
 matrix is calculated once and get reused by all inputs.
 
+To put it all together, the word embedding and the positional encoding are added together to create the input to the
+transformer encoder.
+
+<p align="center">
+<img src="images/input.png" height="405" width="671">
+</p>
+
 At this stage We covered this part of the architecture
 
 <p align="center">
 <img src="images/pos+emb.png" height="201" width="275">
 </p>
-
-We have the word embedding and the positional encoding, and we can feed them to the transformer encoder
 
 
 ## stay tuned for more
