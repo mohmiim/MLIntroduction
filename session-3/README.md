@@ -25,15 +25,15 @@ We went through how single neuron and multi neuron (multilayers as well) neural 
 <img src="images/dense.png" >
 </p>
 
-But Why is that important to understand, The fully connected nature of the Dense layer impacts how many parameters we need to train during the training phase, and it impacts how long training will take and how big it the model? For example, if we have a neural network that accepts 5 inputs and has 3 hidden layers 10 nodes each and one output layer of 2 nodes. The number of parameters in this networks will be N = 5 \* 10 + 10 \* 10 + 10 \* 10 + 10 \* 2 = 270 (this calculation does not consider the extra B node).
+But Why is that important to understand, The fully connected nature of the Dense layer impacts how many parameters we need to train during the training phase, and it impacts how long training will take and how big it the model? For example, if we have a neural network that accepts 5 inputs and has 3 hidden layers 10 nodes each, and one output layer of 2 nodes. The number of parameters in this network will be N = 5 \* 10 + 10 \* 10 + 10 \* 10 + 10 \* 2 = 270 (this calculation does not consider the extra B node).
 
-Can we reduce this, so we can create very complex networks without having 100s of millions of parameters to train ?!! Welcome to convolution neural networks or CNN.
+Can we reduce this so we can create very complex networks without having hundreds of millions of parameters to train?!! Welcome to convolution neural networks or CNN.
 
-## 2. What is Convolutional Neural Network
+## 2. What is a Convolutional Neural Network
 
-Convolution Neural Network is a special kind of neural network that had been proven to work very well with images. For example recognizing faces, animals, different types of objects and so on.  
+A Convolution Neural Network is a special kind of neural network that has been proven to work very well with images, such as recognizing faces, animals, different types of objects, and so on.  
 
-To understand how CNN works we need to first understand what is the Convolution operation. Convolution operation is applying a specific filter to the image to extract specific feature by considering small squares of the input data and maintain their relationship. Let's assume that our image is I and the Filter is K how can we apply the convolution operation  ?
+To understand how CNN works, we need to first understand the Convolution operation. A convolution operation is applying a specific filter to the image to extract a specific feature by considering small squares of the input data and maintaining their relationship. Let's assume that our image is I and the Filter is K. How can we apply the convolution operation?
 
 <p align="center"> 
 <img src="images/conv.png" >
@@ -41,7 +41,7 @@ To understand how CNN works we need to first understand what is the Convolution 
 
 In the figure above, convolution is I\*K the filter K is moved across I one step at a time and for each step that part of I is multiplied by K we keep doing that till the filter had been moved over all pixels in I and we get the output image I*K
 
-You will notice that the output did shrink in width and height, in the example above the input was 7\*7 but the output was 5\*5. There are multiple or parameters that affect the convolution operation, in the previous example we the filter moved one pixel at a time, this is called the stride which you can control to be suitable for your use case. Another factor does you do padding or not, in the example above the output image shrank because we did not do padding so the corner pixels could not be convoluted, while we could have added a rectangle of 0's around the image this would have increased the input size to 9\*9 so the output would have been 7\*7
+You will notice that the output did shrink in width and height, in the example above the input was 7\*7 but the output was 5\*5. Multiple parameters affect the convolution operation, in the previous example the filter moved one pixel at a time, this is called the stride which you can control to be suitable for your use case. Another factor is whether you do padding or not, in the example above the output image shrank because we did not do padding so the corner pixels could not be convoluted, while we could have added a rectangle of 0's around the image this would have increased the input size to 9\*9 so the output would have been 7\*7
 
 <p align="center"> 
 <img src="images/padding.png" height="350" width="370" >
@@ -57,7 +57,7 @@ This [notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-3/
 
 When we train a convolution Neural Network it tries to find the best filters that extract the best features to identify the different classes we are training it to recognize.
 
-In tensorflow to create a convolution layer, you use the layer type Conv2D
+In Tensorflow to create a convolution layer, you use the layer type Conv2D
 
 ~~~~{.python}
 from tensorflow.keras.layers import Conv2D
