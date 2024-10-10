@@ -1,7 +1,7 @@
 # Session 1: Introduction to Machine Learning and Neural Networks
 
-## 	*You can approximate anything, as long as you have enough terms*
-_Just keep this statement in mind, it will make sense as we continue._
+## 	*You can approximate anything as long as you have enough terms*
+_Keep this statement in mind; it will make sense as we continue._
 
 ## What will we cover
 
@@ -20,67 +20,67 @@ _Just keep this statement in mind, it will make sense as we continue._
 
 Machine Learning, Artificial Intelligence, and Augmented Intelligence are words we hear today everywhere. We each perceive them differently: they scare some and excite others. But what are they really? Should we be scared or excited? What can it do for you, your company, and your community?
 
-As a software developer, not a data scientist or a researcher, should you care?
-The answer is, you definitely should care. The transformation is happening as you read this. Examples of this transformation are all around us. Luckily, it's not too late to get your feet wet and apply it. The topic's not as scary as it might sound! You don't need a Ph.D. or an advanced degree in statistics (though it does not hurt to have one of them or both :) ).
+Should you care as a software developer, not a data scientist or a researcher?
+The answer is, you definitely should care. The transformation is happening as you read this. Examples of this transformation are all around us. Luckily, it's not too late to get your feet wet and apply it. The topic's not as scary as it might sound! You don't need a Ph.D. or an advanced degree in statistics (though it does not hurt to have one or both :) ).
 
-Let’s start simple. What is the difference between machine learning and our typical day to day software development (I might even say compared to classic development)? In typical programming we receive an input, and we write code that represents all the rules for producing the correct output.
+Let’s start simple. What is the difference between machine learning and our typical day-to-day software development (I might even say compared to classic development)? In typical programming, we receive an input, and we write code that represents all the rules for producing the correct output.
 
 
 <p align="center"> 
 <img src="images/Flow.png" height="350" width="650">
 </p>
 
-Although this sounds straightforward, there are many tasks where it is really hard and/or time-consuming to come up with all the rules required to produce the correct output. For example, consider the task of writing a program to determine whether a picture is that of a dog or a cat.
+Although this sounds straightforward, many tasks require a lot of work and/or time to develop all the rules required to produce the correct output. For example, consider writing a program to determine whether a picture is that of a dog or a cat.
 
 <p align="center"> 
 <img src="images/DogVsCat.png" height="200" width="400">
 </p>
 
-Try to think of the rules we need to perform this task. Coding the rules aside, simply imagining all of the required rules is quite hard.
-On the other hand, in a machine learning paradigm you begin with some input data and the correct output data, and the machine learning algorithm comes up with the rules for you.
+Think of the rules we need to perform this task. Coding the rules aside, simply imagining all the required rules is hard.
+On the other hand, in a machine learning paradigm, you begin with input data and the correct output data, and the machine learning algorithm comes up with the rules for you.
 
 
-If you think about it, it is much easier this way (given you have enough data to cover the whole problem space), as the system is coming up with all the rules for you. Furthermore, it's possible that the algorithm will come up with rules you didn't know existed. These rules are captured in what we call the machine learning model.
+If you think about it, it is much easier this way (given you have enough data to cover the whole problem space), as the system is coming up with all the rules for you. Furthermore, the algorithm may develop rules you didn't know existed. These rules are captured in what we call the machine learning model.
 
 ## 2. Single-Neuron Neural Network
 
-Usually the first concept that comes to mind when someone mentions Machine Learning or Deep Learning is Neural Network. It had been there for a very long time, it had good days and bad days :) , but regardless, understanding it will allow us to understand the more sophisticated topics we will handle in later sessions.
+Usually, the first concept that comes to mind when someone mentions Machine Learning or Deep Learning is Neural Networks. They have been around for a very long time, and they have had good days and bad days. :) Regardless, understanding neural networks will allow us to understand the more sophisticated topics we will handle in later sessions.
 
-This figure shows the simplest Neural Network we can create. It has only one node (neuron), accepts 2 inputs and has one output:
+This figure shows the simplest Neural Network we can create. It has only one node (neuron), accepts two inputs and has one output:
 
 <p align="center"> 
 <img src="images/SingleNeuron.png">
 </p>
 
-`Y`:The  output of the neuron, calculated as a function of the sum on inputs multiplied by weight plus the bias: 
+`Y`: The output of the neuron, calculated as a function of the sum of inputs multiplied by weight plus the bias: 
 <p align="center">Y = f(W<sub>1</sub>.X<sub>1</sub> + W<sub>2</sub>.X<sub>2</sub> + b)</p>
 
-`b`: The bias, allows the network to find a good constant value to add to the input of the neuron.
+`b`: The bias allows the network to find a good constant value to add to the neuron's input.
 
 `X`<sub>`n`</sub>: The input to the network. Imagine I am trying to build a network that predicts house prices based on the number of rooms and the total area of each house.  In this case I have two numerical inputs: one for the number of bedrooms and one for the total area of the house.
 
 `W`<sub>`n`</sub>: The weight of each input to our neuron; this starts as a random number but with the magic of machine learning (training) the system will be able to to adjust it to be the suitable value to produce the correct output.
 
-`f`: The activation function, this function plays an important role, specifically for nonlinearity. Let’s set `f` to the identity function `f(x) = x`, then `Y` will be:
+`f`: The activation function plays an important role, specifically for nonlinearity. Let’s set `f` to the identity function `f(x) = x`, then `Y` will be:
 <p align="center">Y = W<sub>1</sub>.X<sub>1</sub> + W<sub>2</sub>.X<sub>2</sub> + b</p>
 
-Given that `W` is just a floating-point number, then `Y` is just a linear function of the input. In real-life scenarios it's not common to be able to represent cases as a linear function. In reality, most of the time it is a nonlinear function, this is why we need to set function `f`.
+Given that `W` is just a floating-point number, then `Y` is just a linear function of the input. In real-life scenarios, it's not common to represent cases as a linear function. Most of the time, it is a nonlinear function, which is why we need to set function `f`.
 
 ### Activation Functions
 
 _Note that these functions can take any real number as input._
 
-**Sigmoid:** The output of sigmoid is a value between 0 and 1.
+**Sigmoid:** sigmoid output is a value between 0 and 1.
 <p align="center"> 
 <img src="images/sigmoid.png"  height="300" width="200">
 </p>
 
-**tanh:** The output is a value is between -1 and 1.
+**tanh:** The output is between -1 and 1.
 <p align="center"> 
 <img src="images/tanh.png"  height="300" width="200">
 </p>
 
-**Relu:** The output is Max(0,x), provides the same non-linearity as sigmoid but with [better performance]().
+**Relu:** The output is Max(0,x), which provides the same non-linearity as sigmoid but with [better performance]().
 <p align="center"> 
 <img src="images/relu.png"  height="300" width="200">
 </p>
@@ -94,11 +94,11 @@ The process of finding the correct values for `W`<sub>`n`</sub> and `b` is calle
 1. The system starts with random values for `W`<sub>`n`</sub> and `b`.
 2. Find the `Y(s)` values for our training `X(s)` values.
 3. Measure the error value using the calculated `Y(s)` and the expected `Y(s)`.
-4. Use what is called an optimization function to update `W`<sub>`n`</sub> and ` b`.
+4. Use an optimization function to update `W`<sub>`n`</sub> and ` b`.
 5. Start over again using the new `W`<sub>`n`</sub> values.
 
 ### Loss Functions
-Loss functions measure how well our model works on the given training data. It's a positive number and the lower it is, the better we modeled our sample data. There are many types of loss functions, to list a few:
+Loss functions measure how well our model works on the given training data. It's a positive number, and the lower it is, the better we modelled our sample data. There are many types of loss functions, to list a few:
 
 **Mean Square Error (MSE):** Widely used in linear regression, outliers drastically affect it.
 <p align="center"> 
@@ -119,20 +119,20 @@ Loss functions measure how well our model works on the given training data. It's
 
 Optimization functions are used to minimize the loss of the Neural Network; there are many types of optimization functions.
 
-**Stochastic gradient descent(SGD):** Works well for shallow networks. Can cause the objective function to fluctuate heavily
+**Stochastic gradient descent(SGD):** Works well for shallow networks. This can cause the objective function to fluctuate heavily
 
-**Adaptive Moment Estimation (Adam):** Computes adaptive learning rates for each parameter. Adam works well in practice and compares favorably to other adaptive learning-method algorithms
+**Adaptive Moment Estimation (Adam):** Computes adaptive learning rates for each parameter. Adam works well in practice and compares favourably to other adaptive learning-method algorithms.
 
 
 ### Running Python code
 
-   In the next sections/sessions, we will be building our own models using TensorFlow in Python, so it is a good idea to consider what will you use as an IDE. There are many options, but it comes down to personal preference. I will share mine, first obvious one is Juptyer notebooks, you can install the server on your machine and start using it (i do not do that), or you can use any of the freely hosted ones. My favorite is [google colaboratory](https://colab.research.google.com "google colaboratory"); I like it because it is quite accessible and makes it very easy to hit the ground running. Also, it gives you access to a free GPU, which will become very important when we start building more complicated models that take time to train (with the GPU, the training process will be much faster). The only thing I'm not too fond of much about notebooks is the debugging experience, that is why I usually set up a local IDE as well to make it easier for me to debug my code. There are many options, for example, Visual Studio Code or PyCharm are good. I will do my best to ensure the tutorial's sample code can be copied and pasted in Google colaboratory.
+   In the next sections/sessions, we will be building our own models using TensorFlow in Python, so it is a good idea to consider what will you use as an IDE. There are many options, but it comes down to personal preference. I will share mine, the first obvious one is Juptyer notebooks; you can install the server on your machine and start using it (I do not do that), or you can use any of the freely hosted ones. My favourite is [google colaboratory](https://colab.research.google.com "google colaboratory"); I like it because it is quite accessible and makes it very easy to hit the ground running. Also, it gives you access to a free GPU, which will become very important when we start building more complicated models that take time to train (with the GPU, the training process will be much faster). The only thing I'm not too fond of much about notebooks is the debugging experience, that is why I usually set up a local IDE as well to make it easier for me to debug my code. There are many options, for example, Visual Studio Code or PyCharm are good. I will do my best to ensure the tutorial's sample code can be copied and pasted in Google colaboratory.
 
 ## 3. Approximating a linear function with Single-Neuron Neural Network
 
 
 
-We saw what a Single-Neuron NN looks like, now how can we use it to do a simple task?  
+We saw what a Single-Neuron NN looks like. Now, how can we use it to perform a simple task?  
 
 We are going to use Python and Keras to show how we can build our first Neural Network; it is going to be a Single-Neuron NN and we will use it to approximate the following linear function:
 
@@ -158,7 +158,7 @@ model.add(Dense(units=1,input_dim=1))
 model.compile(optimizer="sgd", loss = "mean_squared_error")
 ```
 
-Our model is ready to be trained, but first we need to prepare our training data. The training data will be 2 arrays: one representing `X` and one representing the expected output for each of the `X`s.
+Our model is ready to be trained, but first,, we need to prepare our training data. The training data will consist of two arrays: one representing `X` and one representing the expected output for each of the `X`s.
 
 ```python
 import numpy as np
@@ -167,7 +167,7 @@ import numpy as np
 xs = np.array([-1, 0, 1,2,3,4],dtype=float)
 ys = np.array([-5,-3,-1,1,3,5],dtype=float)
 ```
-We are using the python library numpy to create arrays representing our training data `x`s and `y`s.
+We are using the Python library numpy to create arrays representing our training data `x`s and `y`s.
 
 Now that we have the training data and the model, we can start training our model! 🎉
 
@@ -175,7 +175,7 @@ Now that we have the training data and the model, we can start training our mode
 model.fit(xs, ys,epochs=500)
 ```
 
-We pass the `fit` function the training samples and the `epochs` parameter (to indicate how many iterations should be attempted before stopping the training). In this case we are telling it to try for 500 iterations. The fit function can now start the training process.
+We pass the `fit` function the training samples and the `epochs` parameter (to indicate how many iterations should be attempted before stopping the training). In this case, we tell it to try for 500 iterations. The fit function can now start the training process.
 
 When you run the code samples from above, you should see an output similar to this:
 
@@ -188,7 +188,7 @@ Let's try our model with some value it hasn't seen before:
 ```python
 print(model.predict(np.array([10.0])))
 ```
-You will get a result very close to 17, which is (2 X 10 - 3). This means that the very simple neural net we created managed to approximate the function correctly by just seeing a few sample inputs and outputs.
+You will get a result very close to 17, which is (2 X 10 - 3). This means that the very simple neural net we created approximated the function correctly by seeing just a few sample inputs and outputs.
 
 To confirm this, let's print out the weight and bias:
 
@@ -214,25 +214,25 @@ which is a pretty close approximation for our function
 
 <p align="center">Y = 2*X - 3 </p> 
 
-To see the full code working, you can either get it form the github folder and run it on your local machine or you can use [this Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-1/Session_1_first.ipynb) to see the note book, then click on the Open in Colab button to run it and change the code as you like 
+To see the full code working, you can either get it from the GitHub folder and run it on your local machine or you can use [this Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-1/Session_1_first.ipynb) to see the notebook, then click on the Open in Colab button to run it and change the code as you like 
 
 
 ## 4. Approximating a quadratic function with Neural Network
 
-In the last section we saw how to approximate the linear function Y = 2X - 3 , but this is too simple, what if we want to approximate a more complex function? let say quadratic function like this: 
+In the last section, we saw how to approximate the linear function Y = 2X - 3, but this is too simple; what if we want to approximate a more complex function? let's say quadratic function like this: 
 
 <p align="center">Y = X<sup>2</sup> </p> 
 
-Let's modify our code so that Xs and Ys to reflect the new function  
+Let's modify our code so that Xs and Ys reflect the new function  
 
 ```python
 xs = np.random.choice(np.arange(-3,3,.01),500)
 ys = xs**2
 ```
 
-we will leave every thing else the same  and re-run our training. What we get ?
+we will leave everything else the same  and re-run our training. What we get?
 
-Your will notice that the loss value does not really improve, and the accuracy is 0, basically the model is failing to approximate the function 
+You will notice that the loss value does not really improve, and the accuracy is 0, basically the model is failing to approximate the function 
 
 screenshot of the training output
 
@@ -256,32 +256,32 @@ In the previous code we are plotting the correct results as blue and plotting th
  
 I think we can agree this is a very bad approximation.
 
-The reason this is failing is the fact that we are using a single neuron model, which can only approximate linear function, remember that with single neuron the output is:
+The reason this is failing is the fact that we are using a single-neuron model, which can only approximate linear function, remember that with a single neuron the output is:
 
-`Y`:The  output of the neuron, calculated as a function of the sum on inputs multiplied by weight plus the bias: 
+`Y`: The output of the neuron, calculated as a function of the sum on inputs multiplied by weight plus the bias: 
 <p align="center">Y = f(W<sub>1</sub>.X<sub>1</sub> + W<sub>2</sub>.X<sub>2</sub> + b)</p>
 
-The solution to this is a Multi-Neuron model.  This is not much different from what we discussed before.  We just add several neurons and connect them together as showing in the following image:
+The solution to this is a Multi-Neuron model.  This is not much different from what we discussed before.  We just add several neurons and connect them together as shown in the following image:
 
 <img src="images/Neural_network_example.png"  height="300">
 
-Every thing we discussed in the single neuron discussion is still the same, the only difference is that we have now more than one neuron and we use the output of each neuron as an input to our output neuron. 
+Everything we discussed in the single-neuron discussion is still the same. The only difference is that we now have more than one neuron, and we use the output of each neuron as an input to our output neuron. 
 
-in the diagram we introduced few new terms because of the nature of the Multi-Neuron model
+in the diagram, we introduced a few new terms because of the nature of the Multi-Neuron model
 
 
 ### input layer
    This is the collection of all the input nodes in our model, in our examples so far the input layer contained only one node 
    
 ### hidden layer
-   This is the collection of the nodes between the input and output, in this example we have have one hidden layer with 4 nodes, a neural network model can have more than one hidden layer.
+   This is the collection of the nodes between the input and output. In this example, we have one hidden layer with four nodes; a neural network model can have more than one hidden layer.
 
 ### output layer
    This is the collection of all the output nodes, in our examples so far we only had one output node
 
 let's apply this to our quadratic example, so instead of using a single neuron let's have a model setup like this 
 input layer: 1 node
-hidden layers: i hidden layer contains 20 nodes, and activation function of type Relu
+hidden layers: 1 hidden layer contains 20 nodes and activation function of type Relu
 output layer: 1 node
 
 replace the model code we had initially with this code
@@ -294,7 +294,7 @@ model.add(Dense(units=1))
 ```
 We do not need to change anything else.  Rerun the training step and check what do you get.
 
-Unlike the last run, now we see that the loss value is going down and if we plot the results we have a much better approximation.
+Unlike the last run, the loss value is going down, and if we plot the results, we have a much better approximation.
 
 <img src="images/good_approx.png"  height="300">
  
@@ -304,13 +304,13 @@ The Layer type we used here is ```Dense```. This is basically a layer that is co
 
 The reason this works much better is the extra nodes we just added.  These nodes allow the model to simulate the non-linearity nature of the function we are trying to approximate.
 
-Now you know how to create a single neuron model, or a multi layer model using tensorflow with few lines of code. I hope you found this useful and and have convinced you that machine learning is really easy to get going. This is the end of session one. Hope you give the assignment a try and see you in session 2 
+Now you know how to create a single neuron model or a multi-layer model using tensorflow with few lines of code. I hope you found this useful and and have convinced you that machine learning is really easy to get going. This is the end of session one. Hope you give the assignment a try and see you in session 2 
 
-To see the full code working, you can either get it form the github folder and run it on your local machine or you can use [this Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-1/session_1_Quadratic.ipynb) to see the note book, then click on the Open in Colab button to run it and change the code as you like 
+To see the full code working, you can either get it from the GitHub folder and run it on your local machine or you can use [this Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-1/session_1_Quadratic.ipynb) to see the notebook, then click on the Open in Colab button to run it and change the code as you like 
 
 ## 5. Assignment (XOR)
 
-   XOR, data for 2 variables looks very simple but it is really none linear. The data will look like that 
+   XOR, data for 2 variables looks very simple, but it is really non-linear. The data will look like that 
    
 <img src="images/xor_table.png"  height="200"> 
 
