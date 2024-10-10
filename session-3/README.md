@@ -19,7 +19,7 @@
 
 ## 1. What is Dense Layer
 
-We went through how single neuron and multi neuron (multilayers as well) neural networks work, one observation you would have  seen is that layers in neural networks are fully connected. Meaning that every node in one layer is connected to all nodes in the layers before and after it  (Hence the layer type we used in tensorflow is called Dense). 
+We went through how single-neuron and multi-neuron (multilayers as well) neural networks work. One observation you would have seen is that layers in neural networks are fully connected. This means that every node in one layer is connected to all nodes in the layers before and after it (Hence, the layer type we used in TensorFlow is called dense). 
 
 <p align="center"> 
 <img src="images/dense.png" >
@@ -33,31 +33,31 @@ Can we reduce this so we can create very complex networks without having hundred
 
 A Convolution Neural Network is a special kind of neural network that has been proven to work very well with images, such as recognizing faces, animals, different types of objects, and so on.  
 
-To understand how CNN works, we need to first understand the Convolution operation. A convolution operation is applying a specific filter to the image to extract a specific feature by considering small squares of the input data and maintaining their relationship. Let's assume that our image is I and the Filter is K. How can we apply the convolution operation?
+To understand how CNN works, we need to first understand the Convolution operation. A convolution operation applies a specific filter to the image to extract a specific feature by considering small squares of the input data and maintaining their relationship. Let's assume our image is I, and the Filter is K. How can we apply the convolution operation?
 
 <p align="center"> 
 <img src="images/conv.png" >
 </p>
 
-In the figure above, convolution is I\*K the filter K is moved across I one step at a time and for each step that part of I is multiplied by K we keep doing that till the filter had been moved over all pixels in I and we get the output image I*K
+In the figure above, convolution is I\*K. The filter K is moved across I one step at a time, and for each step, that part of I is multiplied by K we keep doing that till the filter has been moved over all pixels in I, and we get the output image I*K
 
-You will notice that the output did shrink in width and height, in the example above the input was 7\*7 but the output was 5\*5. Multiple parameters affect the convolution operation, in the previous example the filter moved one pixel at a time, this is called the stride which you can control to be suitable for your use case. Another factor is whether you do padding or not, in the example above the output image shrank because we did not do padding so the corner pixels could not be convoluted, while we could have added a rectangle of 0's around the image this would have increased the input size to 9\*9 so the output would have been 7\*7
+You will notice that the output did shrink in width and height, in the example above the input was 7\*7 but the output was 5\*5. Multiple parameters affect the convolution operation, in the previous example the filter moved one pixel at a time, this is called the stride which you can control to be suitable for your use case. Another factor is whether you do padding or not, in the example above the output image shrank because we did not do padding so the corner pixels could not be convoluted, while we could have added a rectangle of 0's around the image, this would have increased the input size to 9\*9 so the output would have been 7\*7
 
 <p align="center"> 
 <img src="images/padding.png" height="350" width="370" >
 </p>
 
-The following image will show the effect of applying a specific convolution filter on an image
+The following image will show the effect of applying a specific convolution filter on an image.
 
 <p align="center"> 
 <img src="images/convSample.png" height="310" width="900" >
 </p>
 
-This [notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-3/ImageConv.ipynb "conv sample") contains code showing the effect of the filter on the image, so you can experiment with different values and different images. Some filter values can extract horizontal edges, some extracts vertical edges and so on. 
+This [notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-3/ImageConv.ipynb "conv sample") contains code showing the effect of the filter on the image so that you can experiment with different values and different images. Some filter values can extract horizontal edges; some extract vertical edges. 
 
-When we train a convolution Neural Network it tries to find the best filters that extract the best features to identify the different classes we are training it to recognize.
+When we train a convolution Neural Network, it tries to find the best filters that extract the best features to identify the different classes we are training it to recognize.
 
-In Tensorflow to create a convolution layer, you use the layer type Conv2D
+In Tensorflow, to create a convolution layer, you use the layer type Conv2D
 
 ~~~~{.python}
 from tensorflow.keras.layers import Conv2D
@@ -68,9 +68,9 @@ The previous code add a convolution layer to your model, that contains 64 filter
 
 ## 3. What is Pooling Layer
 
-We learned in the previous section what is convolution layer, it extracts features from the layer before it. But these features encode the precise position of the feature in the input, this is not ideal since a small shift in the input will result in a different feature set and can lead to the wrong classification. The solution to this is to create a lower resolution version of the extracted features while maintaining the large or important features this is called pooling this will remove the precise details this might be of no value to our recognition task. The pooling layer does not really learn it just applies the pooling operation to the previous layer output, typically in CNN you find each Convolution layer followed by a pooling layer.
+We learned in the previous section what is convolution layer, it extracts features from the layer before it. However, these features encode the precise position of the feature in the input, which could be better since a small shift in the input will result in a different feature set and can lead to the wrong classification. The solution is to create a lower-resolution version of the extracted features while maintaining the large or important features. This is called pooling, which will remove the precise details that might be useless to our recognition task. The pooling layer does not really learn it just applies the pooling operation to the previous layer output, typically in CNN you find each Convolution layer followed by a pooling layer.
 
-There are different types of pooling, for example, Average pooling which calculate the average value for the pooling area and this became the output, another type is Max pooling which output the largest value in the pooling area.
+There are different types of pooling. For example, Average pooling calculates the average value for the pooling area, which becomes the output. Another type is Max pooling, which outputs the largest value in the pooling area.
 
 Example of max pooling
 
@@ -87,15 +87,15 @@ model.add(MaxPool2D((2,2)))
 
 ## 4. Why Convolutional Neural Network
 
-One of the main benefits of CNN is the reduction in the numbers of parameters compared to the similar Dense Layers. This allows us to create much more complex networks and still be able to train them in a reasonable amount of time and using reasonable hardware. For example, consider a use case where our input is an RGB image of 100 pixels by 100 pixels, this means our input size is 3\*100\*100 = 30000, LEt see how many parameters would we have if we create a Dense layer of 1000 Node vs Conv layer of 64 filters each filter 3\*3.
+One of the main benefits of CNN is the reduction in the number of parameters compared to the similar Dense Layers. This allows us to create much more complex networks and still train them in a reasonable amount of time and using reasonable hardware. For example, consider a use case where our input is an RGB image of 100 pixels by 100 pixels, this means our input size is 3\*100\*100 = 30000, LEt see how many parameters would we have if we create a Dense layer of 1000 Node vs Conv layer of 64 filters each filter 3\*3.
 Dense : 30000\*1000 = 30000000 Parameters
-Conv : 64\*3\*3\*3 = 1728 Parameters. 
+Conv: 64\*3\*3\*3 = 1728 Parameters. 
 
-The reduction in number of parameters will have big  impact on how long it takes to train the Network, this is huge factor since Machine Learning is an iterative process by nature, the faster it takes to train your network the more iterations and experiment you can do with your network and its parameters which will always lead to a better model.
+The reduction in the number of parameters will have a big impact on how long it takes to train the Network. This is a huge factor since Machine Learning is an iterative process by nature. The faster it takes to train your network, the more iterations and experiments you can do with it and its parameters, which will always lead to a better model.
 
-## 5. Using Convolutional Neural Network for chart recognition
+## 5. Using Convolutional Neural Network for Chart Recognition
 
-Now we are ready to put it all to work, let's see how can we apply CNN to our chart recognition problem. The change is actually quite easy we will use everything we learned so far. Training set loading, model training, saving/loading, and testing will not change at all. the only change will be the model itself and how we build.  
+Now that we are ready to put it all to work, let's see how we can apply CNN to our chart recognition problem. The change is actually quite easy. We will use everything we have learned so far. Training set loading, model training, saving/loading, and testing will not change at all. The only change will be the model itself and how we build it.  
 
 
 Replace the model building code we had in session2 with this code
@@ -114,7 +114,7 @@ model.add(Dense(512,activation=relu))
 model.add(Dense(5,activation='softmax'))
 ~~~~
 
-The rest of the code should stay pretty much the same if you check the output of model.summary() you will notice that this model has 1,737,317 parameters, compared to the 31M+ parameters in the model we created in the previous session.
+If you check the output of model summary (), the rest of the code should stay pretty much the same. However, you will notice that this model has 1,737,317 parameters, compared to the 31M+ parameters in the model we created in the previous session.
 
 <p align="center"> 
 <img src="images/model.png" height="550" width="200" >
@@ -122,7 +122,7 @@ The rest of the code should stay pretty much the same if you check the output of
 
 This [notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-3/Session_3_first.ipynb "full example") shows a fully working example
 
-## 6. Compare accuracy and model size of the CNN model to the NN model
+## 6. Compare the accuracy and model size of the CNN model to the NN model
 
 The accuracy of the CNN model will be roughly 3% to 5% better than the NN model.
 The model size is a big difference, the CNN model size will be around 7MB while the NN model will be 100's of MBs
