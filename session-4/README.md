@@ -18,12 +18,12 @@
 
 ## 1. Accuracy so far and how to improve it
 
-So far we managed to get accuracy in the range of 70% (+/- 3), which is OK but not great. It is a good time to think why is that why we do not have better accuracy?  It is All about data, our training sample is too small compared to the problem we are trying to tackle. Oh, OK then let's have more samples, this is easier said than done, deep learning has a hunger to data and getting clean labeled samples is time and money consuming task.
+So far, we have managed to get accuracy in the range of 70% (+/- 3), which is OK but not great. It is a good time to think about why we lack accuracy.  It is All about data; our training sample is too small compared to the problem we are trying to tackle. Oh, OK, then, let's have more samples; this is easier said than done. Deep learning has a hunger for data and getting clean, labelled samples is a time and money-consuming task.
 
-What if there is a way to automatically manufacture samples? Yes, there is, in session 2 we used the method [ImageDataGenerator](https://github.com/mohmiim/MLIntroduction/tree/master/session-2#2-loading-images-training-set-using-tensorflow "Image data Generator") to load our training samples, but this method can do more, it can do Data augmentation based on the parameters we use.
+What if there is a way to manufacture samples automatically? Yes, there is. In session 2, we used the method [ImageDataGenerator](https://github.com/mohmiim/MLIntroduction/tree/master/session-2#2-loading-images-training-set-using-tensorflow "Image data Generator") to load our training samples, but this method can do more. It can do Data augmentation based on the parameters we use.
 
-ImageDataGenerator support different types of data augmentation options:
- - width_shift_range and height_shift_range shifts image along width or height.
+ImageDataGenerator supports different types of data augmentation options:
+ - width_shift_range and height_shift_range shift the image along with width or height.
  - horizontal_flip and vertical_flip flips image.
  - rotation_range, Image rotations
  - brightness_range, Image brightness.
@@ -31,7 +31,7 @@ ImageDataGenerator support different types of data augmentation options:
 
 ## 2. Apply samples manufacturing to our use-case
 
-Let's continue with our code from session 3, modify the ImageDataGenerator code to look like this 
+Let's continue with our code from session 3 and modify the ImageDataGenerator code to look like this. 
 
 ~~~~{.python}
 
@@ -42,21 +42,21 @@ train_data_generator = ImageDataGenerator(preprocessing_function=preprocess_inpu
                                           fill_mode='nearest')
 ~~~~
 
-Then let's re-train our model and run the tests, what do you find?
+Then, let's re-train our model and run the tests; what do you find?
 
-This [Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-4/Session_4_Data_Augmentationt.ipynb "Training Augmentation") has the full code, you will notice that the accuracy increased to around 80%, this is a big jump keeping in mind that this 8-10% increase came with minimum effort and using the same CNN
+This [Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-4/Session_4_Data_Augmentationt.ipynb "Training Augmentation") has the full code; you will notice that the accuracy increased to around 80%, this is a big jump keeping in mind that this 8-10% increase came with minimum effort and using the same CNN
 
 That is cool, but can we do better? 
 
 ## 3. Transfer learning
 
-So far, we improved our accuracy by using CNN instead of NN, and by augmenting our training set with manufactured examples, this allowed us to improve our accuracy to around 80% instead of 68%. but we can do more. Our challenge is the fact that we have a small number of training samples which limit our model abilities to extract good features to predict the correct class. If we look in tensorflow.keras.applications we will find many pre-built [models](https://www.tensorflow.org/api_docs/python/tf/keras/applications "Applications") targeted for image classification. Let's pick one and take a deeper look, we will look at [xception](https://www.tensorflow.org/api_docs/python/tf/keras/applications/xception)
+So far, we have improved our accuracy by using CNN instead of NN, and by augmenting our training set with manufactured examples, this allowed us to improve our accuracy to around 80% instead of 68%. But we can do more. Our challenge is that we have few training samples, which limits our model's ability to extract good features to predict the correct class. If we look in tensorflow.keras.applications we will find many pre-built [models](https://www.tensorflow.org/api_docs/python/tf/keras/applications "Applications") targeted for image classification. Let's pick one and take a deeper look; we will look at [xception](https://www.tensorflow.org/api_docs/python/tf/keras/applications/xception)
 
 ###xception model
 
-This model is trained using the [ImageNet](http://www.image-net.org/) dataset which contains 1000 different classes, the training set is roughly 1.2 million images. The Top-1 accuracy of this model on ImageNet is around 79%. 
+This model is trained using the [ImageNet](http://www.image-net.org/) dataset, which contains 1000 different classes. The training set is roughly 1.2 million images. This model's Top-1 accuracy on ImageNet is around 79%. 
 
-We can load the pre-trained model using this code
+We can load the pre-trained model using this code.
 
 ~~~~{.python}
 from tensorflow.keras.applications import xception
@@ -67,17 +67,17 @@ model.summary()
 plot_model(model, "full.png",show_shapes=True)
 ~~~~
 
-xception.Xception loads our pre-trained model, while the summary method will print a summary of the model architecture. This is quite a big model, it has around 22M parameters
+xception.Xception loads our pre-trained model, while the summary method prints a summary of the model architecture. This is quite a big model; it has around 22M parameters.
 
 plot_model function will save an [image](https://github.com/mohmiim/MLIntroduction/tree/master/session-4/images/full.png "full model") of the model architecture
 
-How can this help us? this model had been trained to receive images extract features from these images and classify them to be one of 1000 class, we want to train a model to receive an image, extract features from this image and classify it to one of 5 classes. The 2 problems sound very similar but they have different outputs. We can benefit from the features the xception model extracted, but we can not befit form its output classes, if we find a way to load this pre-trained model, but ditch the output layer then we have a model that can extract the features from an image but not classify it, we can call that our feature extractor then we create a simple NN that receive these features instead of the raw image and train it to do our 5 classes classification. This process is called transfer Learning
+Do you know how this can help us? This model had been trained to receive images, extract features from these images, and classify them as one of 1000 classes; we want to train a model to receive an image, extract features from it, and classify it into one of 5 classes. The two problems sound very similar, but they have different outputs. We can benefit from the features the xception model extracted, but we can not befit from its output classes; if we find a way to load this pre-trained model but ditch the output layer, then we have a model that can extract the features from an image but not classify it, we can call that our feature extractor then we create a simple NN that receive these features instead of the raw image and train it to do our five classes classification. This process is called transfer Learning.
 
 ## 4. Why transfer learning
 
-Transfer learning enables us to benefit from pre-trained models, that had been trained on large data sets and apply their feature extraction abilities to our domain. This helps a lot in cases where we have a small training set
+Transfer learning enables us to benefit from pre-trained models trained on large data sets and apply their feature extraction abilities to our domain. This helps a lot in cases where we have a small training set
 
-The following diagram shows the flow of the transfer learning process
+The following diagram shows the flow of the transfer learning process.
 
 <p align="center"> 
 <img src="images/transferLearning.png" height="450" >
@@ -87,7 +87,7 @@ The following diagram shows the flow of the transfer learning process
 
 The first few steps for loading our data will stay the same as we did in the previous notebook (make sure you have the data augmentation parameters  passed to ImageDataGenerator ) 
 
-The first change is before we create our model we need to load the exception model without the output layer and extract the features from our training set. The way to do that is using the following code 
+The first change is that before we create our model, we need to load the exception model without the output layer and extract the features from our training set. The way to do that is by using the following code. 
 
 ~~~~{.python}
 from tensorflow.keras.applications import xception
@@ -99,7 +99,7 @@ FEATURE_EXTRACTOR = xception.Xception(weights='imagenet',include_top=False,input
 features_x = FEATURE_EXTRACTOR.predict_generator(train_generator)
 ~~~~
 
-Then we create a simple dense model like this 
+Then we create a simple dense model like this. 
 
 ~~~~{.python}
 model = Sequential()
@@ -115,15 +115,15 @@ model.summary()
 model.fit(features_x,y_train,epochs=epochs,shuffle=True,verbose=2)
 ~~~~
 
-the main difference between what we are doing here and what we did before, is the fact that now we are using the method fit to train the model, and passing the input, the features we extracted, and the output, expected classes to the method to start the training.
+The main difference between what we are doing here and what we did before is that now we are using the method fit to train the model and passing the input, the features we extracted, and the output, expected classes to the method to start the training.
 
 This [Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-4/Session_4_Transfer_Learning.ipynb) has the full code 
 
-Run the tests and check the results 
+Run the tests and check the results. 
 
 ## 6. Discuss the Result
 
-I found that accuracy ranging from 90% to 93% that is an increase of 10 to 13%. So the conclusion here is that transfer learning really helped us big time, the reason is that the extracted features from the pre-trained model really helped our use case although they had been extracted for a different classification goal. This is a typical finding when the input is similar (images in this case) even though the classification goals are different the extracted features form one model can be beneficial for the other.
+I found that accuracy ranging from 90% to 93% that is an increase of 10 to 13%. So the conclusion here is that transfer learning really helped us big time; the reason is that the extracted features from the pre-trained model helped our use case, although they had been extracted for a different classification goal. This is a typical finding when the input is similar (images in this case) even though the classification goals are different the extracted features form one model can be beneficial for the other.
 
 
 ## 7. Assignment
