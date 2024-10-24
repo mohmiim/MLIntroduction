@@ -10,21 +10,21 @@
 
 ## 1. Accuracy so far and how to improve it
 
-So far we managed to get our accuracy in the 90% range, without adding more samples. but can we even do better :)
+So far, we have managed to get our accuracy in the 90% range without adding more samples. But can we even do better :)
 
-We found that if we apply transfer learning and use a pre-trained model it improved our accuracy quite a bit. Can we do more, what if we used 2 or 5 models to extract the features, will it make it better ?!
+We found that applying transfer learning and using a pre-trained model improved our accuracy quite a bit. Can we do more? What if we used two or five models to extract the features? Would it make it better?!
 
 Let's try it
 
 ## 2. Using multiple models architecture
 
-How can we use multiple models to extract the features? and how to use all these features to train our small dense model? The following diagram shows the general flow
+How can we use multiple models to extract the features? And how to use all these features to train our small, dense model. The following diagram shows the general flow.
 
 <p align="center"> 
 <img src="images/ensemble.png" height="450" >
 </p>
 
-Here is an example, of loading and extracting features from 2 models then combining them  
+Here is an example of loading and extracting features from 2 models then combining them  
 
 - Loading the first model 
 
@@ -35,7 +35,7 @@ model1.add(FEATURE_EXTRACTOR1)
 model1.add(Flatten())
 ~~~~
 
-Notice that we added a Flatten layer to the end of the feature extractor model to make the output a vector
+Notice that we added a Flatten layer to the end of the feature extractor model to make the output a vector.
 
 - Loading the second model 
 
@@ -64,17 +64,17 @@ features_x2 = model2.predict_generator(train_generator)
 all_features = np.concatenate((features_x1,features_x2), axis=1)
 ~~~~
 
-the rest will be the same as in session 4 but we will use the all_features vector as our training sample. 
+The rest will be the same as in session four, but we will use the all_features vector as our training sample. 
 
-Then let's re-train our model and run the tests, what do you find?
+Then, let's try to re-train our model and run the tests; what do you find?
 
-This [Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-5/Session_5_ensemble.ipynb) has the full code.
+This [Notebook](https://github.com/mohmiim/MLIntroduction/blob/master/session-5/Session_5_ensemble.ipynb) has the complete code.
 
 In my tests, Accuracy went up to 99%
 
 ## Congratulations 
 
-If you have been following along the 5 sessions, Congratulations we covered so much, we build simple linear model, approximated non-linear functions, built a system for recognizing charts type form an image and improved it is accuracy till we reached 97%. Learned what is Convolution neural network, Training set data augmentation, Transfer learning and Machine Learning model ensemble you should be proud :)
+If you have been following along with the five sessions, Congratulations. We covered so much; we built a simple linear model, approximated non-linear functions, built a system for recognizing chart types from an image, and improved its accuracy till we reached 97%. Learned what Convolution neural network, Training set data augmentation, Transfer learning and Machine Learning model ensemble you should be proud :)
 
 ## 3. Assignment
 
